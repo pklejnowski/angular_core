@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.tss
 /Insig/Insig.Web/.vscode
 
 # User-specific files (MonoDevelop/Xamarin Studio)
