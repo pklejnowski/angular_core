@@ -5,6 +5,8 @@
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
 
     <!--Compile TypeScript file using Angular CLI instead of VS-->
+    <TypeScriptCompilerBlocked>true</TypeScriptCompilerBlocked>
+    <PostBuildEvent>ng build --aot</PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
