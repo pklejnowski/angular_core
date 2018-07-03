@@ -1,4 +1,4 @@
-﻿namespace PublishedLanguage.Dtos
+﻿namespace Insig.PublishedLanguage.Dtos
 {
     public class SampleDTO
     {

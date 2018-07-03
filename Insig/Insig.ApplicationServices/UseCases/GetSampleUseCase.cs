@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
 using Insig.Common.CQRS;
-using PublishedLanguage.Dtos;
-using PublishedLanguage.Queries;
+using Insig.PublishedLanguage.Dtos;
+using Insig.PublishedLanguage.Queries;
 
 namespace Insig.ApplicationServices.UseCases
 {

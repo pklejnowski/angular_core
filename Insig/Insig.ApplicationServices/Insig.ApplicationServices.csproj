@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
-    <ProjectReference Include="..\PublishedLanguage\PublishedLanguage.csproj" />
+    <ProjectReference Include="..\PublishedLanguage\Insig.PublishedLanguage.csproj" />
   </ItemGroup>
 
 </Project>

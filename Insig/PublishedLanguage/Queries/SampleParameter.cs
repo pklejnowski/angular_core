@@ -1,7 +1,7 @@
 ﻿using Insig.Common.CQRS;
-using PublishedLanguage.Dtos;
+using Insig.PublishedLanguage.Dtos;
 
-namespace PublishedLanguage.Queries
+namespace Insig.PublishedLanguage.Queries
 {
     public class SampleParameter : IQuery<SampleDTO>
     {

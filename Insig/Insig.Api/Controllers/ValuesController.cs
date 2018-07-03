@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
 using Insig.Common.CQRS;
+using Insig.PublishedLanguage.Dtos;
+using Insig.PublishedLanguage.Queries;
 using Microsoft.AspNetCore.Mvc;
-using PublishedLanguage.Dtos;
-using PublishedLanguage.Queries;
 
 namespace Insig.Api.Controllers
 {

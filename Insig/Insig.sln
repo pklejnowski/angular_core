@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Domain", "Insig.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Common", "Insig.Common\Insig.Common.csproj", "{93552137-36E2-4EEF-B469-76F5192A5BFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insig.ApplicationServices", "Insig.ApplicationServices\Insig.ApplicationServices.csproj", "{87395851-FDF2-403B-A596-4F68CD9B3183}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.ApplicationServices", "Insig.ApplicationServices\Insig.ApplicationServices.csproj", "{87395851-FDF2-403B-A596-4F68CD9B3183}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishedLanguage", "PublishedLanguage\PublishedLanguage.csproj", "{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.PublishedLanguage", "PublishedLanguage\Insig.PublishedLanguage.csproj", "{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

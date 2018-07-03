@@ -2,8 +2,8 @@
 using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
 using Insig.Infrastructure.DataModel.Context;
-using PublishedLanguage.Dtos;
-using PublishedLanguage.Queries;
+using Insig.PublishedLanguage.Dtos;
+using Insig.PublishedLanguage.Queries;
 
 namespace Insig.Infrastructure.Queries
 {
