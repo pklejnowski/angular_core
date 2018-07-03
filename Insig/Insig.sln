@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Api", "Insig.Api\Insi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Web", "Insig.Web\Insig.Web.csproj", "{4844FF0F-42F2-4A98-B349-A34BF87688AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insig.Infrastructure", "Insig.Infrastructure\Insig.Infrastructure.csproj", "{88CFD398-F345-46F9-8FD4-D1606841981E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Infrastructure", "Insig.Infrastructure\Insig.Infrastructure.csproj", "{88CFD398-F345-46F9-8FD4-D1606841981E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insig.Domain", "Insig.Domain\Insig.Domain.csproj", "{4356EB43-3CB4-45FA-90E3-89F2253DBDC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Domain", "Insig.Domain\Insig.Domain.csproj", "{4356EB43-3CB4-45FA-90E3-89F2253DBDC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insig.Common", "Insig.Common\Insig.Common.csproj", "{93552137-36E2-4EEF-B469-76F5192A5BFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4356EB43-3CB4-45FA-90E3-89F2253DBDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4356EB43-3CB4-45FA-90E3-89F2253DBDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4356EB43-3CB4-45FA-90E3-89F2253DBDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93552137-36E2-4EEF-B469-76F5192A5BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93552137-36E2-4EEF-B469-76F5192A5BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93552137-36E2-4EEF-B469-76F5192A5BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93552137-36E2-4EEF-B469-76F5192A5BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
