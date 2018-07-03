@@ -15,7 +15,7 @@
     <ProjectReference Include="..\Insig.ApplicationServices\Insig.ApplicationServices.csproj" />
     <ProjectReference Include="..\Insig.Infrastructure\Insig.Infrastructure.csproj" />
     <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
-    <ProjectReference Include="..\PublishedLanguage\Insig.PublishedLanguage.csproj" />
+    <ProjectReference Include="..\Insig.PublishedLanguage\Insig.PublishedLanguage.csproj" />
   </ItemGroup>
 
 </Project>
