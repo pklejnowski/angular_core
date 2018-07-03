@@ -1,6 +1,12 @@
 import { Component } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { ApiSampleService } from "./core/services/api-sample.service";
+
+export interface SampleDto {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: "app-root",
@@ -8,11 +14,9 @@ import { ApiSampleService } from "./core/services/api-sample.service";
 })
 export class AppComponent {
   title = "app";
-  sample: Object;
+  sample: Observable<SampleDto>;
 
   constructor(private sampleService: ApiSampleService) {
-    sampleService.getSampleData().subscribe(data => {
-      this.sample = data;
-    });
+    this.sample = this.sampleService.getSampleData();
   }
 }

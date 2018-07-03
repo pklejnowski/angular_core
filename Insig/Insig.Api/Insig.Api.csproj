@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.0.0" />
+    <PackageReference Include="Ensure.That" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Insig.ApplicationServices\Insig.ApplicationServices.csproj" />
     <ProjectReference Include="..\Insig.Infrastructure\Insig.Infrastructure.csproj" />
     <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
+    <ProjectReference Include="..\PublishedLanguage\PublishedLanguage.csproj" />
   </ItemGroup>
 
 </Project>

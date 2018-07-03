@@ -1,29 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Insig.Infrastructure.DataModel.Context;
+﻿using EnsureThat;
+using Insig.Common.CQRS;
 using Microsoft.AspNetCore.Mvc;
+using PublishedLanguage.Dtos;
+using PublishedLanguage.Queries;
 
 namespace Insig.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("values")]
     public class ValuesController : Controller
     {
-        private readonly InsigContext _context;
+        private readonly IQueryDispatcher _dispatcher;
 
-        public ValuesController(InsigContext context)
+        public ValuesController(IQueryDispatcher dispatcher)
         {
-            _context = context;
+            EnsureArg.IsNotNull(dispatcher, nameof(dispatcher));
+
+            _dispatcher = dispatcher;
         }
 
-        // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public SampleDTO Get(SampleParameter parameter)
         {
-            return new string[]
-            {
-                "Some hardcoded data",
-                _context.Samples.FirstOrDefault()?.Name ?? "Missing records in Database!"
-            };
+            return _dispatcher.Dispatch(parameter);
         }
     }
 }
