@@ -26,7 +26,7 @@ namespace Insig.Api.Infrastructure
 
             if (!handlerExists)
             {
-                throw new Exception($"Handler for query parameter: {GetQueryName(query)} does not exist.");
+                throw new Exception($"Handler for query {GetQueryName(query)} does not exist.");
             }
 
             return ExecuteHandler(handler, query);
