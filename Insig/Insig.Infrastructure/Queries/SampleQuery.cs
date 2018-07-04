@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
 using Insig.Infrastructure.DataModel.Context;
@@ -18,11 +19,9 @@ namespace Insig.Infrastructure.Queries
             _context = context;
         }
 
-        public SampleDTO GetSampleData(SampleParameter query)
+        public List<SampleDTO> GetSampleData(SampleParameter query)
         {
-            var result = _context.Samples.First();
-
-            return new SampleDTO { Id = result.Id, Name = result.Name };
+            return _context.Samples.Select(r => new SampleDTO { Name = r.Name }).ToList();
         }
     }
 }

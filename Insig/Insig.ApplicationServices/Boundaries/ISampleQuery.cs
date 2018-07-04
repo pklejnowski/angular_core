@@ -1,10 +1,11 @@
-﻿using Insig.PublishedLanguage.Dtos;
+﻿using System.Collections.Generic;
+using Insig.PublishedLanguage.Dtos;
 using Insig.PublishedLanguage.Queries;
 
 namespace Insig.ApplicationServices.Boundaries
 {
     public interface ISampleQuery
     {
-        SampleDTO GetSampleData(SampleParameter query);
+        List<SampleDTO> GetSampleData(SampleParameter query);
     }
 }

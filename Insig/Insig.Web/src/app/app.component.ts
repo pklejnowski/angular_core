@@ -1,10 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
+import { switchMap } from "rxjs/operators";
 
 import { ApiSampleService } from "./core/services/api-sample.service";
 
 export interface SampleDto {
-  id: number;
   name: string;
 }
 
@@ -12,11 +12,20 @@ export interface SampleDto {
   selector: "app-root",
   templateUrl: "./app.component.html"
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = "app";
-  sample: Observable<SampleDto>;
+  samples: Observable<SampleDto[]>;
 
-  constructor(private sampleService: ApiSampleService) {
-    this.sample = this.sampleService.getSampleData();
+  constructor(private sampleService: ApiSampleService) { }
+
+  addSample(sampleNameToAdd: string): void {
+    this.samples = this.sampleService.addSampleData(<SampleDto>{ name: sampleNameToAdd })
+      .pipe(
+        switchMap(() => this.sampleService.getSampleData())
+      );
+  }
+
+  ngOnInit(): void {
+    this.samples = this.sampleService.getSampleData();
   }
 }

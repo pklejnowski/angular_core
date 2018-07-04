@@ -5,6 +5,7 @@ using EnsureThat;
 using Insig.Api.Controllers;
 using Insig.ApplicationServices.UseCases;
 using Insig.Infrastructure.DataModel.Context;
+using Insig.Infrastructure.Domain;
 using Insig.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -14,23 +15,25 @@ namespace Insig.Api.Infrastructure
 {
     public class DefaultModule : Module
     {
-        private readonly string _insigConnectionString;
+        private readonly string _connectionString;
 
-        public DefaultModule(string insigConnectionString)
+        public DefaultModule(string connectionString)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(insigConnectionString, nameof(insigConnectionString));
+            Ensure.String.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
 
-            _insigConnectionString = insigConnectionString;
+            _connectionString = connectionString;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<QueryDispatcher>().AsImplementedInterfaces();
+            builder.RegisterType<CommandDispatcher>().AsImplementedInterfaces();
 
-            RegisterControllers(builder);
             RegisterContext(builder);
-            RegisterQueries(builder);
+            RegisterControllers(builder);
             RegisterUseCases(builder);
+            RegisterQueries(builder);
+            RegisterRepositories(builder);
         }
 
         private static void RegisterTransientDependenciesAutomatically(
@@ -43,6 +46,15 @@ namespace Insig.Api.Infrastructure
                 .AsSelf()
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
+        }
+
+        private void RegisterContext(ContainerBuilder builder)
+        {
+            var options = new DbContextOptionsBuilder<InsigContext>();
+            options.UseSqlServer(_connectionString)
+                .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+
+            builder.Register((container) => new InsigContext(options.Options)).InstancePerLifetimeScope();
         }
 
         private static void RegisterControllers(ContainerBuilder builder)
@@ -69,13 +81,12 @@ namespace Insig.Api.Infrastructure
                 "Insig.Infrastructure.Queries");
         }
 
-        private void RegisterContext(ContainerBuilder builder)
+        private void RegisterRepositories(ContainerBuilder builder)
         {
-            var options = new DbContextOptionsBuilder<InsigContext>();
-            options.UseSqlServer(_insigConnectionString)
-                .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-
-            builder.Register((container) => new InsigContext(options.Options)).InstancePerLifetimeScope();
+            RegisterTransientDependenciesAutomatically(
+                builder,
+                typeof(SampleRepository).Assembly,
+                "Insig.Infrastructure.Domain");
         }
     }
 }
