@@ -16,9 +16,14 @@ namespace Insig.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseHttpsRedirection();
         }
     }
 }

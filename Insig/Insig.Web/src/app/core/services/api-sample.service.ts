@@ -12,12 +12,12 @@ export class ApiSampleService {
   }
 
   getSampleData(): Observable<SampleDto[]> {
-    const apiUrl = "http://localhost:5001/values/sample";
+    const apiUrl = "https://localhost:5001/values/sample";
     return this.http.get<SampleDto[]>(apiUrl);
   }
 
   addSampleData(sample: SampleDto): Observable<SampleDto> {
-    const apiUrl = "http://localhost:5001/values/sample";
+    const apiUrl = "https://localhost:5001/values/sample";
     return this.http.post<SampleDto>(apiUrl, sample);
   }
 }

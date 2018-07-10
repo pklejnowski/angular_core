@@ -29,9 +29,13 @@ namespace Insig.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
-
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
 

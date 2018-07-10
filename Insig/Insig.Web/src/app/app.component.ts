@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { switchMapTo } from "rxjs/operators";
 
 import { ApiSampleService } from "./core/services/api-sample.service";
 
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   addSample(sampleNameToAdd: string): void {
     this.samples = this.sampleService.addSampleData(<SampleDto>{ name: sampleNameToAdd })
       .pipe(
-        switchMap(() => this.sampleService.getSampleData())
+        switchMapTo(this.sampleService.getSampleData())
       );
   }
 
