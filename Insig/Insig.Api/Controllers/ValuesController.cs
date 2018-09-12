@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Insig.Api.Controllers
 {
     [Route("values")]
-    public class ValuesController : Controller
+    [ApiController]
+    public class ValuesController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
         private readonly ICommandDispatcher _commandDispatcher;
@@ -24,7 +25,7 @@ namespace Insig.Api.Controllers
         }
 
         [HttpGet("sample")]
-        public List<SampleDTO> Get(SampleParameter parameter)
+        public List<SampleDTO> Get([FromQuery] SampleParameter parameter)
         {
             return _queryDispatcher.Dispatch(parameter);
         }
