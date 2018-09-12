@@ -31,7 +31,7 @@ namespace Insig.Api.Controllers
         }
 
         [HttpPost("sample")]
-        public void Add([FromBody]AddSampleCommand command)
+        public void Add([FromBody] AddSampleCommand command)
         {
             _commandDispatcher.Dispatch(command);
         }
