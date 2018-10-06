@@ -13,13 +13,13 @@ export interface SampleDto {
   templateUrl: "./app.component.html"
 })
 export class AppComponent implements OnInit {
-  title = "app";
+  title = "Sample App";
   samples: Observable<SampleDto[]>;
 
   constructor(private sampleService: ApiSampleService) { }
 
-  addSample(sampleNameToAdd: string): void {
-    this.samples = this.sampleService.addSampleData(<SampleDto>{ name: sampleNameToAdd })
+  addSample(sampleName: string): void {
+    this.samples = this.sampleService.addSampleData(<SampleDto>{ name: sampleName })
       .pipe(
         switchMapTo(this.sampleService.getSampleData())
       );

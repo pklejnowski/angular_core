@@ -1,23 +1,22 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { SampleDto } from "src/app/app.component";
 
-import { SampleDto } from "../../app.component";
+import { ApiClientService } from "./api-client.service";
+
 
 @Injectable({
   providedIn: "root"
 })
 export class ApiSampleService {
-  constructor(private http: HttpClient) {
+  constructor(private apiClientService: ApiClientService) {
   }
 
   getSampleData(): Observable<SampleDto[]> {
-    const apiUrl = "https://localhost:5001/values/sample";
-    return this.http.get<SampleDto[]>(apiUrl);
+    return this.apiClientService.get("values/sample");
   }
 
   addSampleData(sample: SampleDto): Observable<SampleDto> {
-    const apiUrl = "https://localhost:5001/values/sample";
-    return this.http.post<SampleDto>(apiUrl, sample);
+    return this.apiClientService.post("values/sample", sample);
   }
 }
