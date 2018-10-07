@@ -13,6 +13,18 @@ export class ValidationFeedbackComponent implements OnInit {
 
   constructor(@Optional() private formGroup: FormGroupDirective) { }
 
+  getValidationError(): string {
+    if (this.control.hasError("required")) {
+      return "Field is required.";
+    } else if (this.control.hasError("minlength")) {
+      return `Field has to have at least ${this.control.getError("minlength").requiredLength} characters.`;
+    } else if (this.control.hasError("email")) {
+      return "E-mail format is incorrect.";
+    }
+
+    return null;
+  }
+
   ngOnInit(): void {
     if (!this.control && !this.controlName) {
       throw new Error("Validation Feedback must have [control] or [controlName] inputs");

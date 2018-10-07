@@ -32,10 +32,11 @@
                  formControlName="confirmPassword"
                  required>
           <mat-error>
-            <app-validation-feedback controlName="confirmPassword"></app-validation-feedback>
-          </mat-error>
-          <mat-error *ngIf="registrationForm.get('confirmPassword').hasError('notMatch')">
-            This doesn't match the password you've provided. Please confirm you've entered your password correctly.
+            <app-validation-feedback controlName="confirmPassword">
+              <ng-container *ngIf="registrationForm.get('confirmPassword').hasError('notMatch')">
+                This doesn't match the password you've provided. Please confirm you've entered your password correctly.
+              </ng-container>
+            </app-validation-feedback>
           </mat-error>
         </mat-form-field>
         <div class="margin-top-25">
