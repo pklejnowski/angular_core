@@ -1,0 +1,48 @@
+<div class="login-content">
+  <mat-card>
+    <mat-card-title>Registration</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="registrationForm"
+            (ngSubmit)="register()">
+        <mat-form-field class="full-width-input">
+          <input matInput
+                 placeholder="User"
+                 formControlName="username"
+                 required>
+          <mat-error>
+            <app-validation-feedback controlName="username"></app-validation-feedback>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input matInput
+                 placeholder="Password"
+                 formControlName="password"
+                 required
+                 [type]="hide_password ? 'password' : 'text'">
+          <mat-icon matSuffix
+                    (click)="hide_password = !hide_password">{{ hide_password ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-error>
+            <app-validation-feedback controlName="password"></app-validation-feedback>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input matInput
+                 type="password"
+                 placeholder="Confirm Password"
+                 formControlName="confirmPassword"
+                 required>
+          <mat-error>
+            <app-validation-feedback controlName="confirmPassword"></app-validation-feedback>
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('confirmPassword').hasError('notMatch')">
+            This doesn't match the password you've provided. Please confirm you've entered your password correctly.
+          </mat-error>
+        </mat-form-field>
+        <div class="margin-top-25">
+          <button mat-raised-button
+                  color="primary">Register</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,10 @@
+<ng-container *ngIf="control.hasError('required')">
+  Field is required.
+</ng-container>
+<ng-container *ngIf="control.getError('minlength') as error">
+  Field has to have at least {{error.requiredLength}} characters.
+</ng-container>
+<ng-container *ngIf="control.hasError('email')">
+  E-mail format is incorrect.
+</ng-container>
+<ng-content></ng-content>
