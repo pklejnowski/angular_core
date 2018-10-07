@@ -21,6 +21,7 @@ namespace Insig.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/");
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseHttpsRedirection();

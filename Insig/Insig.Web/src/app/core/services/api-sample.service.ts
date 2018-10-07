@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { SampleDto } from "src/app/app.component";
+import { SampleDto } from "src/app/features/sample/sample.component";
 
 import { ApiClientService } from "./api-client.service";
 

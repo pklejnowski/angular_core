@@ -1,30 +1,3 @@
-<div>
-  <mat-toolbar color="primary"
-               class="mat-elevation-z6">
-    <span>
-      <mat-icon>mood</mat-icon>
-    </span>
-    <span>{{title}}</span>
-  </mat-toolbar>
+<app-navbar></app-navbar>
 
-  <mat-card>
-    <h1>
-      Welcome to {{ title }}!
-    </h1>
-
-    <mat-form-field class="example-full-width">
-      <input matInput
-             #sampleInput
-             placeholder="Sample value">
-    </mat-form-field>
-
-    <button mat-raised-button
-            (click)="addSample(sampleInput.value)">Add sample</button>
-
-    <ul>
-      <li *ngFor="let sample of samples | async">
-        Name: {{ sample.name }}
-      </li>
-    </ul>
-  </mat-card>
-</div>
+<router-outlet></router-outlet>

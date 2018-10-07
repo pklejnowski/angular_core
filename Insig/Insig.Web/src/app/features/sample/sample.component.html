@@ -1,0 +1,20 @@
+<mat-card>
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+  <mat-form-field class="example-full-width">
+    <input matInput
+           #sampleInput
+           placeholder="Sample value">
+  </mat-form-field>
+
+  <button mat-raised-button
+          (click)="addSample(sampleInput.value)">Add sample</button>
+
+  <ul>
+    <li *ngFor="let sample of samples | async">
+      Name: {{ sample.name }}
+    </li>
+  </ul>
+</mat-card>
