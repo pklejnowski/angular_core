@@ -20,8 +20,6 @@ export class ValidationFeedbackComponent implements OnInit {
     } else if (this.control.hasError("email")) {
       return "E-mail format is incorrect.";
     }
-
-    return null;
   }
 
   ngOnInit(): void {

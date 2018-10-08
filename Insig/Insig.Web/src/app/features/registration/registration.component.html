@@ -14,27 +14,31 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
-          <input matInput
+          <input #password
+                 matInput
+                 type="password"
                  placeholder="Password"
                  formControlName="password"
-                 required
-                 [type]="hide_password ? 'password' : 'text'">
-          <mat-icon matSuffix
-                    (click)="hide_password = !hide_password">{{ hide_password ? 'visibility' : 'visibility_off'}}</mat-icon>
+                 required>
+          <mat-icon [appPasswordSwitchType]="password"
+                    matSuffix>{{ password.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
           <mat-error>
             <app-validation-feedback controlName="password"></app-validation-feedback>
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
-          <input matInput
+          <input #confirmPassword
+                 matInput
                  type="password"
                  placeholder="Confirm Password"
                  formControlName="confirmPassword"
                  required>
+          <mat-icon [appPasswordSwitchType]="confirmPassword"
+                    matSuffix>{{ confirmPassword.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
           <mat-error>
             <app-validation-feedback controlName="confirmPassword">
               <ng-container *ngIf="registrationForm.get('confirmPassword').hasError('notMatch')">
-                This doesn't match the password you've provided. Please confirm you've entered your password correctly.
+                This doesn't match the password you've provided.
               </ng-container>
             </app-validation-feedback>
           </mat-error>

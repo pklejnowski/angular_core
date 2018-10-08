@@ -13,8 +13,6 @@ export class RegistrationComponent implements OnDestroy {
 
   destroySubject$: Subject<void> = new Subject();
 
-  hide_password = true;
-
   registrationForm = this.fb.group({
     username: ["", [Validators.required]],
     password: ["", [Validators.required, Validators.minLength(6)]],
@@ -24,7 +22,6 @@ export class RegistrationComponent implements OnDestroy {
   constructor(private fb: FormBuilder, private authService: AuthService) { }
 
   register(): void {
-    console.log(this.registrationForm);
     if (this.registrationForm.valid) {
       this.authService.register(this.registrationForm.value);
     }
