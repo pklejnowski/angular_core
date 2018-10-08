@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^6.1.9",
     "@angular/router": "^6.1.9",
     "core-js": "^2.5.4",
+    "ngx-toastr": "^9.1.0",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },
