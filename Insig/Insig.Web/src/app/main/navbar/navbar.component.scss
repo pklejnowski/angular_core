@@ -4,3 +4,10 @@ mat-toolbar {
     left: 0;
     z-index: 2;
 }
+
+.nav-title {
+    margin-left: 25px;
+    &:hover {
+        cursor: pointer;
+    }
+}

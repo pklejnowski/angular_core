@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app.routing.module";
@@ -18,7 +19,8 @@ import { MaterialModule } from "./material.module";
     BrowserAnimationsModule,
     CoreModule,
     MainModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LoadingBarHttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
