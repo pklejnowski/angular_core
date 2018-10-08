@@ -3,8 +3,7 @@ import { AbstractControl, FormGroupDirective } from "@angular/forms";
 
 @Component({
   selector: "app-validation-feedback",
-  templateUrl: "./validation-feedback.component.html",
-  styleUrls: ["./validation-feedback.component.scss"]
+  templateUrl: "./validation-feedback.component.html"
 })
 export class ValidationFeedbackComponent implements OnInit {
 
