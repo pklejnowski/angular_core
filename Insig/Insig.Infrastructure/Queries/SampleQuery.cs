@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
-using Insig.Infrastructure.DataModel.Context;
+using Insig.Infrastructure.QueryBuilder;
 using Insig.PublishedLanguage.Dtos;
 using Insig.PublishedLanguage.Queries;
 
@@ -10,18 +9,22 @@ namespace Insig.Infrastructure.Queries
 {
     public class SampleQuery : ISampleQuery
     {
-        private readonly InsigContext _context;
+        private readonly SqlQueryBuilder _sqlQueryBuilder;
 
-        public SampleQuery(InsigContext context)
+        public SampleQuery(SqlQueryBuilder sqlQueryBuilder)
         {
-            EnsureArg.IsNotNull(context, nameof(context));
+            EnsureArg.IsNotNull(sqlQueryBuilder, nameof(sqlQueryBuilder));
 
-            _context = context;
+            _sqlQueryBuilder = sqlQueryBuilder;
         }
 
         public List<SampleDTO> GetSampleData(SampleParameter query)
         {
-            return _context.Samples.Select(r => new SampleDTO { Name = r.Name }).ToList();
+            return _sqlQueryBuilder
+                .Select("Name")
+                .From("Sample")
+                .BuildQuery<SampleDTO>()
+                .ExecuteToList();
         }
     }
 }

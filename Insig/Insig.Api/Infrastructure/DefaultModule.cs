@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
 using Autofac;
 using EnsureThat;
@@ -7,6 +9,7 @@ using Insig.ApplicationServices.UseCases;
 using Insig.Infrastructure.DataModel.Context;
 using Insig.Infrastructure.Domain;
 using Insig.Infrastructure.Queries;
+using Insig.Infrastructure.QueryBuilder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Module = Autofac.Module;
@@ -30,6 +33,7 @@ namespace Insig.Api.Infrastructure
             builder.RegisterType<CommandDispatcher>().AsImplementedInterfaces();
 
             RegisterContext(builder);
+            RegisterDatabaseAccess(builder);
             RegisterControllers(builder);
             RegisterUseCases(builder);
             RegisterQueries(builder);
@@ -55,6 +59,16 @@ namespace Insig.Api.Infrastructure
                 .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
             builder.Register((container) => new InsigContext(options.Options)).InstancePerLifetimeScope();
+        }
+
+        private void RegisterDatabaseAccess(ContainerBuilder builder)
+        {
+            builder
+                .Register<IDbConnection>(c => new SqlConnection(_connectionString))
+                .InstancePerLifetimeScope();
+            builder
+                .RegisterType<SqlQueryBuilder>()
+                .InstancePerDependency();
         }
 
         private static void RegisterControllers(ContainerBuilder builder)
