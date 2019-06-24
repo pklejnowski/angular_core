@@ -7,13 +7,15 @@ import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app.routing.module";
+import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
 import { CoreModule } from "./core/core.module";
 import { MainModule } from "./main/main.module";
 import { MaterialModule } from "./material.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AuthCallbackComponent
   ],
   imports: [
     BrowserModule,

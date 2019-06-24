@@ -4,11 +4,13 @@ using Insig.Common.CQRS;
 using Insig.PublishedLanguage.Commands;
 using Insig.PublishedLanguage.Dtos;
 using Insig.PublishedLanguage.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Insig.Api.Controllers
 {
     [Route("values")]
+    [Authorize]
     [ApiController]
     public class ValuesController : ControllerBase
     {

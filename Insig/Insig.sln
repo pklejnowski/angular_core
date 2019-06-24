@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Api", "Insig.Api\Insig.Api.csproj", "{758BA3FD-AC4B-42A2-8CD6-A7909827A413}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.ApplicationServices", "Insig.ApplicationServices\Insig.ApplicationServices.csproj", "{87395851-FDF2-403B-A596-4F68CD9B3183}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.PublishedLanguage", "Insig.PublishedLanguage\Insig.PublishedLanguage.csproj", "{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insig.IdentityServer", "Insig.IdentityServer\Insig.IdentityServer.csproj", "{ACC4CD97-73DF-4975-A93F-7FE657A89417}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DACFC646-8D6A-4B8F-98E0-A93200FB9F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACC4CD97-73DF-4975-A93F-7FE657A89417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACC4CD97-73DF-4975-A93F-7FE657A89417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACC4CD97-73DF-4975-A93F-7FE657A89417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACC4CD97-73DF-4975-A93F-7FE657A89417}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

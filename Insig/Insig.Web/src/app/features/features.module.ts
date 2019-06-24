@@ -4,7 +4,7 @@ import { MaterialModule } from "@app/material.module";
 
 import { FeaturesRoutingModule } from "./features-routing.module";
 import { LoginModule } from "./login/login.module";
-import { RegistrationModule } from "./registration/registration.module";
+import { RegisterModule as RegisterModule } from "./register/register.module";
 import { SampleComponent } from "./sample/sample.component";
 
 @NgModule({
@@ -13,7 +13,7 @@ import { SampleComponent } from "./sample/sample.component";
     FeaturesRoutingModule,
     MaterialModule,
     LoginModule,
-    RegistrationModule
+    RegisterModule
   ],
   declarations: [
     SampleComponent

@@ -36,24 +36,36 @@ namespace Insig.Api
 
             app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            services.AddCors();
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5000";
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "insigapi.read";
+                });
+
             return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
 
         private ContainerBuilder ContainerBuilder(IServiceCollection services)
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("DefaultConnection")));
+            containerBuilder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
             containerBuilder.Populate(services);
 
             return containerBuilder;
         }
-
-
     }
 }

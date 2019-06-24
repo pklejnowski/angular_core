@@ -6,19 +6,27 @@
 
   <span class="fill-remaining-space"></span>
 
-  <div>
+  <nav *ngIf="!(authStatus$ | async)">
+    <button *ngIf="!(authStatus$ | async)"
+            mat-button
+            routerLink="/login">
+      <mat-icon>security</mat-icon> Login
+    </button>
+    <button *ngIf="!(authStatus$ | async)"
+            mat-button
+            routerLink="/register">
+      <mat-icon>call_made</mat-icon> Register
+    </button>
+  </nav>
+
+  <nav *ngIf="authStatus$ | async">
     <button mat-button
             routerLink="/sample">
       <mat-icon>mood</mat-icon> Sample
     </button>
     <button mat-button
-            routerLink="/login">
-      <mat-icon>security</mat-icon> Login
+            (click)="signout()">
+      <mat-icon>exit_to_app</mat-icon> Signout {{getUserName()}}
     </button>
-    <button mat-button
-            routerLink="/registration">
-      <mat-icon>call_made</mat-icon> Register
-    </button>
-  </div>
-
+  </nav>
 </mat-toolbar>

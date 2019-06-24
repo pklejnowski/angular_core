@@ -12,7 +12,7 @@ export class ToastHttpInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((err) => {
-                this.toastr.error("Operation failed.", "Error");
+                this.toastr.error("Operation failed", "Error");
                 return throwError(err);
             })
         );

@@ -1,16 +1,25 @@
 <div class="login-content">
   <mat-card>
-    <mat-card-title>Registration</mat-card-title>
+    <mat-card-title>Register your account</mat-card-title>
     <mat-card-content>
-      <form [formGroup]="registrationForm"
+      <form [formGroup]="registerForm"
             (ngSubmit)="register()">
         <mat-form-field class="full-width-input">
           <input matInput
-                 placeholder="User"
-                 formControlName="username"
+                 placeholder="Name"
+                 formControlName="name"
                  required>
           <mat-error>
-            <app-validation-feedback controlName="username"></app-validation-feedback>
+            <app-validation-feedback controlName="name"></app-validation-feedback>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input matInput
+                 placeholder="Email"
+                 formControlName="email"
+                 required>
+          <mat-error>
+            <app-validation-feedback controlName="email"></app-validation-feedback>
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
@@ -32,19 +41,21 @@
                  type="password"
                  placeholder="Confirm Password"
                  formControlName="confirmPassword"
+                 pattern="{{ password.value }}"
                  required>
           <mat-icon [appPasswordSwitchType]="confirmPassword"
                     matSuffix>{{ confirmPassword.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
           <mat-error>
             <app-validation-feedback controlName="confirmPassword">
-              <ng-container *ngIf="registrationForm.get('confirmPassword').hasError('notMatch')">
+              <ng-container *ngIf="registerForm.get('confirmPassword').hasError('pattern')">
                 This doesn't match the password you've provided.
               </ng-container>
             </app-validation-feedback>
           </mat-error>
         </mat-form-field>
         <div class="margin-top-25">
-          <button mat-raised-button
+          <button [disabled]="!registerForm.valid"
+                  mat-raised-button
                   color="primary">Register</button>
         </div>
       </form>
