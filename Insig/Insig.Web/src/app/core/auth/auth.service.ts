@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { getClientSettings } from "@app/auth.config";
 import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, from, Observable } from "rxjs";
 
 interface RegisterCredentials {
   name: string;
@@ -40,6 +40,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.user != null && !this.user.expired;
+  }
+
+  isAuthenticatedObs(): Observable<boolean> {
+    return from(this.manager.getUser().then(user => user ? true : false));
   }
 
   async completeAuthentication(): Promise<void> {
