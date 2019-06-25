@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Security.Claims;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Insig.Api.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -43,18 +45,23 @@ namespace Insig.Api
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore()
-                .AddAuthorization()
                 .AddJsonFormatters();
 
             services.AddCors();
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(o =>
                 {
-                    options.Authority = "https://localhost:5000";
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "insigapi.read";
+                    o.RequireHttpsMetadata = true;
+                    o.Authority = "https://localhost:5000";
+                    o.Audience = "insigapi";
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "insigapi.read"));
+                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+            });
 
             return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }

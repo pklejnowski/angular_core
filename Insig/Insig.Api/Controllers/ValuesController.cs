@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Insig.Api.Controllers
 {
+    [Authorize(Policy = "ApiReader")]
     [Route("values")]
-    [Authorize]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -26,12 +26,14 @@ namespace Insig.Api.Controllers
             _commandDispatcher = commandDispatcher;
         }
 
+        [Authorize(Policy = "Consumer")]
         [HttpGet("sample")]
         public List<SampleDTO> Get([FromQuery] SampleParameter parameter)
         {
             return _queryDispatcher.Dispatch(parameter);
         }
 
+        [Authorize(Policy = "Consumer")]
         [HttpPost("sample")]
         public void Add([FromBody] AddSampleCommand command)
         {

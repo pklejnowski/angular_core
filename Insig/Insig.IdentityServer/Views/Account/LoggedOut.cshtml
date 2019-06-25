@@ -1,0 +1,13 @@
+﻿@model Insig.IdentityServer.Models.LoggedOutViewModel
+
+@{
+    // set this so the layout rendering sees an anonymous user
+    ViewData["signed-out"] = true;
+}
+
+<div class="page-header logged-out">
+    <h1>
+        Logout
+    </h1>
+    You are now logged out
+</div>

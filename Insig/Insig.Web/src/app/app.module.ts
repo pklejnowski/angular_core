@@ -9,6 +9,7 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app.routing.module";
 import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
 import { CoreModule } from "./core/core.module";
+import { HttpAuthInterceptor } from "./core/interceptors/http-auth-interceptor";
 import { MainModule } from "./main/main.module";
 import { MaterialModule } from "./material.module";
 
@@ -30,6 +31,11 @@ import { MaterialModule } from "./material.module";
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ToastHttpInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpAuthInterceptor,
       multi: true
     }
   ],

@@ -31,7 +31,7 @@ namespace Insig.IdentityServer
             return new[]
             {
                 new Client {
-                    RequireConsent = false,
+                    RequireConsent = false, // change to true if you want to see consent page after log in
                     ClientId = "insig_spa",
                     ClientName = "Insig SPA",
                     AllowedGrantTypes = GrantTypes.Implicit,
