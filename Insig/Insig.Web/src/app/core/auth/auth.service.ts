@@ -4,6 +4,7 @@ import { getClientSettings } from "@app/auth.config";
 import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
 import { BehaviorSubject, from, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 interface RegisterCredentials {
   name: string;
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   isAuthenticatedObs(): Observable<boolean> {
-    return from(this.manager.getUser().then(user => user ? true : false));
+    return from(this.manager.getUser()).pipe(map(user => !!user));
   }
 
   async completeAuthentication(): Promise<void> {

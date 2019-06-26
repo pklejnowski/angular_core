@@ -1,5 +1,5 @@
 import { environment } from "environments/environment";
-import { UserManagerSettings } from "oidc-client";
+import { UserManagerSettings, WebStorageStateStore } from "oidc-client";
 
 export function getClientSettings(): UserManagerSettings {
     return {
@@ -7,6 +7,7 @@ export function getClientSettings(): UserManagerSettings {
         client_id: "insig_spa",
         redirect_uri: environment.clientUrl + "auth-callback",
         response_type: "id_token token",
-        scope: "openid profile email insigapi.read"
+        scope: "openid profile email insigapi.read",
+        userStore: new WebStorageStateStore({ store: window.localStorage })
     };
 }
