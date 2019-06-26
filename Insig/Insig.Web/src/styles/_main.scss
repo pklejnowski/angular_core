@@ -27,3 +27,13 @@ mat-card {
 .full-width-input {
     width: 100%;
 }
+
+.small-info-page {
+    padding: 15px 1rem;
+
+    mat-card {
+        max-width: 400px;
+        margin: 2em auto;
+        text-align: center;
+    }
+}

@@ -36,11 +36,15 @@ namespace Insig.IdentityServer
                     ClientName = "Insig SPA",
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = { "openid", "profile", "email", "insigapi.read" },
-                    RedirectUris = {"https://localhost:5002/auth-callback"},
-                    PostLogoutRedirectUris = {"https://localhost:5002/"},
+                    RedirectUris =
+                    {
+                        "https://localhost:5002/auth-callback",
+                        //"https://localhost:5002/silent-refresh.html"
+                    },
+                    PostLogoutRedirectUris = {"https://localhost:5002/logout"},
                     AllowedCorsOrigins = {"https://localhost:5002"},
                     AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 3600
+                    AccessTokenLifetime = 80
                 }
             };
         }

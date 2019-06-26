@@ -2,9 +2,10 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MaterialModule } from "@app/material.module";
 
+import { LoginModule } from "./account/login/login.module";
+import { LogoutModule } from "./account/logout/logout.module";
+import { RegisterModule } from "./account/register/register.module";
 import { FeaturesRoutingModule } from "./features-routing.module";
-import { LoginModule } from "./login/login.module";
-import { RegisterModule as RegisterModule } from "./register/register.module";
 import { SampleComponent } from "./sample/sample.component";
 
 @NgModule({
@@ -13,7 +14,8 @@ import { SampleComponent } from "./sample/sample.component";
     FeaturesRoutingModule,
     MaterialModule,
     LoginModule,
-    RegisterModule
+    RegisterModule,
+    LogoutModule
   ],
   declarations: [
     SampleComponent

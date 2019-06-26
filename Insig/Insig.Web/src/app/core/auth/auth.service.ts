@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { getClientSettings } from "@app/auth.config";
 import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
@@ -24,10 +25,16 @@ export class AuthService {
   private authNavStatusSource = new BehaviorSubject<boolean>(false);
   authStatus$ = this.authNavStatusSource.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.manager.getUser().then(user => {
       this.user = user;
       this.authNavStatusSource.next(this.isAuthenticated());
+    });
+
+    this.manager.events.addUserSignedOut(() => {
+      this.user = null;
+      this.authNavStatusSource.next(this.isAuthenticated());
+      this.router.navigate(["logout"]);
     });
   }
 
