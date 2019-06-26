@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using IdentityServer4.AccessTokenValidation;
 using Insig.Api.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -45,16 +45,18 @@ namespace Insig.Api
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore()
+                .AddAuthorization()
                 .AddJsonFormatters();
 
             services.AddCors();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(o =>
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
                 {
-                    o.RequireHttpsMetadata = true;
-                    o.Authority = "https://localhost:5000";
-                    o.Audience = "insigapi";
+                    options.Authority = "https://localhost:5000";
+                    options.RequireHttpsMetadata = true;
+
+                    options.ApiName = "insigapi";
                 });
 
             services.AddAuthorization(options =>
