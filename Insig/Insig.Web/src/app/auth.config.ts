@@ -1,5 +1,5 @@
 import { environment } from "environments/environment";
-import { UserManagerSettings, WebStorageStateStore } from "oidc-client";
+import { UserManagerSettings } from "oidc-client";
 
 export function getClientSettings(): UserManagerSettings {
     return {
@@ -8,6 +8,7 @@ export function getClientSettings(): UserManagerSettings {
         redirect_uri: environment.clientUrl + "auth-callback",
         response_type: "id_token token",
         scope: "openid profile email insigapi.read",
-        userStore: new WebStorageStateStore({ store: window.localStorage })
+        automaticSilentRenew: true,
+        silent_redirect_uri: environment.clientUrl + "assets/silent-refresh.html"
     };
 }

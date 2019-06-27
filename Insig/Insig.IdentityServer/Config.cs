@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace Insig.IdentityServer
@@ -30,21 +31,30 @@ namespace Insig.IdentityServer
         {
             return new[]
             {
-                new Client {
+                new Client
+                {
                     RequireConsent = false, // change to true if you want to see consent page after log in
                     ClientId = "insig_spa",
                     ClientName = "Insig SPA",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = { "openid", "profile", "email", "insigapi.read" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "insigapi.read"
+                    },
                     RedirectUris =
                     {
                         "https://localhost:5002/auth-callback",
-                        //"https://localhost:5002/silent-refresh.html"
+                        "https://localhost:5002/assets/silent-refresh.html"
                     },
                     PostLogoutRedirectUris = {"https://localhost:5002/logout"},
                     AllowedCorsOrigins = {"https://localhost:5002"},
                     AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 80
+                    AccessTokenLifetime = 80,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AlwaysIncludeUserClaimsInIdToken = true
                 }
             };
         }

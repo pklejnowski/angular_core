@@ -31,6 +31,10 @@ export class AuthService {
       this.authNavStatusSource.next(this.isAuthenticated());
     });
 
+    this.manager.events.addUserLoaded(user => {
+      this.user = user;
+    });
+
     this.manager.events.addUserSignedOut(() => {
       this.user = null;
       this.authNavStatusSource.next(this.isAuthenticated());
