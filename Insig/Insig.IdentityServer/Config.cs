@@ -36,7 +36,8 @@ namespace Insig.IdentityServer
                     RequireConsent = false, // change to true if you want to see consent page after log in
                     ClientId = "insig_spa",
                     ClientName = "Insig SPA",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -52,7 +53,7 @@ namespace Insig.IdentityServer
                     PostLogoutRedirectUris = {"https://localhost:5002/logout"},
                     AllowedCorsOrigins = {"https://localhost:5002"},
                     AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 80,
+                    AccessTokenLifetime = 300,
                     AccessTokenType = AccessTokenType.Jwt,
                     AlwaysIncludeUserClaimsInIdToken = true
                 }
