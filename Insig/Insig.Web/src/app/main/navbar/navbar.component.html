@@ -5,6 +5,13 @@
 
   <span class="fill-remaining-space"></span>
 
+  <a mat-button
+     routerLinkActive="menu-item-active"
+     [routerLinkActiveOptions]="{ exact: true }"
+     routerLink="/">
+    <mat-icon>home</mat-icon> Home
+  </a>
+
   <nav *ngIf="!(authStatus$ | async)">
     <a mat-button
        routerLinkActive="menu-item-active"

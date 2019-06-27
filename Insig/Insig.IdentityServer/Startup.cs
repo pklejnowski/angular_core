@@ -42,8 +42,8 @@ namespace Insig.IdentityServer
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                .AddDeveloperSigningCredential() // not exist in nol ?????????
-                .AddInMemoryPersistedGrants() // copied from NOL ????????????
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
