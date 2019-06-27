@@ -6,6 +6,8 @@ mat-toolbar {
 }
 
 .nav-title {
+    color: inherit;
+    text-decoration: none;
     margin-left: 25px;
 
     &:hover {

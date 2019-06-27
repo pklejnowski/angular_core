@@ -1,32 +1,33 @@
-<mat-toolbar color="primary"
-             class="mat-elevation-z6">
+<mat-toolbar class="mat-elevation-z6 navbar">
 
-  <div class="nav-title"
-       routerLink="/">{{title}}</div>
+  <a class="nav-title"
+     routerLink="/">{{title}}</a>
 
   <span class="fill-remaining-space"></span>
 
   <nav *ngIf="!(authStatus$ | async)">
-    <button *ngIf="!(authStatus$ | async)"
-            mat-button
-            routerLink="/login">
+    <a mat-button
+       routerLinkActive="menu-item-active"
+       routerLink="/login">
       <mat-icon>security</mat-icon> Login
-    </button>
-    <button *ngIf="!(authStatus$ | async)"
-            mat-button
-            routerLink="/register">
+    </a>
+    <a mat-button
+       routerLinkActive="menu-item-active"
+       routerLink="/register">
       <mat-icon>call_made</mat-icon> Register
-    </button>
+    </a>
   </nav>
 
   <nav *ngIf="authStatus$ | async">
-    <button mat-button
-            routerLink="/sample">
+    <a mat-button
+       routerLinkActive="menu-item-active"
+       routerLink="/sample">
       <mat-icon>mood</mat-icon> Sample
-    </button>
-    <button mat-button
-            (click)="signout()">
+    </a>
+    <a mat-button
+       routerLinkActive="menu-item-active"
+       (click)="signout()">
       <mat-icon>exit_to_app</mat-icon> Signout {{getUserName()}}
-    </button>
+    </a>
   </nav>
 </mat-toolbar>

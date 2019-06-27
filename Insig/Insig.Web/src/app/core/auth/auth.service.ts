@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { getClientSettings } from "@app/auth.config";
 import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
 import { BehaviorSubject, from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+
+import { getClientSettings } from "./auth.config";
 
 interface RegisterCredentials {
   name: string;

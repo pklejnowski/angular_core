@@ -3,6 +3,11 @@ body {
     font-family: Roboto, sans-serif;
 }
 
+.navbar {
+    background: white;
+    height: 56px !important;
+}
+
 mat-card {
     max-width: 80%;
     margin: 2em auto;
@@ -36,4 +41,8 @@ mat-card {
         margin: 2em auto;
         text-align: center;
     }
+}
+
+.menu-item-active {
+    border-bottom: 3px solid !important;
 }
