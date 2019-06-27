@@ -1,17 +1,18 @@
 <div class="small-info-page">
   <mat-card>
-    <mat-card-title><img src="assets/images/open-identity.png"
+    <mat-card-title>
+      <img src="assets/images/open-identity.png"
            class="openid-logo" /></mat-card-title>
     <mat-card-content>
-      <p>This step redirects to the IdentityServer instance to perform the authentication step. Before you can login
+      <div class="login-info">
+        This step redirects to the IdentityServer instance to perform the authentication step. Before you can login
         here, you must <a routerLink="/register">register a new account</a>.
-      </p>
-
-      <p>
+      </div>
+      <div>
         <button mat-raised-button
                 color="primary"
                 (click)="login()">Login with IdentityServer</button>
-      </p>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
