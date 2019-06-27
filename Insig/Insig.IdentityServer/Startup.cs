@@ -87,11 +87,11 @@ namespace Insig.IdentityServer
                 .WriteTo.File(@"authserver_log.txt");
 
             loggerFactory.WithFilter(new FilterLoggerSettings
-                {
-                    { "IdentityServer4", LogLevel.Debug },
-                    { "Microsoft", LogLevel.Warning },
-                    { "System", LogLevel.Warning },
-                }).AddSerilog(serilog.CreateLogger());
+            {
+                {"IdentityServer4", LogLevel.Debug},
+                {"Microsoft", LogLevel.Warning},
+                {"System", LogLevel.Warning},
+            }).AddSerilog(serilog.CreateLogger());
 
             app.UseStaticFiles();
             app.UseCors("AllowAll");

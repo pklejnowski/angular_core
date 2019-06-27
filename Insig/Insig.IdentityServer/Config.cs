@@ -38,6 +38,7 @@ namespace Insig.IdentityServer
                     ClientName = "Insig SPA",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
+                    RequireClientSecret = false,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
