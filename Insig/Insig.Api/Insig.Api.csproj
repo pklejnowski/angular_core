@@ -10,6 +10,9 @@
     <PackageReference Include="Ensure.That" Version="8.1.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
+    <PackageReference Include="serilog.extensions.logging" Version="2.0.2" />
+    <PackageReference Include="serilog.sinks.file" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

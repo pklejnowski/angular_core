@@ -88,9 +88,8 @@ namespace Insig.IdentityServer
 
             loggerFactory.WithFilter(new FilterLoggerSettings
             {
-                {"IdentityServer4", LogLevel.Debug},
                 {"Microsoft", LogLevel.Warning},
-                {"System", LogLevel.Warning},
+                {"System", LogLevel.Warning}
             }).AddSerilog(serilog.CreateLogger());
 
             app.UseStaticFiles();

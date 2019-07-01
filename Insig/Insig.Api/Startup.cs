@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Insig.Api
 {
@@ -53,7 +55,7 @@ namespace Insig.Api
             return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -63,6 +65,17 @@ namespace Insig.Api
             {
                 app.UseHsts();
             }
+
+            var serilog = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.FromLogContext()
+                .WriteTo.File(@"api_log.txt");
+
+            loggerFactory.WithFilter(new FilterLoggerSettings
+            {
+                {"Microsoft", LogLevel.Warning},
+                {"System", LogLevel.Warning}
+            }).AddSerilog(serilog.CreateLogger());
 
             app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
             app.UseHttpsRedirection();

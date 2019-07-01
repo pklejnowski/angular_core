@@ -267,3 +267,4 @@ __pycache__/
 
 # Log reports
 authserver_log.txt
+api_log.txt
