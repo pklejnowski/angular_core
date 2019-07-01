@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EnsureThat;
+using Insig.Common.Auth;
 using Insig.Common.CQRS;
 using Insig.PublishedLanguage.Commands;
 using Insig.PublishedLanguage.Dtos;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Insig.Api.Controllers
 {
-    [Authorize(Policy = "ApiReader")]
+    [Authorize(Policy = Policies.ApiReader)]
     [Route("values")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -26,14 +27,14 @@ namespace Insig.Api.Controllers
             _commandDispatcher = commandDispatcher;
         }
 
-        [Authorize(Policy = "Consumer")]
+        [Authorize(Policy = Policies.Consumer)]
         [HttpGet("sample")]
         public List<SampleDTO> Get([FromQuery] SampleParameter parameter)
         {
             return _queryDispatcher.Dispatch(parameter);
         }
 
-        [Authorize(Policy = "Consumer")]
+        [Authorize(Policy = Policies.Consumer)]
         [HttpPost("sample")]
         public void Add([FromBody] AddSampleCommand command)
         {

@@ -6,7 +6,7 @@ using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Insig.IdentityServer.Infrastructure.Constants;
+using Insig.Common.Auth;
 using Insig.IdentityServer.Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,7 +15,7 @@ namespace Insig.IdentityServer.Infrastructure.Services
     public class IdentityClaimsProfileService : IProfileService
     {
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsFactory;
-          private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public IdentityClaimsProfileService(UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsFactory)
         {

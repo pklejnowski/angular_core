@@ -42,11 +42,11 @@ namespace Insig.IdentityServer
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
+                .AddDeveloperSigningCredential() // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryClients(Config.GetClients(Configuration["AppUrls:ClientUrl"]))
                 .AddAspNetIdentity<AppUser>();
 
             services.AddTransient<IProfileService, IdentityClaimsProfileService>();

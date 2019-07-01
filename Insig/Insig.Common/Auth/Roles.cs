@@ -1,6 +1,6 @@
 ﻿
 
-namespace Insig.IdentityServer.Infrastructure.Constants
+namespace Insig.Common.Auth
 {
     public static class Roles
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IdentityServer4;
 using IdentityServer4.Models;
+using Insig.Common.Auth;
 
 namespace Insig.IdentityServer
 {
@@ -20,14 +21,14 @@ namespace Insig.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("insigapi", "Resource Insig API")
+                new ApiResource(Instances.InsigApi, "Resource Insig API")
                 {
-                    Scopes = {new Scope("insigapi.read") }
+                    Scopes = {new Scope(Scopes.InsigApi) }
                 }
             };
         }
 
-        public static IEnumerable<Client> GetClients()
+        public static IEnumerable<Client> GetClients(string clientUrl)
         {
             return new[]
             {
@@ -44,15 +45,15 @@ namespace Insig.IdentityServer
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "insigapi.read"
+                        Scopes.InsigApi
                     },
                     RedirectUris =
                     {
-                        "https://localhost:5002/auth-callback",
-                        "https://localhost:5002/assets/silent-refresh.html"
+                        clientUrl + "/auth-callback",
+                        clientUrl + "/assets/silent-refresh.html"
                     },
-                    PostLogoutRedirectUris = {"https://localhost:5002/logout"},
-                    AllowedCorsOrigins = {"https://localhost:5002"},
+                    PostLogoutRedirectUris = { clientUrl + "/logout" },
+                    AllowedCorsOrigins = { clientUrl },
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 300,
                     AccessTokenType = AccessTokenType.Jwt,

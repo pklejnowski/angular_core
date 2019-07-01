@@ -4,8 +4,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.AccessTokenValidation;
 using Insig.Api.Infrastructure;
+using Insig.Common.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +27,32 @@ namespace Insig.Api
             Configuration = builder.Build();
         }
 
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvcCore()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            services.AddCors();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = Configuration["AppUrls:IdentityUrl"];
+                    options.RequireHttpsMetadata = true;
+                    options.ApiName = Instances.InsigApi;
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.ApiReader, policy => policy.RequireClaim("scope", Scopes.InsigApi));
+                options.AddPolicy(Policies.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Consumer));
+            });
+
+            return new AutofacServiceProvider(ContainerBuilder(services).Build());
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -40,32 +68,6 @@ namespace Insig.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
-        }
-
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
-
-            services.AddCors();
-
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "https://localhost:5000";
-                    options.RequireHttpsMetadata = true;
-
-                    options.ApiName = "insigapi";
-                });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "insigapi.read"));
-                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
-            });
-
-            return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
 
         private ContainerBuilder ContainerBuilder(IServiceCollection services)

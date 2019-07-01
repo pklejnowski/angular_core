@@ -22,4 +22,8 @@
     <PackageReference Include="serilog.sinks.file" Version="4.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
+  </ItemGroup>
+
 </Project>
