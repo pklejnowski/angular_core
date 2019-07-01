@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Insig.IdentityServer.Infrastructure.Data.Identity
+namespace Insig.IdentityServer.Infrastructure.Data
 {
     public class AppUser : IdentityUser
     {

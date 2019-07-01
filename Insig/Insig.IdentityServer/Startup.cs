@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using IdentityServer4.Services;
 using Insig.IdentityServer.Extensions;
-using Insig.IdentityServer.Infrastructure.Data.Identity;
+using Insig.IdentityServer.Infrastructure;
+using Insig.IdentityServer.Infrastructure.Data;
 using Insig.IdentityServer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;

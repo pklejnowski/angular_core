@@ -7,7 +7,7 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Insig.Common.Auth;
-using Insig.IdentityServer.Infrastructure.Data.Identity;
+using Insig.IdentityServer.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace Insig.IdentityServer.Infrastructure.Services

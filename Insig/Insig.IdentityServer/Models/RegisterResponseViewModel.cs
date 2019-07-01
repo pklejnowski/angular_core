@@ -1,4 +1,4 @@
-﻿using Insig.IdentityServer.Infrastructure.Data.Identity;
+﻿using Insig.IdentityServer.Infrastructure.Data;
 
 namespace Insig.IdentityServer.Models
 {

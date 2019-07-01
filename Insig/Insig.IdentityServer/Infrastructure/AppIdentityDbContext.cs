@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
+using Insig.IdentityServer.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Insig.IdentityServer.Infrastructure.Data.Identity
+namespace Insig.IdentityServer.Infrastructure
 {
     public class AppIdentityDbContext : IdentityDbContext<AppUser>, IDesignTimeDbContextFactory<AppIdentityDbContext>
     {
