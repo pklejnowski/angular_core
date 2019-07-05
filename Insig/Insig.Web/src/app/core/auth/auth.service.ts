@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   login(): Promise<any> {
-    return this.manager.signinRedirect();
+    return this.manager.signinRedirect({ state: window.location.href });
   }
 
   isAuthenticated(): boolean {
@@ -60,7 +60,11 @@ export class AuthService {
   }
 
   async completeAuthentication(): Promise<void> {
-    this.user = await this.manager.signinRedirectCallback();
+    await this.manager.signinRedirectCallback().then((user) => {
+      this.user = user;
+      this.router.navigate([(new URL(user.state)).searchParams.get("redirect") || "/"]);
+    });
+
     this.authNavStatusSource.next(this.isAuthenticated());
   }
 
