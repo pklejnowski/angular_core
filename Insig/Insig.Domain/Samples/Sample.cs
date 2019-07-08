@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Insig.Common.Exceptions;
 
 namespace Insig.Domain.Samples
 {
@@ -6,12 +7,22 @@ namespace Insig.Domain.Samples
     {
         public Sample(string name)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(name, nameof(name));
+            EnsureThatNameIsCorrect(name);
 
             Name = name;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        private void EnsureThatNameIsCorrect(string name)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(name, nameof(name));
+
+            if (name.ToLower().Contains("test"))
+            {
+                throw new DomainException($"Sample value with name: {name} is not allowed.");
+            }
+        }
     }
 }
