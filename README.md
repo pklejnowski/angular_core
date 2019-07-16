@@ -1,5 +1,5 @@
 # Insig project
-Template with Angular and Asp.net Core + IdentityServer 4
+Template with Angular 8 + .NET Core 2.2 + IdentityServer4
 
 # Setup
 1. Ensure that you have valid Data Source (current: ".\\SQLEXPRESS") in ConnectionString (appsettings.json) in following projects: Insig.Api, Insig.Infrastructure, Insig.IdentityServer
