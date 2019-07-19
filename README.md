@@ -1,5 +1,5 @@
 # Insig project
-Template with Angular 8 + .NET Core 2.2 + IdentityServer4
+Template with Angular 8 + .NET Core 2.2 + IdentityServer4 (Authorization Code Flow + PKCE)
 
 # Project references
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
