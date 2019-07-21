@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using EnsureThat;
+using Insig.ApplicationServices.UseCases;
 using Insig.Common.Exceptions;
 using Insig.Domain.Samples;
 using Insig.Infrastructure.DataModel.Context;

@@ -1,4 +1,6 @@
-﻿namespace Insig.Domain.Samples
+﻿using Insig.Domain.Samples;
+
+namespace Insig.ApplicationServices.UseCases
 {
     public interface ISampleRepository
     {
