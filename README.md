@@ -7,7 +7,7 @@ Proof of Concept for Angular 8 + .NET Core 2.2 + IdentityServer4 (Authorization 
 # Setup
 1. Ensure that you have valid Data Source (current: ".\\SQLEXPRESS") in ConnectionString (appsettings.json) in following projects: Insig.Api, Insig.Infrastructure, Insig.IdentityServer
 
-2. Update database migrations ("dotnet ef database update") in following projects: Insig.Infrastructure, Insig.IdentityServer
+2. Run database migrations ("dotnet ef database update") in following projects: Insig.Infrastructure, Insig.IdentityServer
 
 3. Download npm packages ("npm install") in Insig.Web
 
