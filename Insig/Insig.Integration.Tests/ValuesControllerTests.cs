@@ -1,54 +1,86 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Insig.Api;
 using Insig.Domain.Samples;
 using Insig.Integration.Tests.Utility;
+using Insig.PublishedLanguage.Commands;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
 namespace Insig.Integration.Tests
 {
-    public class ValuesControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ValuesControllerTests : TestHostFixture
     {
-        private readonly HttpClient _client;
-
-        public ValuesControllerTests(CustomWebApplicationFactory<Startup> factory)
-        {
-            _client = factory.CreateClient();
-        }
-
-        [Fact]
-        public async Task Sample_WhenGettingSampleData_ThenAllAreReturned()
+        [Theory]
+        [InlineData("/values/sample")]
+        public async Task Sample_WhenGettingSampleData_ThenAllAreReturned(string url)
         {
             // when
-            var httpResponse = await _client.GetAsync("/values/sample");
+            var httpResponse = await Client.GetAsync(url);
 
             // then
             httpResponse.EnsureSuccessStatusCode();
-
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             var samples = JsonConvert.DeserializeObject<List<Sample>>(stringResponse);
 
             samples.ShouldAllBe(sample => sample.Name.Contains("Sample_"));
         }
 
+        [Theory]
+        [InlineData("/values/sample")]
+        public async Task Sample_WhenCreatingSampleData_ThenIsAddedToDatabase(string url)
+        {
+            // given
+            var command = new AddSampleCommand { Name = "Ble" };
 
-        //[Fact]
-        //public async Task CanGetPlayerById()
-        //{
-        //    // The endpoint or route of the controller action.
-        //    var httpResponse = await _client.GetAsync("/api/players/1");
+            // when
+            var httpResponse = await Client.PostAsJsonAsync(url, command);
 
-        //    // Must be successful.
-        //    httpResponse.EnsureSuccessStatusCode();
+            // then
+            httpResponse.EnsureSuccessStatusCode();
 
-        //    // Deserialize and examine results.
-        //    var stringResponse = await httpResponse.Content.ReadAsStringAsync();
-        //    var player = JsonConvert.DeserializeObject<Sample>(stringResponse);
-        //    Assert.Equal(1, player.Id);
-        //    Assert.Equal("Wayne", player.FirstName);
-        //}
+            using (var dbContext = GetContext())
+            {
+                dbContext.Samples.FirstOrDefault(x => x.Name == "Ble").ShouldNotBeNull();
+            }
+        }
+
+        [Theory]
+        [InlineData("/values/sample")]
+        public async Task Sample_WhenCreatingInvalidSampleData_ThenExceptionIsThrown(string url)
+        {
+            // given
+            var command = new AddSampleCommand { Name = "test" };
+
+            // when
+            var httpResponse = await Client.PostAsJsonAsync(url, command);
+
+            // then
+            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            stringResponse.ShouldContain("DomainException");
+            stringResponse.ShouldContain("is not allowed");
+        }
+
+        [Theory]
+        [InlineData("/values/sample")]
+        public async Task Sample_WhenCreatingDuplicatedSampleData_ThenExceptionIsThrown(string url)
+        {
+            // given
+            var command1 = new AddSampleCommand { Name = "Ble" };
+            var command2 = new AddSampleCommand { Name = "Ble" };
+
+            // when
+            var httpResponse1 = await Client.PostAsJsonAsync(url, command1);
+            var httpResponse2 = await Client.PostAsJsonAsync(url, command2);
+
+            // then
+            httpResponse1.EnsureSuccessStatusCode();
+
+            var stringResponse = await httpResponse2.Content.ReadAsStringAsync();
+            stringResponse.ShouldContain("DomainException");
+            stringResponse.ShouldContain("already exist");
+        }
     }
 }

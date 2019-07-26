@@ -29,7 +29,7 @@ namespace Insig.Integration.Tests.Utility
 
                 if (!connectionString.ToLower().Contains("test"))
                 {
-                    throw new Exception($"Live database used in tests. Ensure that connection string is valid: {connectionString}");
+                    throw new Exception($"Live database used in tests. Ensure that ConnectionString is valid: {connectionString}");
                 }
 
                 services.AddDbContext<InsigContext>(options =>
@@ -45,23 +45,35 @@ namespace Insig.Integration.Tests.Utility
                     var scopedServices = scope.ServiceProvider;
                     var appDb = scopedServices.GetRequiredService<InsigContext>();
 
+                    CleanUpDatabase(appDb);
                     appDb.Database.Migrate();
-                    appDb.Database.EnsureCreated();
 
                     try
                     {
                         // Seed the database with some specific test data.
-                        SeedData.PopulateTestData(appDb);
+                        DataHelper.PopulateTestData(appDb);
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"An error occurred seeding the database with test messages. Error: {ex.Message}");
+                        throw new Exception($"An error occurred seeding the database with test messages. Error: {ex.InnerException.Message}");
                     }
                 }
             }).ConfigureAppConfiguration((context, conf) =>
             {
                 conf.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), appsettingsFileName));
             });
+        }
+
+        private static void CleanUpDatabase(InsigContext appDb)
+        {
+            if (appDb.Database.CanConnect())
+            {
+                foreach (var tableName in DataHelper.GetTableNames())
+                {
+                    var tableToRemove = $"DELETE FROM {tableName}";
+                    appDb.Database.ExecuteSqlCommand(tableToRemove);
+                }
+            }
         }
     }
 }
