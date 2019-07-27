@@ -5,7 +5,7 @@ Proof of Concept for project with Angular 8 + .NET Core 2.2 + IdentityServer4 (A
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
 
 # Setup
-1. Ensure that you have valid Data Source (current: ".\\SQLEXPRESS") in ConnectionString (appsettings.json) in following projects: Insig.Api, Insig.Infrastructure, Insig.IdentityServer
+1. Ensure that you have valid Data Source (current: ".\\SQLEXPRESS") in ConnectionString (appsettings.json) in following projects: Insig.Api, Insig.Infrastructure, Insig.IdentityServer, Insig.Integration.Tests
 
 2. Run database migrations ("dotnet ef database update") in following projects: Insig.Infrastructure, Insig.IdentityServer
 
