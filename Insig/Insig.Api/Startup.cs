@@ -33,19 +33,7 @@ namespace Insig.Api
 
             services.AddCors();
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = Configuration["AppUrls:IdentityUrl"];
-                    options.RequireHttpsMetadata = true;
-                    options.ApiName = Instances.InsigApi;
-                });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(Policies.ApiReader, policy => policy.RequireClaim("scope", Scopes.InsigApi));
-                options.AddPolicy(Policies.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Consumer));
-            });
+            ConfigureAuth(services);
 
             return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
@@ -76,6 +64,23 @@ namespace Insig.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+        }
+
+        public virtual void ConfigureAuth(IServiceCollection services)
+        {
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = Configuration["AppUrls:IdentityUrl"];
+                    options.RequireHttpsMetadata = true;
+                    options.ApiName = Instances.InsigApi;
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.ApiReader, policy => policy.RequireClaim("scope", Scopes.InsigApi));
+                options.AddPolicy(Policies.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Consumer));
+            });
         }
 
         private ContainerBuilder ContainerBuilder(IServiceCollection services)

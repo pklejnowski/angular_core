@@ -2,6 +2,7 @@
 using System.IO;
 using Insig.Infrastructure.DataModel.Context;
 using Insig.Integration.Tests.Data;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +11,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Insig.Integration.Tests.Utility
 {
-    public class CustomWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
+    public class CustomWebApplicationFactory<TTestStartup, TStartup> : WebApplicationFactory<TStartup>
+        where TTestStartup : class
+        where TStartup : class
     {
+        protected override IWebHostBuilder CreateWebHostBuilder()
+        {
+            return WebHost.CreateDefaultBuilder(null)
+                .UseStartup<TTestStartup>();
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var appsettingsFileName = "appsettings.json";
 
             builder.ConfigureServices(services =>
             {
+                services.AddMvc().AddApplicationPart(typeof(TStartup).Assembly);
+
                 var serviceProvider = new ServiceCollection()
                     .AddEntityFrameworkSqlServer()
                     .BuildServiceProvider();

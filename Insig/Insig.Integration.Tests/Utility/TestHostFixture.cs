@@ -6,14 +6,14 @@ using Xunit;
 
 namespace Insig.Integration.Tests.Utility
 {
-    public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<TestStartup, Startup>>
     {
         private readonly IServiceScopeFactory _scopeFactory;
         public readonly HttpClient Client;
 
         protected TestHostFixture()
         {
-            var factory = new CustomWebApplicationFactory<Startup>();
+            var factory = new CustomWebApplicationFactory<TestStartup, Startup>();
 
             Client = factory.CreateClient();
             _scopeFactory = factory.Server.Host.Services.GetService<IServiceScopeFactory>();

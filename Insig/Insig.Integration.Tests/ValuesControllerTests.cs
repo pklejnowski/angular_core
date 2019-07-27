@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Insig.Common.Exceptions;
 using Insig.Domain.Samples;
 using Insig.Integration.Tests.Utility;
 using Insig.PublishedLanguage.Commands;
@@ -49,18 +50,13 @@ namespace Insig.Integration.Tests
 
         [Theory]
         [InlineData("/values/sample")]
-        public async Task Sample_WhenCreatingInvalidSampleData_ThenExceptionIsThrown(string url)
+        public void Sample_WhenCreatingInvalidSampleData_ThenExceptionIsThrown(string url)
         {
             // given
             var command = new AddSampleCommand { Name = "test" };
 
-            // when
-            var httpResponse = await Client.PostAsJsonAsync(url, command);
-
-            // then
-            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
-            stringResponse.ShouldContain("DomainException");
-            stringResponse.ShouldContain("is not allowed");
+            // when then
+            Should.Throw<DomainException>(() => Client.PostAsJsonAsync(url, command)).Message.ShouldContain("is not allowed");
         }
 
         [Theory]
@@ -73,14 +69,10 @@ namespace Insig.Integration.Tests
 
             // when
             var httpResponse1 = await Client.PostAsJsonAsync(url, command1);
-            var httpResponse2 = await Client.PostAsJsonAsync(url, command2);
-
-            // then
             httpResponse1.EnsureSuccessStatusCode();
 
-            var stringResponse = await httpResponse2.Content.ReadAsStringAsync();
-            stringResponse.ShouldContain("DomainException");
-            stringResponse.ShouldContain("already exist");
+            // then
+            Should.Throw<DomainException>(() => Client.PostAsJsonAsync(url, command2)).Message.ShouldContain("already exist");
         }
     }
 }
