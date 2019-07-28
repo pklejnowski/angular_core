@@ -42,10 +42,10 @@ namespace Insig.Integration.Tests
             // then
             httpResponse.EnsureSuccessStatusCode();
 
-            using (var dbContext = GetContext())
+            GetContext(dbContext =>
             {
                 dbContext.Samples.FirstOrDefault(x => x.Name == "Ble").ShouldNotBeNull();
-            }
+            });
         }
 
         [Theory]

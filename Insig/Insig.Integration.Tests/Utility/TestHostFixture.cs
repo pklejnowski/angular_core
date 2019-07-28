@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using Insig.Api;
 using Insig.Infrastructure.DataModel.Context;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,22 +9,21 @@ namespace Insig.Integration.Tests.Utility
 {
     public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<TestStartup, Startup>>
     {
-        private readonly IServiceScopeFactory _scopeFactory;
-        public readonly HttpClient Client;
+        private readonly CustomWebApplicationFactory<TestStartup, Startup> _factory;
+        protected readonly HttpClient Client;
 
         protected TestHostFixture()
         {
-            var factory = new CustomWebApplicationFactory<TestStartup, Startup>();
-
-            Client = factory.CreateClient();
-            _scopeFactory = factory.Server.Host.Services.GetService<IServiceScopeFactory>();
+            _factory = new CustomWebApplicationFactory<TestStartup, Startup>();
+            Client = _factory.CreateClient();
         }
 
-        protected InsigContext GetContext()
+        protected void GetContext(Action<InsigContext> test)
         {
-            using (var scope = _scopeFactory.CreateScope())
+            using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                return scope.ServiceProvider.GetService<InsigContext>();
+                var context = scope.ServiceProvider.GetRequiredService<InsigContext>();
+                test(context);
             }
         }
     }
