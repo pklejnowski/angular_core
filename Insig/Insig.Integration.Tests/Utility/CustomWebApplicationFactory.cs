@@ -47,7 +47,7 @@ namespace Insig.Integration.Tests.Utility
                 {
                     options.UseSqlServer(connectionString);
                     options.UseInternalServiceProvider(serviceProvider);
-                }, ServiceLifetime.Singleton);
+                });
 
                 var sp = services.BuildServiceProvider();
 

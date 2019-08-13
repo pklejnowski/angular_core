@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Insig.Integration.Tests.Utility
 {
+    [Collection("Sequential")]
     public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<TestStartup, Startup>>
     {
         private readonly CustomWebApplicationFactory<TestStartup, Startup> _factory;
