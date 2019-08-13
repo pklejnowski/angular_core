@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
-import { BehaviorSubject, from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { from, Observable, of, ReplaySubject } from "rxjs";
+import { catchError, map, switchMap } from "rxjs/operators";
 
 import { getClientSettings } from "./auth.config";
 
@@ -23,13 +23,22 @@ export class AuthService {
   private manager = new UserManager(getClientSettings());
   private user: User | null;
 
-  private authNavStatusSource = new BehaviorSubject<boolean>(false);
+  private authNavStatusSource = new ReplaySubject<boolean>();
   authStatus$ = this.authNavStatusSource.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     this.manager.getUser().then(user => {
-      this.user = user;
-      this.authNavStatusSource.next(this.isAuthenticated());
+      if (user) {
+        this.user = user;
+        this.authNavStatusSource.next(this.isAuthenticated());
+      } else {
+        this.manager.signinSilent().then((userResult: User) => {
+          this.user = userResult;
+          this.authNavStatusSource.next(this.isAuthenticated());
+        }).catch(() => {
+          this.authNavStatusSource.next(false);
+        });
+      }
     });
 
     this.manager.events.addUserLoaded(user => {
@@ -37,9 +46,11 @@ export class AuthService {
     });
 
     this.manager.events.addUserSignedOut(() => {
-      this.user = null;
-      this.authNavStatusSource.next(this.isAuthenticated());
-      this.router.navigate(["logout"]);
+      this.manager.removeUser().then(() => {
+        this.user = null;
+        this.authNavStatusSource.next(false);
+        this.router.navigate(["logout"]);
+      });
     });
   }
 
@@ -55,8 +66,17 @@ export class AuthService {
     return this.user != null && !this.user.expired;
   }
 
-  isAuthenticatedObs(): Observable<boolean> {
-    return from(this.manager.getUser()).pipe(map(user => !!user));
+  get isAuthenticated$(): Observable<boolean> {
+    return from(this.manager.getUser()).pipe(
+      switchMap(user => !!user
+        ? of(true)
+        : from(this.manager.signinSilent()).pipe(
+          map(userResult => {
+            this.user = userResult;
+            return !!userResult;
+          }))),
+      catchError(() => of(false))
+    );
   }
 
   async completeAuthentication(): Promise<void> {
