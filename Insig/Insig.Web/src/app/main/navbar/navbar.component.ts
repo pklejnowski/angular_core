@@ -18,6 +18,10 @@ export class NavbarComponent implements OnInit {
     this.authService.signout();
   }
 
+  manageAccount(): void {
+    this.authService.manageAccount();
+  }
+
   ngOnInit(): void {
     this.authStatus$ = this.authService.authStatus$;
   }

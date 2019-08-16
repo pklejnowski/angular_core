@@ -62,6 +62,10 @@ export class AuthService {
     return this.manager.signinRedirect({ state: window.location.href });
   }
 
+  manageAccount(): void {
+    window.location.href = this.authorizationUrl + "Manage/Index?ReturnUrl=" + encodeURIComponent(environment.clientUrl);
+  }
+
   isAuthenticated(): boolean {
     return this.user != null && !this.user.expired;
   }

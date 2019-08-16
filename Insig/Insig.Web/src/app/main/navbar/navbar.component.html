@@ -33,6 +33,11 @@
     </a>
     <a mat-button
        routerLinkActive="menu-item-active"
+       (click)="manageAccount()">
+      <mat-icon>account_circle</mat-icon> Manage Account
+    </a>
+    <a mat-button
+       routerLinkActive="menu-item-active"
        (click)="signout()">
       <mat-icon>exit_to_app</mat-icon> Signout {{getUserName()}}
     </a>
