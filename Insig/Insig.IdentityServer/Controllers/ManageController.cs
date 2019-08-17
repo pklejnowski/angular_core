@@ -51,7 +51,13 @@ namespace Insig.IdentityServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string button)
         {
-            if (button != "cancel")
+            if (button == "cancel")
+            {
+                return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
+                    ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordCanceled}"
+                    : "~/");
+            }
+            else
             {
                 if (!ModelState.IsValid)
                 {
@@ -73,11 +79,11 @@ namespace Insig.IdentityServer.Controllers
                 }
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
-            }
 
-            return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
-                ? model.ReturnUrl
-                : "~/");
+                return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
+                    ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordChanged}"
+                    : "~/");
+            }
         }
     }
 }
