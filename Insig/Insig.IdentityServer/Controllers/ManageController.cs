@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Insig.IdentityServer.Infrastructure.Data;
 using Insig.IdentityServer.Models;
@@ -73,7 +74,7 @@ namespace Insig.IdentityServer.Controllers
                 var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                 if (!changePasswordResult.Succeeded)
                 {
-                    _logger.Log(LogLevel.Error, $"An error occurs when User with ID '{user.Id}' was trying to change password.");
+                    _logger.Log(LogLevel.Error, $"An error occurs when User with ID '{user.Id}' was trying to change password. (Error: '${string.Join(",", changePasswordResult.Errors.Select(e => e.Description))}')");
                     model.HasError = true;
                     return View(model);
                 }

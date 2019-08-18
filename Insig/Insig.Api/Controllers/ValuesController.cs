@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Insig.Api.Controllers
 {
-    [Authorize(Policy = Policies.ApiReader)]
     [Route("values")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -27,14 +26,14 @@ namespace Insig.Api.Controllers
             _commandDispatcher = commandDispatcher;
         }
 
-        [Authorize(Policy = Policies.Consumer)]
+        [Authorize(Policies.Consumer)]
         [HttpGet("sample")]
         public List<SampleDTO> Get([FromQuery] SampleParameter parameter)
         {
             return _queryDispatcher.Dispatch(parameter);
         }
 
-        [Authorize(Policy = Policies.Consumer)]
+        [Authorize(Policies.Consumer)]
         [HttpPost("sample")]
         public void Add([FromBody] AddSampleCommand command)
         {

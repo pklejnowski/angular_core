@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.AccessTokenValidation;
+using Insig.Api.Conventions;
 using Insig.Api.Infrastructure;
 using Insig.Common.Auth;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,7 @@ namespace Insig.Api
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore()
+            services.AddMvcCore(o => { o.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddAuthorization()
                 .AddJsonFormatters();
