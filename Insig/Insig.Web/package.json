@@ -28,6 +28,7 @@
     "oidc-client": "^1.8.2",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0",
+    "url-polyfill": "^1.1.7",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
