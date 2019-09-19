@@ -30,9 +30,25 @@ namespace Insig.IdentityServer.Controllers
         }
 
         [HttpGet]
-        public RedirectToActionResult Index(string returnUrl)
+        public async Task<IActionResult> Index(string returnUrl)
         {
-            return RedirectToAction(nameof(ChangePassword), null, new { returnUrl });
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new IndexViewModel
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            };
+
+            ViewBag.ReturnUrl = returnUrl;
+
+            return View(model);
         }
 
         [HttpGet]
@@ -85,6 +101,19 @@ namespace Insig.IdentityServer.Controllers
                     ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordChanged}"
                     : "~/");
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmPhoneNumber(string returnUrl)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new ChangePasswordViewModel { ReturnUrl = returnUrl };
+            return View(model);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Extensions;
@@ -12,7 +13,9 @@ using Insig.IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace Insig.IdentityServer.Controllers
 {
@@ -24,8 +27,9 @@ namespace Insig.IdentityServer.Controllers
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IClientStore _clientStore;
         private readonly IPersistedGrantService _persistedGrantService;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IIdentityServerInteractionService interaction, IAuthenticationSchemeProvider schemeProvider, IClientStore clientStore, IPersistedGrantService persistedGrantService)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IIdentityServerInteractionService interaction, IAuthenticationSchemeProvider schemeProvider, IClientStore clientStore, IPersistedGrantService persistedGrantService, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,6 +37,7 @@ namespace Insig.IdentityServer.Controllers
             _schemeProvider = schemeProvider;
             _clientStore = clientStore;
             _persistedGrantService = persistedGrantService;
+            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -47,12 +52,40 @@ namespace Insig.IdentityServer.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.Action(
+                action: "ConfirmEmail",
+                controller: "Account",
+                values: new { userId = user.Id, code, model.RedirectUrl },
+                protocol: Request.Scheme);
+
+            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.Name));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", Roles.Consumer));
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code, string redirectUrl)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+            }
+
+            await _userManager.ConfirmEmailAsync(user, code);
+
+            return Redirect(!redirectUrl.IsNullOrEmpty() ? redirectUrl : "~/");
         }
 
         /// <summary>
@@ -106,7 +139,8 @@ namespace Insig.IdentityServer.Controllers
             {
                 // validate username/password
                 var user = await _userManager.FindByNameAsync(model.Username);
-                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+
+                if (user != null && user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.

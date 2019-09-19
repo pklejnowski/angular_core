@@ -12,6 +12,7 @@ interface RegisterCredentials {
   name: string;
   email: string;
   password: string;
+  redirectUrl: string;
 }
 
 @Injectable({
