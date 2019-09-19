@@ -11,6 +11,7 @@ import { getClientSettings } from "./auth.config";
 interface RegisterCredentials {
   name: string;
   email: string;
+  phoneNumber: string;
   password: string;
   redirectUrl: string;
 }

@@ -23,6 +23,15 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
+          <input matInput
+                 placeholder="Phone Number"
+                 formControlName="phoneNumber"
+                 required>
+          <mat-error>
+            <app-validation-feedback controlName="phoneNumber"></app-validation-feedback>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
           <input #password
                  matInput
                  type="password"

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Twilio;
 
 namespace Insig.IdentityServer
 {
@@ -53,9 +54,14 @@ namespace Insig.IdentityServer
                 .AddAspNetIdentity<AppUser>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IPhoneVerificationSender, PhoneVerificationSender>();
             services.AddTransient<IProfileService, IdentityClaimsProfileService>();
 
             services.Configure<AuthMessageSenderOptions>(options => Configuration.GetSection("SendGridEmailSettings").Bind(options));
+            services.Configure<TwilioVerifySettings>(Configuration.GetSection("Twilio"));
+            var accountSid = Configuration["Twilio:AccountSID"];
+            var authToken = Configuration["Twilio:AuthToken"];
+            TwilioClient.Init(accountSid, authToken);
 
             services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
                .AllowAnyMethod()

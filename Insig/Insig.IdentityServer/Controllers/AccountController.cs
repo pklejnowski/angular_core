@@ -46,7 +46,7 @@ namespace Insig.IdentityServer.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = new AppUser { UserName = model.Name, Name = model.Name, Email = model.Email };
+            var user = new AppUser { UserName = model.Name, Name = model.Name, Email = model.Email, PhoneNumber = model.PhoneNumber };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -65,6 +65,7 @@ namespace Insig.IdentityServer.Controllers
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.Name));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
+            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("phoneNumber", user.PhoneNumber));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", Roles.Consumer));
 
             return Ok();

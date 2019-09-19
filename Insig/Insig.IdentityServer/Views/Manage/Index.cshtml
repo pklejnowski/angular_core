@@ -1,8 +1,10 @@
 ﻿@model Insig.IdentityServer.Models.IndexViewModel
 
+<partial name="_ValidationSummary" />
+
 <div class="row">
     <div class="col-md-4">
-        <form>
+        <form asp-route="Index">
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" readonly />
@@ -14,14 +16,19 @@
             <div class="form-group">
                 <label asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" readonly />
+                @if (!@Model.PhoneNumberConfirmed)
+                {
+                    <span class="alert-danger">Phone number is not verified!</span>
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumberConfirmed"></label>
-                <input asp-for="PhoneNumberConfirmed" class="form-control checkbox-phone" disabled />
+            <div class="mt-4 mb-4">
+                @if (!@Model.PhoneNumberConfirmed)
+                {
+                    <button class="btn btn-primary" name="button">Verify Phone</button>
+                }
             </div>
         </form>
-        <div class="mt-4 mb-4">
-            <button class="btn btn-light" onclick="location.href = '@ViewBag.ReturnUrl'">Cancel</button>
-        </div>
+        <button class="btn btn-light" onclick="location.href = '@ViewBag.ReturnUrl'">Cancel</button>
+
     </div>
 </div>
