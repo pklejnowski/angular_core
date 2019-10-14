@@ -16,13 +16,13 @@ describe("Tests for sample page",
                 cy.get("[data-cy=value_list]").should("be.visible");
             });
 
-        it("Show sample page",
+        it("Add sample data",
             function () {
                 var valueToAdd = Date.now();
 
                 cy.get("[data-cy=value_data]").type(valueToAdd);
                 cy.get("[data-cy=value_add_button]").click(); //delay
-                cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");
+                cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");  // cover by element button
             });
 
         it("Add exisiting value and check if toast appears",
