@@ -1,0 +1,8 @@
+{
+    "baseUrl": "https://localhost:5002",
+    "identityServerUrl": "https://localhost:5000",
+    "user": "qwe",
+    "password": "qweqwe",
+    "viewportWidth": 1024,
+    "viewportHeight": 768
+}
