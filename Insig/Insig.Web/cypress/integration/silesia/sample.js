@@ -1,3 +1,4 @@
+
 /// <reference types="cypress" />
 
 describe("Tests for sample page",
@@ -8,7 +9,7 @@ describe("Tests for sample page",
             cy.visit("/sample");
         });
 
-        it.only("Show sample page",
+        it("Show sample page",
             function () {
                 cy.get("[data-cy=title_string]").should("be.visible");
                 cy.get("[data-cy=value_data]").should("be.visible");
@@ -25,12 +26,24 @@ describe("Tests for sample page",
                 cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");  // cover by element button
             });
 
-        it("Add exisiting value and check if toast appears",
+        it.only("Add exisiting value and check if toast and correct status code appears",
             function () {
-                var valueToAdd = "zxcv";
+                cy.server();
+                cy.route("POST", "https://localhost:5001/values/sample").as("SendSampleData");
 
+                var valueToAdd = "zxcv";
                 cy.get("[data-cy=value_data]").type(valueToAdd);
+
                 cy.get("[data-cy=value_add_button]").click();
+
+                cy.wait("@SendSampleData");
+
+                cy.get("@SendSampleData").then((xhr) => {
+                    expect(xhr.status).to.eq(500)
+                    expect(xhr.requestHeaders).to.have.property('Content-Type')
+                    expect(xhr.method).to.eq('POST')
+                });
+
                 cy.get("#toast-container").contains("Operation failed").should("be.visible");
             });
     });

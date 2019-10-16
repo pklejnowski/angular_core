@@ -22,7 +22,7 @@ describe("Tests for Login page",
 
         it("Should validate when login and password is not provided",
             function () {
-                cy.get("#logInButton").click();
+                cy.get("#logInButton").click(); //id
 
                 cy.get(".validation-summary-errors").contains("The Username field is required.").should("be.visible"); // nested content
                 cy.get(".validation-summary-errors").contains("The Password field is required.").should("be.visible");
@@ -32,8 +32,10 @@ describe("Tests for Login page",
             function () {
                 cy.get("[data-cy=username]").type("zxcv");
                 cy.get("[data-cy=password]").type("qwerty");
-                cy.get("[data-cy=login_button]").click();
 
+                // cy.pause();
+
+                cy.get("[data-cy=login_button]").click();
                 cy.contains("Invalid username or password").should("be.visible");
             });
 
@@ -46,6 +48,8 @@ describe("Tests for Login page",
                 cy.get("[data-cy=password]")
                     .type(testPassword)
                     .should("have.value", testPassword);
+
+                // debugger;
 
                 cy.get("[data-cy=login_button]").click();
 

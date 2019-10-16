@@ -21,6 +21,7 @@ export class SampleComponent implements OnInit {
   addSample(sampleName: string): void {
     this.samples = this.sampleService.addSampleData(<SampleDto>{ name: sampleName })
       .pipe(
+        // delay(2000),
         switchMapTo(this.sampleService.getSampleData())
       );
   }
