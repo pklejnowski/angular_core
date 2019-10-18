@@ -26,7 +26,7 @@ describe("Tests for sample page",
                 cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");  // cover by element button
             });
 
-        it.only("Add exisiting value and check if toast and correct status code appears",
+        it("Add exisiting value and check if toast and correct status code appears",
             function () {
                 cy.server();
                 cy.route("POST", "https://localhost:5001/values/sample").as("SendSampleData");
@@ -39,9 +39,9 @@ describe("Tests for sample page",
                 cy.wait("@SendSampleData");
 
                 cy.get("@SendSampleData").then((xhr) => {
-                    expect(xhr.status).to.eq(500)
-                    expect(xhr.requestHeaders).to.have.property('Content-Type')
-                    expect(xhr.method).to.eq('POST')
+                    expect(xhr.status).to.eq(500);
+                    expect(xhr.requestHeaders).to.have.property("Content-Type");
+                    expect(xhr.method).to.eq("POST");
                 });
 
                 cy.get("#toast-container").contains("Operation failed").should("be.visible");
