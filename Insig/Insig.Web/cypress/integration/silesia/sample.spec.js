@@ -22,8 +22,8 @@ describe("Tests for sample page",
                 var valueToAdd = Date.now();
 
                 cy.get("[data-cy=value_data]").type(valueToAdd);
-                cy.get("[data-cy=value_add_button]").click(); //delay
-                cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");  // cover by element button
+                cy.get("[data-cy=value_add_button]").click(); // before-after | delay
+                cy.get("[data-cy=value_list]").contains("ble").should("be.visible");  // cover by element button
             });
 
         it("Add exisiting value and check if toast and correct status code appears",
