@@ -30,7 +30,7 @@ export class RegisterComponent {
         password: this.registerForm.value["password"],
         redirectUrl: environment.clientUrl + "login"
       }).subscribe(_ => {
-        this.toastr.success("Your registration was successful");
+        this.toastr.success("A verification link has been sent to your email account", "Thank you for registering");
         this.router.navigate(["login"]);
       }, error => {
         this.toastr.error(error.error[0].description);
