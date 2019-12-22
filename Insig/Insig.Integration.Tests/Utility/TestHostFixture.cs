@@ -21,7 +21,7 @@ namespace Insig.Integration.Tests.Utility
 
         protected void GetContext(Action<InsigContext> test)
         {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
+            using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<InsigContext>();
                 test(context);

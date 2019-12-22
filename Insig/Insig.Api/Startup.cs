@@ -1,16 +1,14 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.AccessTokenValidation;
 using Insig.Api.Conventions;
 using Insig.Api.Infrastructure;
 using Insig.Common.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
@@ -25,21 +23,18 @@ namespace Insig.Api
             Configuration = configuration;
         }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore(o => { o.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            services
+                .AddMvcCore(o => { o.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
+                .AddNewtonsoftJson()
                 .AddAuthorization()
-                .AddJsonFormatters();
-
-            services.AddCors();
+                .AddCors();
 
             ConfigureAuth(services);
-
-            return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -61,15 +56,24 @@ namespace Insig.Api
                 {"System", LogLevel.Warning}
             }).AddSerilog(serilog.CreateLogger());
 
-            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
             app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
+
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
 
         public virtual void ConfigureAuth(IServiceCollection services)
         {
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            services
+                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Configuration["AppUrls:IdentityUrl"];
@@ -84,13 +88,9 @@ namespace Insig.Api
             });
         }
 
-        private ContainerBuilder ContainerBuilder(IServiceCollection services)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
-            containerBuilder.Populate(services);
-
-            return containerBuilder;
+            builder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
         }
     }
 }

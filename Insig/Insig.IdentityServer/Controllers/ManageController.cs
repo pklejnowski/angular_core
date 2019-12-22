@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 namespace Insig.IdentityServer.Controllers
 {
     [Authorize]
-    [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

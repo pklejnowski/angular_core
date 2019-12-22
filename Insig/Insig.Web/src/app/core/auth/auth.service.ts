@@ -30,7 +30,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {
     this.manager.getUser().then(user => {
-      if (user) {
+      if (!!user && !user.expired) {
         this.user = user;
         this.authNavStatusSource.next(this.isAuthenticated());
       } else {
@@ -69,7 +69,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.user != null && !this.user.expired;
+    return !!this.user && !this.user.expired;
   }
 
   get isAuthenticated$(): Observable<boolean> {

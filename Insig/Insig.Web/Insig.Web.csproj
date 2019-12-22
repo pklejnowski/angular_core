@@ -1,8 +1,8 @@
-﻿  <Project Sdk="Microsoft.NET.Sdk.Web">
+  <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
 
     <!--Compile TypeScript file using Angular CLI instead of VS-->
     <TypeScriptCompilerBlocked>true</TypeScriptCompilerBlocked>
@@ -10,10 +10,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
