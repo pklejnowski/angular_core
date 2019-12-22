@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using EnsureThat;
 using Insig.Common.Auth;
 using Insig.Common.CQRS;
@@ -28,16 +29,16 @@ namespace Insig.Api.Controllers
 
         [Authorize(Policies.Consumer)]
         [HttpGet("sample")]
-        public List<SampleDTO> Get([FromQuery] SampleParameter parameter)
+        public async Task<List<SampleDTO>> Get([FromQuery] SampleParameter parameter)
         {
-            return _queryDispatcher.Dispatch(parameter);
+            return await _queryDispatcher.Dispatch(parameter);
         }
 
         [Authorize(Policies.Consumer)]
         [HttpPost("sample")]
-        public void Add([FromBody] AddSampleCommand command)
+        public async Task Add([FromBody] AddSampleCommand command)
         {
-            _commandDispatcher.Dispatch(command);
+            await _commandDispatcher.Dispatch(command);
         }
     }
 }

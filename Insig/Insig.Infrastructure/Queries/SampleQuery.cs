@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
 using Insig.Infrastructure.QueryBuilder;
@@ -18,9 +19,9 @@ namespace Insig.Infrastructure.Queries
             _sqlQueryBuilder = sqlQueryBuilder;
         }
 
-        public List<SampleDTO> GetSampleData(SampleParameter query)
+        public async Task<List<SampleDTO>> GetSampleData(SampleParameter query)
         {
-            return _sqlQueryBuilder
+            return await _sqlQueryBuilder
                 .Select("Name")
                 .From("Sample")
                 .BuildQuery<SampleDTO>()
