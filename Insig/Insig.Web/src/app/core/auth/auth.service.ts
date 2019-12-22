@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { environment } from "environments/environment";
 import { User, UserManager } from "oidc-client";
 import { from, Observable, of, ReplaySubject } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
@@ -21,7 +20,7 @@ interface RegisterCredentials {
 })
 export class AuthService {
 
-  private authorizationUrl = environment.authorizationUrl;
+  private authorizationUrl = appConfig.AuthorizationUrl;
   private manager = new UserManager(getClientSettings());
   private user: User | null;
 
@@ -57,7 +56,7 @@ export class AuthService {
   }
 
   register(credentials: RegisterCredentials): Observable<any> {
-    return this.http.post(this.authorizationUrl + "register", credentials);
+    return this.http.post(this.authorizationUrl + "/register", credentials);
   }
 
   login(): Promise<any> {
@@ -65,7 +64,7 @@ export class AuthService {
   }
 
   manageAccount(): void {
-    window.location.href = this.authorizationUrl + "Manage/Index?ReturnUrl=" + encodeURIComponent(environment.clientUrl);
+    window.location.href = this.authorizationUrl + "/Manage/Index?ReturnUrl=" + encodeURIComponent(appConfig.ClientUrl);
   }
 
   isAuthenticated(): boolean {

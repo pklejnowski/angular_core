@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "@app/core/auth/auth.service";
-import { environment } from "environments/environment";
 import { ToastrService } from "ngx-toastr";
 
 @Component({
@@ -28,7 +27,7 @@ export class RegisterComponent {
         email: this.registerForm.value["email"],
         phoneNumber: "+48" + this.registerForm.value["phoneNumber"],
         password: this.registerForm.value["password"],
-        redirectUrl: environment.clientUrl + "login"
+        redirectUrl: appConfig.ClientUrl + "/login"
       }).subscribe(_ => {
         this.toastr.success("A verification link has been sent to your email account", "Thank you for registering");
         this.router.navigate(["login"]);
