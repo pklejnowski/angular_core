@@ -13,10 +13,10 @@ export class ApiSampleService {
   }
 
   getSampleData(): Observable<SampleDto[]> {
-    return this.apiClientService.get("values/sample");
+    return this.apiClientService.get("values/samples");
   }
 
   addSampleData(sample: SampleDto): Observable<SampleDto> {
-    return this.apiClientService.post("values/sample", sample);
+    return this.apiClientService.post("values/samples", sample);
   }
 }

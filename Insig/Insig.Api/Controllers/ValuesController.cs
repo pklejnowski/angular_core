@@ -28,17 +28,19 @@ namespace Insig.Api.Controllers
         }
 
         [Authorize(Policies.Consumer)]
-        [HttpGet("sample")]
-        public async Task<List<SampleDTO>> Get([FromQuery] SampleParameter parameter)
+        [HttpGet("samples")]
+        public async Task<IActionResult> GetSamples([FromQuery] SampleParameter parameter)
         {
-            return await _queryDispatcher.Dispatch(parameter);
+            List<SampleDTO> result = await _queryDispatcher.Dispatch(parameter);
+            return Ok(result);
         }
 
         [Authorize(Policies.Consumer)]
-        [HttpPost("sample")]
-        public async Task Add([FromBody] AddSampleCommand command)
+        [HttpPost("samples")]
+        public async Task<IActionResult> AddSamples([FromBody] AddSampleCommand command)
         {
             await _commandDispatcher.Dispatch(command);
+            return Ok();
         }
     }
 }
