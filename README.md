@@ -33,6 +33,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 8 
 **API Project:**
 - .NET Core 3.1
 - CQRS + Dispatcher
+- Custom Query Builder for Dapper
 - Prepared for Domain-driven design
 - IoC Container Autofac
 - Database - Microsoft SQL Server
