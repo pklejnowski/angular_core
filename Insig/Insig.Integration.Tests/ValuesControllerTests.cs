@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Insig.Integration.Tests
     public class ValuesControllerTests : TestHostFixture
     {
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenGettingSampleData_ThenAllAreReturned(string url)
         {
             // when
@@ -29,7 +30,7 @@ namespace Insig.Integration.Tests
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenCreatingSampleData_ThenIsAddedToDatabase(string url)
         {
             // given
@@ -43,12 +44,16 @@ namespace Insig.Integration.Tests
 
             GetContext(dbContext =>
             {
-                dbContext.Samples.FirstOrDefault(x => x.Name == "Ble").ShouldNotBeNull();
+                var result = dbContext.Samples.First(x => x.Name == "Ble");
+                result.CreatedBy.ShouldBe("test@email.com");
+                result.CreatedOn.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(1));
+                result.UpdatedBy.ShouldBeNull();
+                result.UpdatedOn.ShouldBeNull();
             });
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public void Sample_WhenCreatingInvalidSampleData_ThenExceptionIsThrown(string url)
         {
             // given
@@ -59,7 +64,7 @@ namespace Insig.Integration.Tests
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenCreatingDuplicatedSampleData_ThenExceptionIsThrown(string url)
         {
             // given

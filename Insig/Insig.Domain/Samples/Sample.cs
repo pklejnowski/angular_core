@@ -1,9 +1,10 @@
 ﻿using EnsureThat;
 using Insig.Common.Exceptions;
+using Insig.Domain.Common;
 
 namespace Insig.Domain.Samples
 {
-    public class Sample
+    public class Sample : AuditableEntity
     {
         public Sample(string name)
         {

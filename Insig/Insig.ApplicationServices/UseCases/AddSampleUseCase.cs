@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Insig.ApplicationServices.Boundaries;
 using Insig.Common.CQRS;
 using Insig.Domain;
 using Insig.Domain.Samples;

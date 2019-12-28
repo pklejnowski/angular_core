@@ -1,6 +1,6 @@
 ﻿using Insig.Domain.Samples;
 
-namespace Insig.ApplicationServices.UseCases
+namespace Insig.ApplicationServices.Boundaries
 {
     public interface ISampleRepository
     {

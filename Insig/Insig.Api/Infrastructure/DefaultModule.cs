@@ -4,7 +4,9 @@ using System.Reflection;
 using Autofac;
 using EnsureThat;
 using Insig.Api.Controllers;
+using Insig.ApplicationServices;
 using Insig.ApplicationServices.UseCases;
+using Insig.Common.Auth;
 using Insig.Infrastructure.DataModel.Context;
 using Insig.Infrastructure.Domain;
 using Insig.Infrastructure.Queries;
@@ -33,6 +35,7 @@ namespace Insig.Api.Infrastructure
 
             RegisterContext(builder);
             RegisterDatabaseAccess(builder);
+            RegisterServices(builder);
             RegisterControllers(builder);
             RegisterUseCases(builder);
             RegisterQueries(builder);
@@ -40,9 +43,9 @@ namespace Insig.Api.Infrastructure
         }
 
         private static void RegisterTransientDependenciesAutomatically(
-            ContainerBuilder builder,
-            Assembly assembly,
-            string nameSpace)
+             ContainerBuilder builder,
+             Assembly assembly,
+             string nameSpace)
         {
             builder.RegisterAssemblyTypes(assembly)
                 .Where(t => !string.IsNullOrEmpty(t.Namespace) && t.Namespace.StartsWith(nameSpace, StringComparison.InvariantCulture))
@@ -56,7 +59,7 @@ namespace Insig.Api.Infrastructure
             var options = new DbContextOptionsBuilder<InsigContext>();
             options.UseSqlServer(_connectionString);
 
-            builder.Register((container) => new InsigContext(options.Options)).InstancePerLifetimeScope();
+            builder.Register(container => new InsigContext(options.Options, container.Resolve<ICurrentUserService>())).InstancePerLifetimeScope();
         }
 
         private void RegisterDatabaseAccess(ContainerBuilder builder)
@@ -67,6 +70,11 @@ namespace Insig.Api.Infrastructure
             builder
                 .RegisterType<SqlQueryBuilder>()
                 .InstancePerDependency();
+        }
+
+        private void RegisterServices(ContainerBuilder builder)
+        {
+            builder.RegisterType<CurrentUserService>().AsImplementedInterfaces().InstancePerLifetimeScope();
         }
 
         private static void RegisterControllers(ContainerBuilder builder)

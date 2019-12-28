@@ -40,7 +40,8 @@ namespace Insig.Integration.Tests.Utility
         public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new Claim[]
         {
             new Claim("scope", Scopes.InsigApi),
-            new Claim(ClaimTypes.Role, Roles.Consumer)
+            new Claim(ClaimTypes.Role, Roles.Consumer),
+            new Claim("email", "test@email.com")
         }, "test");
     }
 }

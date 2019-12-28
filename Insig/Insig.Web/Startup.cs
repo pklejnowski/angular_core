@@ -45,7 +45,6 @@ namespace Insig.Web
             {
                 endpoints.MapDefaultControllerRoute();
             });
-
         }
     }
 }

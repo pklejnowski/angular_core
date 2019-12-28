@@ -31,6 +31,8 @@ namespace Insig.Api
                 .AddAuthorization()
                 .AddCors();
 
+            services.AddHttpContextAccessor();
+
             ConfigureAuth(services);
         }
 
