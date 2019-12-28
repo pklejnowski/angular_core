@@ -8,9 +8,9 @@ namespace Insig.ApplicationServices
     {
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
-            User = httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            UserId = httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
         }
 
-        public string User { get; }
+        public string UserId { get; }
     }
 }

@@ -49,11 +49,11 @@ namespace Insig.Infrastructure.DataModel.Context
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.User;
+                        entry.Entity.CreatedBy = _currentUserService.UserId;
                         entry.Entity.CreatedOn = DateTime.Now;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedBy = _currentUserService.User;
+                        entry.Entity.UpdatedBy = _currentUserService.UserId;
                         entry.Entity.UpdatedOn = DateTime.Now;
                         break;
                 }

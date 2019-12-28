@@ -45,7 +45,7 @@ namespace Insig.Integration.Tests
             GetContext(dbContext =>
             {
                 var result = dbContext.Samples.First(x => x.Name == "Ble");
-                result.CreatedBy.ShouldBe("test@email.com");
+                result.CreatedBy.ShouldBe("1a2b3c");
                 result.CreatedOn.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(1));
                 result.UpdatedBy.ShouldBeNull();
                 result.UpdatedOn.ShouldBeNull();

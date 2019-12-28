@@ -41,7 +41,7 @@ namespace Insig.Integration.Tests.Utility
         {
             new Claim("scope", Scopes.InsigApi),
             new Claim(ClaimTypes.Role, Roles.Consumer),
-            new Claim("email", "test@email.com")
+            new Claim("sub", "1a2b3c")
         }, "test");
     }
 }
