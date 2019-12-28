@@ -1,5 +1,5 @@
-# Insig project
-Proof of Concept for project with Angular 8 + .NET Core 3.1 + IdentityServer4 (Authorization Code Flow + PKCE)
+# Insig Project Clean Architecture
+This is a solution template for creating a Single Page App (SPA) with Angular 8 + .NET Core 3.1 + IdentityServer4 (Authorization Code Flow + PKCE)
 
 # Project references
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
