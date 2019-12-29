@@ -43,7 +43,9 @@ export class AuthService {
     });
 
     this.userManager.events.addUserLoaded(user => {
-      this.user = user;
+      if (this.user !== user) {
+        this.user = user;
+      }
     });
 
     this.userManager.events.addUserSignedOut(() => {

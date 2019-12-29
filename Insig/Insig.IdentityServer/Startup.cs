@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using IdentityServer4.Services;
 using Insig.IdentityServer.Extensions;
 using Insig.IdentityServer.Infrastructure;
@@ -45,7 +46,7 @@ namespace Insig.IdentityServer
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options => { options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10); })
                 .AddDeveloperSigningCredential() // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
