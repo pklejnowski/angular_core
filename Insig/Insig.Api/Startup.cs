@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using Autofac;
 using IdentityServer4.AccessTokenValidation;
-using Insig.Api.Conventions;
 using Insig.Api.Infrastructure;
 using Insig.Common.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,12 +25,7 @@ namespace Insig.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvcCore(o => { o.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
-                .AddNewtonsoftJson()
-                .AddAuthorization()
-                .AddCors();
-
+            services.AddCors();
             services.AddHttpContextAccessor();
 
             ConfigureAuth(services);
@@ -87,6 +82,11 @@ namespace Insig.Api
             {
                 options.AddPolicy(Policies.ApiReader, policy => policy.RequireClaim("scope", Scopes.InsigApi));
                 options.AddPolicy(Policies.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Consumer));
+            });
+
+            services.AddMvcCore(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter(Policies.ApiReader));
             });
         }
 

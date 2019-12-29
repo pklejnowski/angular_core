@@ -21,35 +21,35 @@ interface RegisterCredentials {
 export class AuthService {
 
   private authorizationUrl = appConfig.AuthorizationUrl;
-  private manager = new UserManager(getClientSettings());
+  private userManager = new UserManager(getClientSettings());
   private user: User | null;
 
-  private authNavStatusSource = new ReplaySubject<boolean>();
-  authStatus$ = this.authNavStatusSource.asObservable();
+  private authStatusSource = new ReplaySubject<boolean>();
+  authStatus$ = this.authStatusSource.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
-    this.manager.getUser().then(user => {
+    this.userManager.getUser().then(user => {
       if (!!user && !user.expired) {
         this.user = user;
-        this.authNavStatusSource.next(this.isAuthenticated());
+        this.authStatusSource.next(this.isAuthenticated());
       } else {
-        this.manager.signinSilent().then((userResult: User) => {
+        this.userManager.signinSilent().then((userResult) => {
           this.user = userResult;
-          this.authNavStatusSource.next(this.isAuthenticated());
+          this.authStatusSource.next(this.isAuthenticated());
         }).catch(() => {
-          this.authNavStatusSource.next(false);
+          this.authStatusSource.next(false);
         });
       }
     });
 
-    this.manager.events.addUserLoaded(user => {
+    this.userManager.events.addUserLoaded(user => {
       this.user = user;
     });
 
-    this.manager.events.addUserSignedOut(() => {
-      this.manager.removeUser().then(() => {
+    this.userManager.events.addUserSignedOut(() => {
+      this.userManager.removeUser().then(() => {
         this.user = null;
-        this.authNavStatusSource.next(false);
+        this.authStatusSource.next(false);
         this.router.navigate(["logout"]);
       });
     });
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   login(): Promise<any> {
-    return this.manager.signinRedirect({ state: window.location.href });
+    return this.userManager.signinRedirect({ state: window.location.href });
   }
 
   manageAccount(): void {
@@ -72,10 +72,10 @@ export class AuthService {
   }
 
   get isAuthenticated$(): Observable<boolean> {
-    return from(this.manager.getUser()).pipe(
+    return from(this.userManager.getUser()).pipe(
       switchMap(user => !!user
         ? of(true)
-        : from(this.manager.signinSilent()).pipe(
+        : from(this.userManager.signinSilent()).pipe(
           map(userResult => {
             this.user = userResult;
             return !!userResult;
@@ -85,23 +85,28 @@ export class AuthService {
   }
 
   async completeAuthentication(): Promise<void> {
-    await this.manager.signinRedirectCallback().then((user) => {
+    await this.userManager.signinRedirectCallback().then((user) => {
       this.user = user;
       this.router.navigate([(new URL(user.state)).searchParams.get("redirect") || "/"]);
+      this.authStatusSource.next(this.isAuthenticated());
     });
-
-    this.authNavStatusSource.next(this.isAuthenticated());
   }
 
   signout(): void {
-    this.manager.signoutRedirect();
+    this.userManager.signoutRedirect();
+  }
+
+  getAuthorizationToken(): Promise<string> {
+    return this.userManager.getUser().then(user => {
+      if (!!user && !user.expired) {
+        return `${user.token_type} ${this.user.access_token}`;
+      } else {
+        return null;
+      }
+    });
   }
 
   get name(): string {
     return this.user != null ? this.user.profile.name : "";
-  }
-
-  get authorizationHeaderValue(): string {
-    return `${this.user.token_type} ${this.user.access_token}`;
   }
 }
