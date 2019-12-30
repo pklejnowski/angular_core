@@ -75,7 +75,7 @@ export class AuthService {
 
   get isAuthenticated$(): Observable<boolean> {
     return from(this.userManager.getUser()).pipe(
-      switchMap(user => !!user
+      switchMap(user => !!user && !user.expired
         ? of(true)
         : from(this.userManager.signinSilent()).pipe(
           map(userResult => {
