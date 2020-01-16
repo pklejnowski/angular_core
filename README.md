@@ -51,3 +51,4 @@ This is a solution template for creating a Single Page App (SPA) with Angular 8 
 - Domain tests
 - Integration API tests
 - Serilog
+- HTTP security headers
