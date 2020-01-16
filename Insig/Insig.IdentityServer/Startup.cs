@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using IdentityServer4.Services;
+using Insig.Common.Configuration;
 using Insig.IdentityServer.Extensions;
 using Insig.IdentityServer.Infrastructure;
 using Insig.IdentityServer.Infrastructure.Data;
@@ -104,6 +105,12 @@ namespace Insig.IdentityServer
                 {"Microsoft", LogLevel.Warning},
                 {"System", LogLevel.Warning}
             }).AddSerilog(serilog.CreateLogger());
+
+            app.RemoveServerHeader();
+            app.UseStrictTransportSecurityHttpHeader(env);
+            app.UseIdentityServer();
+            app.UseContentSecurityPolicyHttpHeader();
+            app.UseWebAppSecurityHttpHeaders();
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();

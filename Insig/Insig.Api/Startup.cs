@@ -3,6 +3,7 @@ using Autofac;
 using IdentityServer4.AccessTokenValidation;
 using Insig.Api.Infrastructure;
 using Insig.Common.Auth;
+using Insig.Common.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -33,6 +34,17 @@ namespace Insig.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var serilog = new LoggerConfiguration()
+                  .MinimumLevel.Verbose()
+                  .Enrich.FromLogContext()
+                  .WriteTo.File(@"api_log.txt");
+
+            loggerFactory.WithFilter(new FilterLoggerSettings
+            {
+                {"Microsoft", LogLevel.Warning},
+                {"System", LogLevel.Warning}
+            }).AddSerilog(serilog.CreateLogger());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -42,17 +54,11 @@ namespace Insig.Api
                 app.UseHsts();
             }
 
-            var serilog = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.FromLogContext()
-                .WriteTo.File(@"api_log.txt");
-
-            loggerFactory.WithFilter(new FilterLoggerSettings
-            {
-                {"Microsoft", LogLevel.Warning},
-                {"System", LogLevel.Warning}
-            }).AddSerilog(serilog.CreateLogger());
-
+            app.UseApiSecurityHttpHeaders();
+            app.UseBlockingContentSecurityPolicyHttpHeader();
+            app.RemoveServerHeader();
+            app.UseNoCacheHttpHeaders();
+            app.UseStrictTransportSecurityHttpHeader(env);
             app.UseHttpsRedirection();
 
             app.UseRouting();
