@@ -24,6 +24,7 @@
     "@ngx-loading-bar/core": "^4.2.0",
     "@ngx-loading-bar/http-client": "^4.2.0",
     "core-js": "^2.5.0",
+    "material-design-icons": "^3.0.1",
     "ngx-toastr": "^10.0.4",
     "oidc-client": "^1.8.2",
     "rxjs": "^6.5.2",
