@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Insig.IdentityServer.Controllers
 {
-    [SecurityHeaders]
     [AllowAnonymous]
     public class HomeController : Controller
     {
