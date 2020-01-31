@@ -24,9 +24,9 @@
             <div class="mt-4 mb-4">
                 @if (!@Model.PhoneNumberConfirmed)
                 {
-                    <button class="btn btn-primary" name="button">Verify Phone</button>
+                <button class="btn btn-primary" name="button">Verify Phone</button>
                 }
-                <button type="button" class="btn btn-light" onclick="location.href = '@ViewBag.ReturnUrl'">Cancel</button>
+                <button class="btn btn-light cancel" name="button" value="cancel">Cancel</button>
             </div>
         </form>
     </div>

@@ -43,6 +43,7 @@ namespace Insig.IdentityServer.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                ReturnUrl = returnUrl
             };
 
             ViewBag.ReturnUrl = returnUrl;
@@ -52,8 +53,13 @@ namespace Insig.IdentityServer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model)
+        public async Task<IActionResult> Index(IndexViewModel model, string button)
         {
+            if (button == "cancel")
+            {
+                return Redirect(string.IsNullOrWhiteSpace(model.ReturnUrl) ? "~/" : model.ReturnUrl);
+            }
+
             try
             {
                 var verification = await _phoneVerificationSender.SendVeryficationCode(model.PhoneNumber);
@@ -124,6 +130,8 @@ namespace Insig.IdentityServer.Controllers
         public IActionResult ChangePassword(string returnUrl)
         {
             var model = new ChangePasswordViewModel { ReturnUrl = returnUrl };
+            ViewBag.ReturnUrl = returnUrl;
+
             return View(model);
         }
 
