@@ -46,6 +46,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 8 
 - Angular Material
 - Toasts
 - Directive for input validation errors
+- Secured API calls (Encoding URI)
 
 **Other:**
 - Domain tests
