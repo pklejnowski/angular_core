@@ -24,6 +24,7 @@
         "@ngx-loading-bar/core": "^4.2.0",
         "@ngx-loading-bar/http-client": "^4.2.0",
         "@types/urijs": "^1.19.5",
+        "@types/url-parse": "^1.4.3",
         "core-js": "^2.5.0",
         "material-design-icons": "^3.0.1",
         "ngx-toastr": "^10.0.4",
@@ -31,6 +32,7 @@
         "rxjs": "^6.5.2",
         "tslib": "^1.10.0",
         "urijs": "^1.19.2",
+        "url-parse": "^1.4.7",
         "url-polyfill": "^1.1.7",
         "zone.js": "~0.9.1"
     },

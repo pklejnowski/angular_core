@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { AuthService } from "@app/auth";
 import { EMPTY, from, Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import * as URLParse from "url-parse";
 
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
@@ -59,21 +60,10 @@ export class HttpAuthInterceptor implements HttpInterceptor {
             return false;
         }
 
-        const serviceUrlBase = this.parseUrl(url);
-        const callUrlBase = this.parseUrl(callUrl);
+        const serviceUrlBase = new URLParse(url);
+        const callUrlBase = new URLParse(callUrl);
 
-        return serviceUrlBase.authority === callUrlBase.authority
-            && serviceUrlBase.scheme === callUrlBase.scheme;
-    }
-
-    private parseUrl(url: string): { scheme: string, authority: string } {
-        const urlRegex = RegExp("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
-        const matches = url.match(urlRegex);
-        const [, , urlScheme, , urlAuthority] = matches;
-
-        return {
-            scheme: urlScheme,
-            authority: urlAuthority
-        };
+        return serviceUrlBase.hostname === callUrlBase.hostname
+            && serviceUrlBase.protocol === callUrlBase.protocol;
     }
 }
