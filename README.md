@@ -1,5 +1,5 @@
 # Insig Project Clean Architecture
-This is a solution template for creating a Single Page App (SPA) with Angular 8 + .NET Core 3.1 + IdentityServer4 (Authorization Code Flow + PKCE)
+This is a solution template for creating a Single Page App (SPA) with Angular 9 + .NET Core 3.1 + IdentityServer4 (Authorization Code Flow + PKCE)
 
 # Project references
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
@@ -40,7 +40,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 8 
 
 **Angular Project:**
 - .NET Core 3.1
-- Angular 8
+- Angular 9
 - Authorization (oidc-client.js)
 - Silent refresh
 - Angular Material
