@@ -34,9 +34,9 @@ namespace Insig.Web
             else
             {
                 app.UseHsts();
-                app.UseContentSecurityPolicyHttpHeader(appUrls.Value);
             }
 
+            app.UseContentSecurityPolicyHttpHeader(appUrls.Value);
             app.RemoveServerHeader();
             app.UseWebAppSecurityHttpHeaders();
             app.UseStrictTransportSecurityHttpHeader(env);
