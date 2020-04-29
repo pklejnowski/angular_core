@@ -69,7 +69,7 @@ namespace Insig.IdentityServer
                .AllowAnyMethod()
                .AllowAnyHeader()));
 
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

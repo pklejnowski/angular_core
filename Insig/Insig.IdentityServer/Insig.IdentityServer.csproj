@@ -10,6 +10,7 @@
         <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.1.0" />
         <PackageReference Include="identityserver4.entityframework" Version="3.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
         <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
         <PackageReference Include="microsoft.aspnetcore.identity.entityframeworkcore" Version="3.1.0" />
         <PackageReference Include="microsoft.entityframeworkcore.design" Version="3.1.0" />

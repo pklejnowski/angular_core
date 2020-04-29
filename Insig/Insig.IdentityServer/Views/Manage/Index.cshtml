@@ -1,32 +1,37 @@
 ﻿@model Insig.IdentityServer.Models.IndexViewModel
 
 <partial name="_ValidationSummary" />
+@if (!string.IsNullOrEmpty(ViewBag.message))
+{
+    <div class="alert alert-success">
+        <strong>Success!</strong>
+        @ViewBag.message
+    </div>
+}
 
 <div class="row">
     <div class="col-md-4">
         <form asp-route="Index">
             <div class="form-group">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" readonly />
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" readonly />
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber"></label>
-                <input asp-for="PhoneNumber" class="form-control" readonly />
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                @Html.HiddenFor(m => m.PhoneNumberConfirmed)
                 @if (!@Model.PhoneNumberConfirmed)
                 {
-                    <span class="alert-danger">Phone number is not verified!</span>
+                    <button class="btn btn-danger col-12" name="button" value="verify">Click here to verify the number</button>
                 }
             </div>
             <div class="mt-4 mb-4">
-                @if (!@Model.PhoneNumberConfirmed)
-                {
-                <button class="btn btn-primary" name="button">Verify Phone</button>
-                }
-                <button class="btn btn-light cancel" name="button" value="cancel">Cancel</button>
+                <button class="btn btn-primary" name="button">Save</button>
+                <button class="btn btn-light" name="button" value="cancel">Cancel</button>
             </div>
         </form>
     </div>

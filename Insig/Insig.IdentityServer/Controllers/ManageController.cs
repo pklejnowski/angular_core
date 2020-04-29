@@ -39,7 +39,7 @@ namespace Insig.IdentityServer.Controllers
 
             var model = new IndexViewModel
             {
-                Username = user.UserName,
+                Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
@@ -60,22 +60,27 @@ namespace Insig.IdentityServer.Controllers
                 return Redirect(string.IsNullOrWhiteSpace(model.ReturnUrl) ? "~/" : model.ReturnUrl);
             }
 
-            try
+            if (button == "verify")
             {
-                var verification = await _phoneVerificationSender.SendVeryficationCode(model.PhoneNumber);
-
-                if (verification.Status == "pending")
+                try
                 {
-                    return RedirectToAction(nameof(ConfirmPhoneNumber));
-                }
+                    var verification = await _phoneVerificationSender.SendVeryficationCode(model.PhoneNumber);
 
-                ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
+                    if (verification.Status == "pending")
+                    {
+                        return RedirectToAction(nameof(ConfirmPhoneNumber));
+                    }
+
+                    ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("",
+                        "There was an error sending the verification code, please check the phone number is correct and try again");
+                }
             }
-            catch (Exception)
-            {
-                ModelState.AddModelError("",
-                    "There was an error sending the verification code, please check the phone number is correct and try again");
-            }
+
+            await UpdateUserProfile(model);
 
             return View(model);
         }
@@ -180,6 +185,30 @@ namespace Insig.IdentityServer.Controllers
             }
 
             return user;
+        }
+
+        private async Task UpdateUserProfile(IndexViewModel model)
+        {
+            var user = await GetUser();
+            user.Name = model.Name;
+
+            if (user.PhoneNumber != model.PhoneNumber)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+                user.PhoneNumberConfirmed = false;
+                model.PhoneNumberConfirmed = false;
+            }
+
+            try
+            {
+                await _userManager.UpdateAsync(user);
+                ViewBag.message = "User data has been updated.";
+            }
+            catch (Exception)
+            {
+                ViewBag.message = null;
+                ModelState.AddModelError("", "There was an error with saving data, please try again");
+            }
         }
     }
 }
