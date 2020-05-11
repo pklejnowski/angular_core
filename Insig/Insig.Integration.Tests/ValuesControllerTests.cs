@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Insig.Common.Exceptions;
 using Insig.Domain.Samples;
@@ -15,7 +15,7 @@ namespace Insig.Integration.Tests
     public class ValuesControllerTests : TestHostFixture
     {
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenGettingSampleData_ThenAllAreReturned(string url)
         {
             // when
@@ -30,37 +30,41 @@ namespace Insig.Integration.Tests
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenCreatingSampleData_ThenIsAddedToDatabase(string url)
         {
             // given
             var command = new AddSampleCommand { Name = "Ble" };
 
             // when
-            var httpResponse = await Client.PostAsJsonAsync(url, command);
+            var httpResponse = await Client.PostAsync(url, command);
 
             // then
             httpResponse.EnsureSuccessStatusCode();
 
             GetContext(dbContext =>
             {
-                dbContext.Samples.FirstOrDefault(x => x.Name == "Ble").ShouldNotBeNull();
+                var result = dbContext.Samples.First(x => x.Name == "Ble");
+                result.CreatedBy.ShouldBe("1a2b3c");
+                result.CreatedOn.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(1));
+                result.UpdatedBy.ShouldBeNull();
+                result.UpdatedOn.ShouldBeNull();
             });
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public void Sample_WhenCreatingInvalidSampleData_ThenExceptionIsThrown(string url)
         {
             // given
             var command = new AddSampleCommand { Name = "test" };
 
             // when then
-            Should.Throw<DomainException>(() => Client.PostAsJsonAsync(url, command)).Message.ShouldContain("is not allowed");
+            Should.Throw<DomainException>(() => Client.PostAsync(url, command)).Message.ShouldContain("is not allowed");
         }
 
         [Theory]
-        [InlineData("/values/sample")]
+        [InlineData("/values/samples")]
         public async Task Sample_WhenCreatingDuplicatedSampleData_ThenExceptionIsThrown(string url)
         {
             // given
@@ -68,11 +72,11 @@ namespace Insig.Integration.Tests
             var command2 = new AddSampleCommand { Name = "Ble" };
 
             // when
-            var httpResponse1 = await Client.PostAsJsonAsync(url, command1);
+            var httpResponse1 = await Client.PostAsync(url, command1);
             httpResponse1.EnsureSuccessStatusCode();
 
             // then
-            Should.Throw<DomainException>(() => Client.PostAsJsonAsync(url, command2)).Message.ShouldContain("already exist");
+            Should.Throw<DomainException>(() => Client.PostAsync(url, command2)).Message.ShouldContain("already exist");
         }
     }
 }

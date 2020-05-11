@@ -1,16 +1,15 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.AccessTokenValidation;
-using Insig.Api.Conventions;
 using Insig.Api.Infrastructure;
 using Insig.Common.Auth;
+using Insig.Common.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
@@ -25,22 +24,27 @@ namespace Insig.Api
             Configuration = configuration;
         }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore(o => { o.Conventions.Add(new AddAuthorizeFiltersControllerConvention()); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddAuthorization()
-                .AddJsonFormatters();
-
             services.AddCors();
+            services.AddHttpContextAccessor();
 
             ConfigureAuth(services);
-
-            return new AutofacServiceProvider(ContainerBuilder(services).Build());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var serilog = new LoggerConfiguration()
+                  .MinimumLevel.Verbose()
+                  .Enrich.FromLogContext()
+                  .WriteTo.File(@"api_log.txt");
+
+            loggerFactory.WithFilter(new FilterLoggerSettings
+            {
+                {"Microsoft", LogLevel.Warning},
+                {"System", LogLevel.Warning}
+            }).AddSerilog(serilog.CreateLogger());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -50,26 +54,29 @@ namespace Insig.Api
                 app.UseHsts();
             }
 
-            var serilog = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.FromLogContext()
-                .WriteTo.File(@"api_log.txt");
-
-            loggerFactory.WithFilter(new FilterLoggerSettings
-            {
-                {"Microsoft", LogLevel.Warning},
-                {"System", LogLevel.Warning}
-            }).AddSerilog(serilog.CreateLogger());
-
-            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
+            app.UseApiSecurityHttpHeaders();
+            app.UseBlockingContentSecurityPolicyHttpHeader();
+            app.RemoveServerHeader();
+            app.UseNoCacheHttpHeaders();
+            app.UseStrictTransportSecurityHttpHeader(env);
             app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
+
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
 
         public virtual void ConfigureAuth(IServiceCollection services)
         {
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            services
+                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Configuration["AppUrls:IdentityUrl"];
@@ -82,15 +89,16 @@ namespace Insig.Api
                 options.AddPolicy(Policies.ApiReader, policy => policy.RequireClaim("scope", Scopes.InsigApi));
                 options.AddPolicy(Policies.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Consumer));
             });
+
+            services.AddMvcCore(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter(Policies.ApiReader));
+            });
         }
 
-        private ContainerBuilder ContainerBuilder(IServiceCollection services)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
-            containerBuilder.Populate(services);
-
-            return containerBuilder;
+            builder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
         }
     }
 }

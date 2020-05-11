@@ -1,30 +1,91 @@
+import "urijs/src/URITemplate";
+
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-
-import { environment } from "../../../environments/environment";
+import * as URI from "urijs";
 
 @Injectable({
-  providedIn: "root"
+    providedIn: "root"
 })
 export class ApiClientService {
-  apiUrl = environment.apiUrl;
+    constructor(private readonly http: HttpClient) { }
 
-  constructor(private readonly http: HttpClient) { }
+    get<T>(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        queryParams?: { [queryParam: string]: any | any[] }): Observable<T> {
 
-  get<T>(url: string): Observable<T> {
-    return this.http.get<T>(this.apiUrl + url);
-  }
+        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        return this.http.get<T>(url);
+    }
 
-  post<T>(url: string, data?: any): Observable<T> {
-    return this.http.post<T>(this.apiUrl + url, data);
-  }
+    getBlob(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        queryParams?: { [queryParam: string]: any | any[] }): Observable<Blob> {
 
-  put<T>(url: string, data?: any): Observable<T> {
-    return this.http.put<T>(this.apiUrl + url, data);
-  }
+        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        return this.http.get(url, { responseType: "blob" });
+    }
 
-  delete<T>(url: string): Observable<T> {
-    return this.http.delete<T>(this.apiUrl + url);
-  }
+    post<T>(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        data?: any): Observable<T> {
+
+        const queryParams: string = null;
+        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        return this.http.post<T>(url, data);
+    }
+
+    postBlob(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        data?: any): Observable<Blob> {
+
+        const queryParams: string = null;
+        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        return this.http.post(url, data, { responseType: "blob" });
+    }
+
+    put<T>(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        data?: any): Observable<T> {
+
+        const queryParams: string = null;
+        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        return this.http.put<T>(url, data);
+    }
+
+    delete<T>(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] }): Observable<T> {
+
+        const url: string = this.buildUrl(uriTemplate, segmentParams);
+        return this.http.delete<T>(url);
+    }
+
+    private buildUrl(
+        uriTemplate: string,
+        segmentParams?: { [segmentParam: string]: any | any[] },
+        queryParams?: any): string {
+
+        let uri: uri.URI = null;
+
+        if (segmentParams) {
+            uri = URI.expand(uriTemplate, segmentParams);
+        }
+
+        if (uri === null) {
+            uri = URI(uriTemplate);
+        }
+
+        if (queryParams) {
+            uri = uri.query(queryParams);
+        }
+
+        return uri.toString();
+    }
 }

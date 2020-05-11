@@ -1,0 +1,19 @@
+﻿@using IdentityServer4.Extensions
+@model Insig.IdentityServer.Models.ConfirmPhoneNumberViewModel
+
+<partial name="_ValidationSummary" />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <p>
+                We just sent the code for verify your phone number @Model.PhoneNumber.
+            </p>
+            <div class="form-group">
+                <label asp-for="Code"></label>
+                <input asp-for="Code" class="form-control" />
+            </div>
+            @Html.HiddenFor(m => m.PhoneNumber)
+            <button type="submit" class="btn btn-primary">Confirm</button>
+        </form>
+    </div>
+</div>

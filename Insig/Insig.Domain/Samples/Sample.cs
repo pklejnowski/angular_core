@@ -1,9 +1,10 @@
 ﻿using EnsureThat;
 using Insig.Common.Exceptions;
+using Insig.Domain.Common;
 
 namespace Insig.Domain.Samples
 {
-    public class Sample
+    public class Sample : AuditableEntity
     {
         public Sample(string name)
         {
@@ -12,8 +13,9 @@ namespace Insig.Domain.Samples
             Name = name;
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int Id { get; }
+
+        public string Name { get; private set; }
 
         private void EnsureThatNameIsCorrect(string name)
         {

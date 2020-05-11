@@ -11,8 +11,8 @@ namespace Insig.Integration.Tests.Utility
 {
     public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticationOptions>
     {
-        public TestAuthenticationHandler(IOptionsMonitor<TestAuthenticationOptions> options, ILoggerFactory logger,
-            UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        public TestAuthenticationHandler(IOptionsMonitor<TestAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+            : base(options, logger, encoder, clock)
         {
         }
 
@@ -40,7 +40,8 @@ namespace Insig.Integration.Tests.Utility
         public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new Claim[]
         {
             new Claim("scope", Scopes.InsigApi),
-            new Claim(ClaimTypes.Role, Roles.Consumer)
+            new Claim(ClaimTypes.Role, Roles.Consumer),
+            new Claim("sub", "1a2b3c")
         }, "test");
     }
 }

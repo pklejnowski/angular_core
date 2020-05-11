@@ -1,7 +1,9 @@
-﻿namespace Insig.Common.CQRS
+﻿using System.Threading.Tasks;
+
+namespace Insig.Common.CQRS
 {
     public interface IQueryDispatcher
     {
-        TResult Dispatch<TResult>(IQuery<TResult> query);
+        Task<TResult> Dispatch<TResult>(IQuery<TResult> query);
     }
 }

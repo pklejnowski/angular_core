@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using IdentityServer4.Services;
+using Insig.Common.Configuration;
 using Insig.IdentityServer.Extensions;
 using Insig.IdentityServer.Infrastructure;
 using Insig.IdentityServer.Infrastructure.Data;
@@ -9,12 +11,14 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Twilio;
 
 namespace Insig.IdentityServer
 {
@@ -38,11 +42,12 @@ namespace Insig.IdentityServer
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
+                    options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options => { options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10); })
                 .AddDeveloperSigningCredential() // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
@@ -50,16 +55,24 @@ namespace Insig.IdentityServer
                 .AddInMemoryClients(Config.GetClients(Configuration["AppUrls:ClientUrl"]))
                 .AddAspNetIdentity<AppUser>();
 
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IPhoneVerificationSender, PhoneVerificationSender>();
             services.AddTransient<IProfileService, IdentityClaimsProfileService>();
+
+            services.Configure<AuthMessageSenderOptions>(options => Configuration.GetSection("SendGridEmailSettings").Bind(options));
+            services.Configure<TwilioVerifySettings>(Configuration.GetSection("Twilio"));
+            var accountSid = Configuration["Twilio:AccountSID"];
+            var authToken = Configuration["Twilio:AuthToken"];
+            TwilioClient.Init(accountSid, authToken);
 
             services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader()));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -93,16 +106,24 @@ namespace Insig.IdentityServer
                 {"System", LogLevel.Warning}
             }).AddSerilog(serilog.CreateLogger());
 
-            app.UseStaticFiles();
-            app.UseCors("AllowAll");
-            app.UseHttpsRedirection();
+            app.RemoveServerHeader();
+            app.UseStrictTransportSecurityHttpHeader(env);
             app.UseIdentityServer();
+            app.UseContentSecurityPolicyHttpHeader();
+            app.UseWebAppSecurityHttpHeaders();
 
-            app.UseMvc(routes =>
+            app.UseStaticFiles();
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseCors("AllowAll");
+
+            app.UseIdentityServer();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

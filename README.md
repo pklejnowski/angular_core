@@ -1,5 +1,5 @@
-# Insig project
-Proof of Concept for project with Angular 8 + .NET Core 2.2 + IdentityServer4 (Authorization Code Flow + PKCE)
+# Insig Project Clean Architecture
+This is a solution template for creating a Single Page App (SPA) with Angular 9 + .NET Core 3.1 + IdentityServer4 (Authorization Code Flow + PKCE)
 
 # Project references
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
@@ -19,3 +19,37 @@ Proof of Concept for project with Angular 8 + .NET Core 2.2 + IdentityServer4 (A
 - Insig.Web
 
 6. Rebuild solution and start application
+
+# Features
+**Authorization Project:**
+- .NET Core 3.1
+- IdentityServer4
+- Authorization Code Flow + PKCE
+- Database - Microsoft SQL Server
+- Consent page (need to be enabled in Config.cs)
+- Email verification (after registering)
+- Phone number verification (in Manage Account)
+
+**API Project:**
+- .NET Core 3.1
+- CQRS + Dispatcher
+- Custom Query Builder for Dapper
+- Prepared for Domain-driven design
+- IoC Container Autofac
+- Database - Microsoft SQL Server
+
+**Angular Project:**
+- .NET Core 3.1
+- Angular 9
+- Authorization (oidc-client.js)
+- Silent refresh
+- Angular Material
+- Toasts
+- Directive for input validation errors
+- Secured API calls (Encoding URI)
+
+**Other:**
+- Domain tests
+- Integration API tests
+- Serilog
+- HTTP security headers

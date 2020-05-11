@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EnsureThat;
 using Insig.Common.Exceptions;
 using Insig.Domain;
@@ -17,11 +18,11 @@ namespace Insig.Infrastructure.Domain
             _context = context;
         }
 
-        public void Save()
+        public async Task Save()
         {
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

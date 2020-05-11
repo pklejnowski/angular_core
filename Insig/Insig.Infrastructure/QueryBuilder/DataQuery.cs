@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 
 namespace Insig.Infrastructure.QueryBuilder
@@ -21,19 +22,21 @@ namespace Insig.Infrastructure.QueryBuilder
 
         public DynamicParameters Parameters { get; }
 
-        public List<T> ExecuteToList()
+        public async Task<List<T>> ExecuteToList()
         {
-            return _connection.Query<T>(Query, Parameters).ToList();
+            var result = await _connection.QueryAsync<T>(Query, Parameters);
+
+            return result.ToList();
         }
 
-        public T ExecuteToFirstElement()
+        public async Task<T> ExecuteToFirstElement()
         {
-            return _connection.Query<T>(Query, Parameters).FirstOrDefault();
+            return await _connection.QueryFirstOrDefaultAsync<T>(Query, Parameters);
         }
 
-        public T ExecuteSingle()
+        public async Task<T> ExecuteSingle()
         {
-            return _connection.Query<T>(Query, Parameters).SingleOrDefault();
+            return await _connection.QuerySingleAsync<T>(Query, Parameters);
         }
     }
 }

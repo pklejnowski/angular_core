@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
+using Autofac.Extensions.DependencyInjection;
 using Insig.Infrastructure.DataModel.Context;
 using Insig.Integration.Tests.Data;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Insig.Integration.Tests.Utility
 {
@@ -15,10 +16,14 @@ namespace Insig.Integration.Tests.Utility
         where TTestStartup : class
         where TStartup : class
     {
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
-            return WebHost.CreateDefaultBuilder(null)
-                .UseStartup<TTestStartup>();
+            return Host.CreateDefaultBuilder(null)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<TTestStartup>();
+                });
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -82,7 +87,7 @@ namespace Insig.Integration.Tests.Utility
                 foreach (var tableName in DataHelper.GetTableNames())
                 {
                     var tableToRemove = $"DELETE FROM {tableName}";
-                    appDb.Database.ExecuteSqlCommand(tableToRemove);
+                    appDb.Database.ExecuteSqlRaw(tableToRemove);
                 }
             }
         }

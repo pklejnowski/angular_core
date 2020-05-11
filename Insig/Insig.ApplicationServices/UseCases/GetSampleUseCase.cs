@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using EnsureThat;
 using Insig.ApplicationServices.Boundaries;
 using Insig.Common.CQRS;
@@ -18,9 +19,9 @@ namespace Insig.ApplicationServices.UseCases
             _sampleQuery = sampleQuery;
         }
 
-        public List<SampleDTO> Handle(SampleParameter query)
+        public async Task<List<SampleDTO>> Handle(SampleParameter query)
         {
-            return _sampleQuery.GetSampleData(query);
+            return await _sampleQuery.GetSampleData(query);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 using Autofac;
 using EnsureThat;
 using Insig.Common.CQRS;
@@ -18,7 +19,7 @@ namespace Insig.Api.Infrastructure
             _lifetimeScope = lifetimeScope;
         }
 
-        public TResult Dispatch<TResult>(IQuery<TResult> query)
+        public async Task<TResult> Dispatch<TResult>(IQuery<TResult> query)
         {
             object handler;
 
@@ -29,18 +30,18 @@ namespace Insig.Api.Infrastructure
                 throw new Exception($"Handler for query {GetQueryName(query)} does not exist.");
             }
 
-            return ExecuteHandler(handler, query);
+            return await ExecuteHandler(handler, query);
         }
 
-        protected virtual TResult ExecuteHandler<TResult>(object handler, IQuery<TResult> query)
+        protected virtual async Task<TResult> ExecuteHandler<TResult>(object handler, IQuery<TResult> query)
         {
             try
             {
-                var result = handler.GetType()
+                var result = (Task<TResult>)handler.GetType()
                     .GetRuntimeMethod("Handle", new[] { query.GetType() })
                     .Invoke(handler, new object[] { query });
 
-                return (TResult)result;
+                return await result;
             }
             catch (TargetInvocationException ex)
             {
