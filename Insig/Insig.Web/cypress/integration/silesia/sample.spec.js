@@ -23,13 +23,13 @@ describe("Tests for sample page",
 
                 cy.get("[data-cy=value_data]").type(valueToAdd);
                 cy.get("[data-cy=value_add_button]").click(); // before-after | delay
-                cy.get("[data-cy=value_list]").contains("ble").should("be.visible");  // cover by element button
+                cy.get("[data-cy=value_list]").contains(valueToAdd).should("be.visible");  // cover by element button
             });
 
         it("Add exisiting value and check if toast and correct status code appears",
             function () {
                 cy.server();
-                cy.route("POST", "https://localhost:5001/values/sample").as("SendSampleData");
+                cy.route("POST", "https://localhost:5001/values/samples").as("SendSampleData");
 
                 var valueToAdd = "zxcv";
                 cy.get("[data-cy=value_data]").type(valueToAdd);

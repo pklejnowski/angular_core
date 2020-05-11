@@ -1,23 +1,23 @@
 <mat-card>
-  <h1 data-cy="title_string">
-    Welcome to {{ title }}!
-  </h1>
+    <h1 data-cy="title_string">
+        Welcome to {{ title }}!
+    </h1>
 
-  <mat-form-field class="example-full-width">
-    <input data-cy="value_data"
-           matInput
-           #sampleInput
-           placeholder="Sample value">
-  </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input data-cy="value_data"
+               matInput
+               #sampleInput
+               placeholder="Sample value">
+    </mat-form-field>
 
-  <button data-cy="value_add_button"
-          mat-raised-button
-          (click)="addSample(sampleInput.value)">Add sample</button>
-  <!-- <button style="width: 200px; height: 100px; position: absolute; left:150px;">BLE</button> -->
+    <button data-cy="value_add_button"
+            mat-raised-button
+            (click)="addSample(sampleInput.value)">Add sample</button>
+    <!-- <button style="width: 200px; height: 100px; position: absolute; left:150px;">BLE</button> -->
 
-  <ul data-cy="value_list">
-    <li *ngFor="let sample of samples | async">
-      Name: {{ sample.name }}
-    </li>
-  </ul>
+    <ul data-cy="value_list">
+        <li *ngFor="let sample of samples | async">
+            Name: {{ sample.name }}
+        </li>
+    </ul>
 </mat-card>
