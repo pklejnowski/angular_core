@@ -50,6 +50,7 @@ describe("Tests for Login page",
                     .should("have.value", testPassword);
 
                 // debugger;
+                // console.log(testPassword)
 
                 cy.get("[data-cy=login_button]").click();
 
