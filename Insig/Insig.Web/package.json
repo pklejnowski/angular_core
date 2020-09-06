@@ -23,7 +23,7 @@
         "@angular/router": "^10.1.0",
         "@ngx-loading-bar/core": "^5.1.0",
         "@ngx-loading-bar/http-client": "^5.1.0",
-        "@types/urijs": "^1.19.5",
+        "@types/urijs": "^1.19.11",
         "@types/url-parse": "^1.4.3",
         "material-design-icons": "^3.0.1",
         "ngx-toastr": "^13.0.0",

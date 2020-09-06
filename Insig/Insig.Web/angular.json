@@ -47,6 +47,10 @@
                             "src/styles/styles.scss",
                             "node_modules/material-design-icons/iconfont/material-icons.css"
                         ],
+                        "allowedCommonJsDependencies": [
+                            "url-parse",
+                            "urijs"
+                        ],
                         "scripts": []
                     },
                     "configurations": {
