@@ -5,77 +5,99 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import * as URI from "urijs";
 
+interface DataParam { [param: string]: any; }
+interface DataBody { [param: string]: any; }
+
+interface QueryParameters {
+    segmentParams?: DataParam;
+    queryParams?: DataParam;
+}
+
+interface CommandParameters {
+    segmentParams?: DataParam;
+    data?: DataBody;
+}
+
+interface DeleteParameters {
+    segmentParams?: DataParam;
+}
+
 @Injectable({
     providedIn: "root"
 })
 export class ApiClientService {
+
     constructor(private readonly http: HttpClient) { }
 
     get<T>(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        queryParams?: { [queryParam: string]: any | any[] }): Observable<T> {
+        queryParameters?: QueryParameters): Observable<T> {
 
-        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
         return this.http.get<T>(url);
     }
 
     getBlob(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        queryParams?: { [queryParam: string]: any | any[] }): Observable<Blob> {
+        queryParameters?: QueryParameters): Observable<Blob> {
 
-        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
+        const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
         return this.http.get(url, { responseType: "blob" });
     }
 
     post<T>(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        data?: any): Observable<T> {
+        commandParameters?: CommandParameters): Observable<T> {
 
-        const queryParams: string = null;
-        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
-        return this.http.post<T>(url, data);
+        const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
+        return this.http.post<T>(url, commandParameters?.data);
     }
 
     postBlob(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        data?: any): Observable<Blob> {
+        commandParameters?: CommandParameters): Observable<Blob> {
 
-        const queryParams: string = null;
-        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
-        return this.http.post(url, data, { responseType: "blob" });
+        const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
+        return this.http.post(url, commandParameters?.data, { responseType: "blob" });
     }
 
     put<T>(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        data?: any): Observable<T> {
+        commandParameters?: CommandParameters): Observable<T> {
 
-        const queryParams: string = null;
-        const url: string = this.buildUrl(uriTemplate, segmentParams, queryParams);
-        return this.http.put<T>(url, data);
+        const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
+        return this.http.put<T>(url, commandParameters?.data);
+    }
+
+    patch<T>(
+        uriTemplate: string,
+        commandParameters?: CommandParameters): Observable<T> {
+
+        const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
+        return this.http.patch<T>(url, commandParameters?.data);
     }
 
     delete<T>(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] }): Observable<T> {
+        deleteParameters?: DeleteParameters): Observable<T> {
 
-        const url: string = this.buildUrl(uriTemplate, segmentParams);
+        const url: string = this.buildUrl(uriTemplate, deleteParameters?.segmentParams);
         return this.http.delete<T>(url);
     }
 
     private buildUrl(
         uriTemplate: string,
-        segmentParams?: { [segmentParam: string]: any | any[] },
-        queryParams?: any): string {
+        segmentParams?: DataParam,
+        queryParams?: DataParam): string {
 
-        let uri: uri.URI = null;
+        this.parseDateValues(segmentParams);
+        this.parseDateValues(queryParams);
+
+        let uri = null;
 
         if (segmentParams) {
-            uri = URI.expand(uriTemplate, segmentParams);
+            // tslint:disable-next-line: no-non-null-assertion | URI.expand is never null because URITemplate is imported
+            uri = URI.expand!(uriTemplate, segmentParams);
         }
 
         if (uri === null) {
@@ -87,5 +109,15 @@ export class ApiClientService {
         }
 
         return uri.toString();
+    }
+
+    private parseDateValues(params: any): void {
+        if (!!params) {
+            for (const prop in params) {
+                if (params[prop]?.constructor === Date) {
+                    params[prop] = params[prop].toISOString();
+                }
+            }
+        }
     }
 }

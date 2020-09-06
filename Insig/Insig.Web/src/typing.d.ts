@@ -4,3 +4,5 @@ interface AppConfig {
     ApiUrl: string;
     ClientUrl: string;
 }
+
+type Nullable<T> = T | undefined | null;
