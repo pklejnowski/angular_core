@@ -20,7 +20,7 @@ export class AuthService {
 
     private authorizationUrl = appConfig.AuthorizationUrl;
     private userManager = new UserManager(getClientSettings());
-    private user: User | null;
+    private user: Nullable<User>;
 
     private authStatusSource = new ReplaySubject<boolean>();
     authStatus$ = this.authStatusSource.asObservable();
@@ -96,17 +96,17 @@ export class AuthService {
         this.userManager.signoutRedirect();
     }
 
-    getAuthorizationToken(): Promise<string> {
+    getAuthorizationToken(): Promise<Nullable<string>> {
         return this.userManager.getUser().then(user => {
             if (!!user && !user.expired) {
-                return `${user.token_type} ${this.user.access_token}`;
+                return `${user.token_type} ${user.access_token}`;
             } else {
                 return null;
             }
         });
     }
 
-    get name(): string {
-        return this.user != null ? this.user.profile.name : "";
+    get name(): Nullable<string> {
+        return this.user?.profile.name;
     }
 }

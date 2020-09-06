@@ -17,7 +17,7 @@ export class ApiSampleService {
     // URI result: "https://localhost:5001/values/1/samples/test?q1=ABC%21&q2=z+x"
 
     getSampleData(): Observable<SampleDto[]> {
-        return this.apiClientService.get(`${appConfig.ApiUrl}/values/samples`, { queryParams: { id: 1, name: "test" }, segmentParams: { q1: "ABC!", q2: "z x" } });
+        return this.apiClientService.get(`${appConfig.ApiUrl}/values/samples`);
     }
 
     addSampleData(sample: SampleDto): Observable<SampleDto> {

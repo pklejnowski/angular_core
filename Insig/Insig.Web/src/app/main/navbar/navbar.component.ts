@@ -9,8 +9,7 @@ import { Observable } from "rxjs";
 })
 export class NavbarComponent implements OnInit {
     title = "Sample App";
-    authStatus$: Observable<boolean>;
-    name: string;
+    authStatus$!: Observable<boolean>;
 
     constructor(private authService: AuthService) { }
 
@@ -26,7 +25,7 @@ export class NavbarComponent implements OnInit {
         this.authStatus$ = this.authService.authStatus$;
     }
 
-    getUserName(): string {
+    getUserName(): Nullable<string> {
         return this.authService.name;
     }
 }

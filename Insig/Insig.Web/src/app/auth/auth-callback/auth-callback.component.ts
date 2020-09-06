@@ -9,7 +9,7 @@ import { AuthService } from "../auth.service";
     styleUrls: ["auth-callback.component.scss"]
 })
 export class AuthCallbackComponent implements OnInit {
-    error: boolean;
+    error = false;
 
     constructor(private authService: AuthService, private router: Router) { }
 

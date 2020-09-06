@@ -14,7 +14,7 @@ export interface SampleDto {
 export class SampleComponent implements OnInit {
 
     title = "Sample App";
-    samples: Observable<SampleDto[]>;
+    samples!: Observable<SampleDto[]>;
 
     constructor(private sampleService: ApiSampleService) { }
 

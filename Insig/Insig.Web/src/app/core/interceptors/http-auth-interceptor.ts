@@ -27,7 +27,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         })).pipe(
             catchError((err) => {
                 if (err instanceof HttpErrorResponse) {
-                    switch ((<HttpErrorResponse>err).status) {
+                    switch ((err as HttpErrorResponse).status) {
                         case 401:
                             return this.handle401Error(err);
                         case 404:

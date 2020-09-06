@@ -1,45 +1,45 @@
 <mat-toolbar class="mat-elevation-z6 navbar">
 
-  <a class="nav-title"
-     routerLink="/">{{title}}</a>
+    <a class="nav-title"
+       routerLink="/">{{title}}</a>
 
-  <span class="fill-remaining-space"></span>
+    <span class="fill-remaining-space"></span>
 
-  <a mat-button
-     routerLinkActive="menu-item-active"
-     [routerLinkActiveOptions]="{ exact: true }"
-     routerLink="/">
-    <mat-icon>home</mat-icon> Home
-  </a>
+    <a mat-button
+       routerLinkActive="menu-item-active"
+       [routerLinkActiveOptions]="{ exact: true }"
+       routerLink="/">
+        <mat-icon>home</mat-icon> Home
+    </a>
 
-  <nav *ngIf="!(authStatus$ | async)">
-    <a mat-button
-       routerLinkActive="menu-item-active"
-       routerLink="/login">
-      <mat-icon>security</mat-icon> Login
-    </a>
-    <a mat-button
-       routerLinkActive="menu-item-active"
-       routerLink="/register">
-      <mat-icon>call_made</mat-icon> Register
-    </a>
-  </nav>
+    <nav *ngIf="(authStatus$ | async) === false">
+        <a mat-button
+           routerLinkActive="menu-item-active"
+           routerLink="/login">
+            <mat-icon>security</mat-icon> Login
+        </a>
+        <a mat-button
+           routerLinkActive="menu-item-active"
+           routerLink="/register">
+            <mat-icon>call_made</mat-icon> Register
+        </a>
+    </nav>
 
-  <nav *ngIf="authStatus$ | async">
-    <a mat-button
-       routerLinkActive="menu-item-active"
-       routerLink="/sample">
-      <mat-icon>mood</mat-icon> Sample
-    </a>
-    <a mat-button
-       routerLinkActive="menu-item-active"
-       (click)="manageAccount()">
-      <mat-icon>account_circle</mat-icon> Manage Account
-    </a>
-    <a mat-button
-       routerLinkActive="menu-item-active"
-       (click)="signout()">
-      <mat-icon>exit_to_app</mat-icon> Signout {{getUserName()}}
-    </a>
-  </nav>
+    <nav *ngIf="authStatus$ | async">
+        <a mat-button
+           routerLinkActive="menu-item-active"
+           routerLink="/sample">
+            <mat-icon>mood</mat-icon> Sample
+        </a>
+        <a mat-button
+           routerLinkActive="menu-item-active"
+           (click)="manageAccount()">
+            <mat-icon>account_circle</mat-icon> Manage Account
+        </a>
+        <a mat-button
+           routerLinkActive="menu-item-active"
+           (click)="signout()">
+            <mat-icon>exit_to_app</mat-icon> Signout {{getUserName()}}
+        </a>
+    </nav>
 </mat-toolbar>
