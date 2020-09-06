@@ -14,6 +14,6 @@
         "Program.cs": true,
         "Insig.Web.csproj.user": true,
         "Insig.Web.csproj": true,
-        "browserslist": true
+        ".browserslistrc": true
     }
 }

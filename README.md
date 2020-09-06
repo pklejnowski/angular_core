@@ -40,7 +40,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 9 
 
 **Angular Project:**
 - .NET Core 3.1
-- Angular 9
+- Angular 10
 - Authorization (oidc-client.js)
 - Silent refresh
 - Angular Material
