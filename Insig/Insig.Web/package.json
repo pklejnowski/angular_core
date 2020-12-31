@@ -30,7 +30,7 @@
         "oidc-client": "^1.10.1",
         "rxjs": "^6.6.2",
         "tslib": "^2.0.1",
-        "urijs": "^1.19.2",
+        "urijs": "^1.19.4",
         "url-parse": "^1.4.7",
         "url-polyfill": "^1.1.10",
         "zone.js": "~0.11.1"
