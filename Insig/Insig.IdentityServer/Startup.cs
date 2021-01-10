@@ -6,12 +6,14 @@ using Insig.IdentityServer.Extensions;
 using Insig.IdentityServer.Infrastructure;
 using Insig.IdentityServer.Infrastructure.Data;
 using Insig.IdentityServer.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +60,55 @@ namespace Insig.IdentityServer
                 .AddInMemoryClients(Config.GetClients(Configuration["AppUrls:ClientUrl"]))
                 .AddAspNetIdentity<AppUser>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Insig.Session";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorRememberMeScheme,
+                options =>
+                {
+                    options.Cookie.Name = "Insig.2faCookie";
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorUserIdScheme,
+                options =>
+                {
+                    options.Cookie.Name = "Insig.2faUserIdCookie";
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ExternalScheme,
+                options =>
+                {
+                    options.Cookie.Name = "Insig.External";
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = "Insig.Antiforgery";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.Name = "Insig.TempCookie";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromMinutes(15);
+            });
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.FromSeconds(60);
+            });
+
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IPhoneVerificationSender, PhoneVerificationSender>();
             services.AddTransient<IProfileService, IdentityClaimsProfileService>();
@@ -67,10 +118,6 @@ namespace Insig.IdentityServer
             var accountSid = Configuration["Twilio:AccountSID"];
             var authToken = Configuration["Twilio:AuthToken"];
             TwilioClient.Init(accountSid, authToken);
-
-            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader()));
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
@@ -119,7 +166,7 @@ namespace Insig.IdentityServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors("AllowAll");
+            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
 
             app.UseIdentityServer();
             app.UseAuthorization();
