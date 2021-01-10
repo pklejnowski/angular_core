@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Twilio.Rest.Preview.AccSecurity.Service;
+using Twilio.Rest.Verify.V2.Service;
 
 namespace Insig.IdentityServer.Infrastructure.Services
 {

@@ -2,7 +2,6 @@
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
-using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Insig.Common.Auth;
 using Insig.IdentityServer.Infrastructure.Data;
@@ -34,7 +33,7 @@ namespace Insig.IdentityServer.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterRequestViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -112,62 +111,32 @@ namespace Insig.IdentityServer.Controllers
 
             if (button == "cancel")
             {
-                if (context != null)
-                {
-                    // if the user cancels, send a result back into IdentityServer as if they 
-                    // denied the consent (even if this client does not require consent).
-                    // this will send back an access denied OIDC error response to the client.
-                    await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
-
-                    return Redirect(model.ReturnUrl);
-                }
-                else
-                {
-                    // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
-                }
+                return Redirect("~/");
             }
 
             if (ModelState.IsValid)
             {
-                // validate username/password
                 var user = await _userManager.FindByNameAsync(model.Username);
 
-                if (user != null && user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, model.Password))
+                if (user != null && user.EmailConfirmed)
                 {
-                    // only set explicit expiration here if user chooses "remember me". 
-                    // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberLogin, lockoutOnFailure: true);
+
+                    if (result.Succeeded)
                     {
-                        props = new AuthenticationProperties
+                        if (Url.IsLocalUrl(model.ReturnUrl))
                         {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
-
-                    // issue authentication cookie with subject ID and username
-                    await HttpContext.SignInAsync(user.Id, user.UserName, props);
-
-                    if (context != null)
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-
-                    // request for a local page
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return Redirect("~/");
-                    }
-                    else
-                    {
-                        // user might have clicked on a malicious link - should be logged
-                        throw new Exception("invalid return URL");
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else if (string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            return Redirect("~/");
+                        }
+                        else
+                        {
+                            // user might have clicked on a malicious link - should be logged
+                            throw new Exception("invalid return URL");
+                        }
                     }
                 }
 

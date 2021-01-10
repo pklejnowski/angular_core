@@ -24,12 +24,14 @@ namespace Insig.IdentityServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -48,10 +50,11 @@ namespace Insig.IdentityServer
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer(options => { options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10); })
-                .AddDeveloperSigningCredential() // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
+                .AddDeveloperSigningCredential(persistKey: _env.IsDevelopment())  // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients(Configuration["AppUrls:ClientUrl"]))
                 .AddAspNetIdentity<AppUser>();
 

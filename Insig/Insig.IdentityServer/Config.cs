@@ -23,8 +23,19 @@ namespace Insig.IdentityServer
             {
                 new ApiResource(Instances.InsigApi, "Resource Insig API")
                 {
-                    Scopes = {new Scope(Scopes.InsigApi) }
+                    Scopes = new List<string>()
+                    {
+                        Scopes.InsigApi
+                    }
                 }
+            };
+        }
+
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new[]
+            {
+                new ApiScope(Scopes.InsigApi, "Access API Backend")
             };
         }
 
@@ -34,7 +45,7 @@ namespace Insig.IdentityServer
             {
                 new Client
                 {
-                    RequireConsent = false, // change to true if you want to see consent page after log in
+                    RequireConsent = false,
                     ClientId = "insig_spa",
                     ClientName = "Insig SPA",
                     AllowedGrantTypes = GrantTypes.Code,
