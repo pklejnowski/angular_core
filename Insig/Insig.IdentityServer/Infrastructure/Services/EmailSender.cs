@@ -25,7 +25,7 @@ namespace Insig.IdentityServer.Infrastructure.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage
             {
-                From = new EmailAddress("test_app@test.com", "Test User"),
+                From = new EmailAddress(_options.EmailSender),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

@@ -4,13 +4,19 @@ using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
 using Insig.Common.Auth;
+using Insig.IdentityServer.Extensions;
+using Insig.IdentityServer.Infrastructure;
 using Insig.IdentityServer.Infrastructure.Data;
 using Insig.IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Insig.IdentityServer.Controllers
 {
@@ -21,14 +27,32 @@ namespace Insig.IdentityServer.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IPersistedGrantService _persistedGrantService;
         private readonly IEmailSender _emailSender;
+        private readonly AppConfig _appConfig;
+        private readonly ILogger _logger;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IIdentityServerInteractionService interaction, IPersistedGrantService persistedGrantService, IEmailSender emailSender)
+        public AccountController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            IIdentityServerInteractionService interaction,
+            IPersistedGrantService persistedGrantService,
+            IEmailSender emailSender,
+            IOptions<AppConfig> appConfig,
+            ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _interaction = interaction;
             _persistedGrantService = persistedGrantService;
             _emailSender = emailSender;
+            _logger = logger;
+            _appConfig = appConfig.Value;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegisterLink()
+        {
+            return Redirect(_appConfig.ClientUrl + "/register");
         }
 
         [HttpPost]
@@ -37,28 +61,24 @@ namespace Insig.IdentityServer.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = new AppUser { UserName = model.Name, Name = model.Name, Email = model.Email, PhoneNumber = model.PhoneNumber };
+            var user = new AppUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.Action(
-                action: "ConfirmEmail",
-                controller: "Account",
-                values: new { userId = user.Id, code, model.RedirectUrl },
-                protocol: Request.Scheme);
+            var callbackUrl = Url.EmailVerificationLink(user.Id, code, model.RedirectUrl, Request.Scheme);
 
             await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.Name));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("phoneNumber", user.PhoneNumber));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", Roles.Consumer));
 
+            _logger.LogInformation($"New user {model.Email} just registered.");
             return Ok();
         }
 
@@ -69,6 +89,7 @@ namespace Insig.IdentityServer.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -106,41 +127,57 @@ namespace Insig.IdentityServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
-            // check if we are in the context of an authorization request
-            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-
-            if (button == "cancel")
-            {
-                return Redirect("~/");
-            }
-
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Username);
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-                if (user != null && user.EmailConfirmed)
+                if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberLogin, lockoutOnFailure: true);
-
-                    if (result.Succeeded)
+                    if (!user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, model.Password))
                     {
-                        if (Url.IsLocalUrl(model.ReturnUrl))
+                        return RedirectToAction(nameof(ResendVerificationEmail), "Account", new { email = user.Email });
+                    }
+
+                    if (user.EmailConfirmed)
+                    {
+                        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, lockoutOnFailure: true);
+
+                        if (result.Succeeded)
                         {
-                            return Redirect(model.ReturnUrl);
+                            if (Url.IsLocalUrl(model.ReturnUrl))
+                            {
+                                return Redirect(model.ReturnUrl);
+                            }
+
+                            if (string.IsNullOrEmpty(model.ReturnUrl))
+                            {
+                                return Redirect(_appConfig.ClientUrl);
+                            }
+
+                            // user might have clicked on a malicious link
+                            _logger.LogError($"User with ID {user.Id} trying to redirect to {model.ReturnUrl}.");
+                            throw new Exception("invalid return URL");
                         }
-                        else if (string.IsNullOrEmpty(model.ReturnUrl))
+
+                        if (result == SignInResult.LockedOut)
                         {
-                            return Redirect("~/");
+                            _logger.LogError($"User with ID {user.Id} account locked out.");
+                            ModelState.AddModelError(string.Empty, "This account has been locked out, please try again later.");
                         }
                         else
                         {
-                            // user might have clicked on a malicious link - should be logged
-                            throw new Exception("invalid return URL");
+                            ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                    }
                 }
-
-                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                else
+                {
+                    ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                }
             }
 
             // something went wrong, show form with error
@@ -154,14 +191,7 @@ namespace Insig.IdentityServer.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout(string logoutId)
         {
-            var vm = await BuildLogoutViewModelAsync(logoutId);
-
-            if (vm.ShowLogoutPrompt == false)
-            {
-                return await Logout(vm);
-            }
-
-            return View(vm);
+            return await Logout(new LogoutInputModel { LogoutId = logoutId });
         }
 
         /// <summary>
@@ -188,11 +218,121 @@ namespace Insig.IdentityServer.Controllers
                 {
                     return Redirect(vm.PostLogoutRedirectUri);
                 }
-
-                return View("LoggedOut", vm);
             }
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResendVerificationEmail(string email)
+        {
+            return View(new ResendVerificationEmailModel { Email = email });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendVerificationEmail(ResendVerificationEmailModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.EmailVerificationLink(user.Id, code, _appConfig.ClientUrl + "/login", Request.Scheme);
+
+            await _emailSender.SendEmailAsync(user.Email,
+                "Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+            return Redirect(_appConfig.ClientUrl);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+
+                await _emailSender.SendEmailAsync(model.Email, "Reset password", $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                _logger.LogInformation($"Reset password token requested for user {user.Id}");
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            if (code == null)
+            {
+                throw new ApplicationException("A code must be supplied for password reset.");
+            }
+
+            var model = new ResetPasswordViewModel { Code = code };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                _logger.Log(LogLevel.Information, $"User with ID {user.Id} reset password with success.");
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            _logger.Log(LogLevel.Warning, $"Unsuccessful attempt to reset password for user with ID {user.Id}.");
+            ModelState.AddModelError(string.Empty, "Something went wrong. Please contact technical support.");
+
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
 
 
@@ -207,39 +347,15 @@ namespace Insig.IdentityServer.Controllers
             {
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Email = context?.LoginHint,
             };
         }
 
         private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
-            vm.Username = model.Username;
+            vm.Email = model.Email;
             vm.RememberLogin = model.RememberLogin;
-            return vm;
-        }
-
-        private async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)
-        {
-            var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
-
-            if (User?.Identity.IsAuthenticated != true)
-            {
-                // if the user is not authenticated, then just show logged out page
-                vm.ShowLogoutPrompt = false;
-                return vm;
-            }
-
-            var context = await _interaction.GetLogoutContextAsync(logoutId);
-            if (context?.ShowSignoutPrompt == false)
-            {
-                // it's safe to automatically sign-out
-                vm.ShowLogoutPrompt = false;
-                return vm;
-            }
-
-            // show the logout prompt. this prevents attacks where the user
-            // is automatically signed out by another malicious web page.
             return vm;
         }
 

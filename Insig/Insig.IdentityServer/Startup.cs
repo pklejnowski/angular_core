@@ -26,6 +26,8 @@ namespace Insig.IdentityServer
 {
     public class Startup
     {
+        private const string CertificateConfigKey = "jwtCertificateThumbprint";
+
         private readonly IWebHostEnvironment _env;
         public IConfiguration Configuration { get; }
 
@@ -42,17 +44,23 @@ namespace Insig.IdentityServer
             services.AddIdentity<AppUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 6;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequireDigit = true;
                     options.SignIn.RequireConfirmedEmail = true;
+                    options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = null;
+
+                    options.Lockout.AllowedForNewUsers = true;
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                    options.Lockout.MaxFailedAccessAttempts = 5;
                 })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer(options => { options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10); })
-                .AddDeveloperSigningCredential(persistKey: _env.IsDevelopment())  // Only for dev purpose! http://amilspage.com/signing-certificates-idsv4/
+                .AddCertificate(_env.IsDevelopment(), Configuration[CertificateConfigKey])
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
@@ -113,8 +121,10 @@ namespace Insig.IdentityServer
             services.AddTransient<IPhoneVerificationSender, PhoneVerificationSender>();
             services.AddTransient<IProfileService, IdentityClaimsProfileService>();
 
+            services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
             services.Configure<AuthMessageSenderOptions>(options => Configuration.GetSection("SendGridEmailSettings").Bind(options));
             services.Configure<TwilioVerifySettings>(Configuration.GetSection("Twilio"));
+
             var accountSid = Configuration["Twilio:AccountSID"];
             var authToken = Configuration["Twilio:AuthToken"];
             TwilioClient.Init(accountSid, authToken);

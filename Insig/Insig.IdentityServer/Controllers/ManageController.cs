@@ -39,7 +39,6 @@ namespace Insig.IdentityServer.Controllers
 
             var model = new IndexViewModel
             {
-                Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
@@ -190,7 +189,7 @@ namespace Insig.IdentityServer.Controllers
         private async Task UpdateUserProfile(IndexViewModel model)
         {
             var user = await GetUser();
-            user.Name = model.Name;
+            user.Email = model.Email;
 
             if (user.PhoneNumber != model.PhoneNumber)
             {

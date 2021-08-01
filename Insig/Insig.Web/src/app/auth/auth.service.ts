@@ -8,7 +8,6 @@ import { catchError, map, switchMap } from "rxjs/operators";
 import { getClientSettings } from "./auth.config";
 
 interface RegisterCredentials {
-    name: string;
     email: string;
     phoneNumber: string;
     password: string;

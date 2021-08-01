@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
@@ -31,7 +30,6 @@ namespace Insig.IdentityServer.Infrastructure.Services
 
             var claims = principal.Claims.ToList();
             claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
-            claims.Add(new Claim(JwtClaimTypes.GivenName, user.Name));
             claims.Add(new Claim(IdentityServerConstants.StandardScopes.Email, user.Email));
             claims.Add(new Claim(ClaimTypes.Role, Roles.Consumer));
 

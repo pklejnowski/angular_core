@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model Insig.IdentityServer.Models.ResendVerificationEmailModel
+
+<div>
+    <h1>Email is unverified</h1>
+
+    <form asp-action="ResendVerificationEmail" autocomplete="off">
+        Do you want to resend the verification code?
+        @Html.HiddenFor(m => m.Email)
+        <div class="mt-4 mb-4">
+            <button class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>

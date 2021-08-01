@@ -8,8 +8,8 @@
         <form asp-route="Login">
             <input type="hidden" asp-for="ReturnUrl" />
             <div class="form-group">
-                <label asp-for="Username"></label>
-                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                <label asp-for="Email"></label>
+                <input class="form-control" placeholder="Email" asp-for="Email" autofocus>
             </div>
 
             <div class="form-group">
@@ -24,10 +24,12 @@
                     <label asp-for="RememberLogin" class="form-check-label">Remember My Login</label>
                 </div>
             }
+            <a asp-action="ForgotPassword" class="text-right">Forgot password?</a>
+
 
             <div class="mt-4 mb-4">
                 <button class="btn btn-primary" name="button" value="login">Login</button>
-                <button class="btn btn-light" name="button" value="cancel">Cancel</button>
+                <a asp-action="RegisterLink">Don't have an account?</a>
             </div>
 
             <partial name="_ValidationSummary" />
