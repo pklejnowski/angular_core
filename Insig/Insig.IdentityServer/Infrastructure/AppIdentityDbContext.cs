@@ -11,7 +11,7 @@ namespace Insig.IdentityServer.Infrastructure
 {
     public class AppIdentityDbContext : IdentityDbContext<AppUser>, IDesignTimeDbContextFactory<AppIdentityDbContext>
     {
-        private const string ConnectionStringName = "Default";
+        private const string ConnectionStringName = "Identity";
 
         public AppIdentityDbContext()
         {

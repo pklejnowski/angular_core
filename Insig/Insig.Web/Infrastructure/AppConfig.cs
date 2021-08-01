@@ -1,6 +1,6 @@
 namespace Insig.Web.Infrastructure
 {
-    public class AppUrls
+    public class AppConfig
     {
         public string AuthorizationUrl { get; set; }
         public string ApiUrl { get; set; }

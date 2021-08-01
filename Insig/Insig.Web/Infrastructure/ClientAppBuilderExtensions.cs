@@ -4,7 +4,7 @@ namespace Insig.Web.Infrastructure
 {
     public static class ClientAppBuilderExtensions
     {
-        public static IApplicationBuilder UseContentSecurityPolicyHttpHeader(this IApplicationBuilder application, AppUrls appUrls)
+        public static IApplicationBuilder UseContentSecurityPolicyHttpHeader(this IApplicationBuilder application, AppConfig appConfig)
         {
             return application.UseCsp(options =>
             {
@@ -13,12 +13,12 @@ namespace Insig.Web.Infrastructure
                     .ConnectSources(x =>
                     {
                         x.Self();
-                        x.CustomSources(appUrls.AuthorizationUrl, appUrls.ApiUrl);
+                        x.CustomSources(appConfig.AuthorizationUrl, appConfig.ApiUrl);
                     })
                     .FrameSources(x =>
                     {
                         x.Self();
-                        x.CustomSources(appUrls.AuthorizationUrl);
+                        x.CustomSources(appConfig.AuthorizationUrl);
                     })
                     .FontSources(x => x.Self())
                     .ImageSources(x =>

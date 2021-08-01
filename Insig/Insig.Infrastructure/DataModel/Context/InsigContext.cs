@@ -38,7 +38,7 @@ namespace Insig.Infrastructure.DataModel.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Insig"));
             }
         }
 

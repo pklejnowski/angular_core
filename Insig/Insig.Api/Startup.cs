@@ -62,7 +62,7 @@ namespace Insig.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(b => b.WithOrigins(Configuration["AppConfig:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -79,7 +79,7 @@ namespace Insig.Api
                 .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = Configuration["AppUrls:IdentityUrl"];
+                    options.Authority = Configuration["AppConfig:IdentityUrl"];
                     options.RequireHttpsMetadata = true;
                     options.ApiName = Instances.InsigApi;
                 });
@@ -98,7 +98,7 @@ namespace Insig.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Default")));
+            builder.RegisterModule(new DefaultModule(Configuration.GetConnectionString("Insig")));
         }
     }
 }

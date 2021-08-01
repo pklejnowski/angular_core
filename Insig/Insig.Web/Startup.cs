@@ -22,10 +22,10 @@ namespace Insig.Web
         {
             services.AddMvcCore();
 
-            services.Configure<AppUrls>(Configuration.GetSection("AppUrls"));
+            services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<AppUrls> appUrls)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<AppConfig> appConfig)
         {
             if (env.IsDevelopment())
             {
@@ -36,7 +36,7 @@ namespace Insig.Web
                 app.UseHsts();
             }
 
-            app.UseContentSecurityPolicyHttpHeader(appUrls.Value);
+            app.UseContentSecurityPolicyHttpHeader(appConfig.Value);
             app.RemoveServerHeader();
             app.UseWebAppSecurityHttpHeaders();
             app.UseStrictTransportSecurityHttpHeader(env);

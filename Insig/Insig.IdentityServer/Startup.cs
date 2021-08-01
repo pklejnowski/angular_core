@@ -37,7 +37,7 @@ namespace Insig.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Identity")));
 
             services.AddIdentity<AppUser, IdentityRole>(options =>
                 {
@@ -57,7 +57,7 @@ namespace Insig.IdentityServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryClients(Config.GetClients(Configuration["AppUrls:ClientUrl"]))
+                .AddInMemoryClients(Config.GetClients(Configuration["AppConfig:ClientUrl"]))
                 .AddAspNetIdentity<AppUser>();
 
             services.ConfigureApplicationCookie(options =>
@@ -166,7 +166,7 @@ namespace Insig.IdentityServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors(b => b.WithOrigins(Configuration["AppUrls:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(b => b.WithOrigins(Configuration["AppConfig:ClientUrl"]).AllowAnyHeader().AllowAnyMethod());
 
             app.UseIdentityServer();
             app.UseAuthorization();

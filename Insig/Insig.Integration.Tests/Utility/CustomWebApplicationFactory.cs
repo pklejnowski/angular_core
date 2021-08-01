@@ -41,7 +41,7 @@ namespace Insig.Integration.Tests.Utility
                 var connectionString = new ConfigurationBuilder()
                      .AddJsonFile(appsettingsFileName)
                      .Build()
-                     .GetConnectionString("Default");
+                     .GetConnectionString("Insig_Test");
 
                 if (!connectionString.ToLower().Contains("test"))
                 {

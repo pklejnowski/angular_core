@@ -6,18 +6,20 @@ using Microsoft.Extensions.Options;
 namespace Insig.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("home")]
     public class HomeController : Controller
     {
-        private readonly AppUrls _applicationUrls;
-        public HomeController(IOptions<AppUrls> applicationUrls)
+        private readonly AppConfig _applicationConfig;
+
+        public HomeController(IOptions<AppConfig> applicationUrls)
         {
-            _applicationUrls = applicationUrls.Value;
+            _applicationConfig = applicationUrls.Value;
         }
-        [HttpGet("ApplicationUrls")]
-        public JavaScriptResult ApplicationUrls()
+
+        [HttpGet("app-config")]
+        public JavaScriptResult GetAppConfig()
         {
-            return new JavaScriptResult("window.appConfig = " + JsonSerializer.Serialize(_applicationUrls));
+            return new JavaScriptResult("window.appConfig = " + JsonSerializer.Serialize(_applicationConfig));
         }
     }
 }
