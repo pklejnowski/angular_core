@@ -15,16 +15,16 @@ export class SampleComponent implements OnInit {
     title = "Sample App";
     samples!: Observable<SampleDto[]>;
 
-    constructor(private sampleService: ApiSampleService) { }
+    constructor(private _sampleService: ApiSampleService) { }
 
     addSample(sampleName: string): void {
-        this.samples = this.sampleService.addSampleData({ name: sampleName } as SampleDto)
+        this.samples = this._sampleService.addSampleData({ name: sampleName } as SampleDto)
             .pipe(
-                switchMapTo(this.sampleService.getSampleData())
+                switchMapTo(this._sampleService.getSampleData())
             );
     }
 
     ngOnInit(): void {
-        this.samples = this.sampleService.getSampleData();
+        this.samples = this._sampleService.getSampleData();
     }
 }

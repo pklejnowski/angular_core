@@ -12,17 +12,17 @@ const resultCodeDictionary: { [code: number]: string } = {
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    constructor(private route: ActivatedRoute, private toastrService: ToastrService) { }
+    constructor(private _route: ActivatedRoute, private _toastrService: ToastrService) { }
 
     ngOnInit(): void {
-        const resultCode = +(this.route.snapshot.queryParamMap.get("resultCode") || "");
+        const resultCode = +(this._route.snapshot.queryParamMap.get("resultCode") || "");
 
         switch (resultCode) {
             case 1:
-                this.toastrService.success(resultCodeDictionary[resultCode]);
+                this._toastrService.success(resultCodeDictionary[resultCode]);
                 break;
             case 2:
-                this.toastrService.warning(resultCodeDictionary[resultCode]);
+                this._toastrService.warning(resultCodeDictionary[resultCode]);
                 break;
             default:
                 break;

@@ -8,11 +8,11 @@ import { AuthService } from "@app/auth";
     styleUrls: ["./logout.component.scss"]
 })
 export class LogoutComponent implements OnInit {
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private _authService: AuthService, private _router: Router) { }
 
     ngOnInit(): void {
-        if (this.authService.isAuthenticated()) {
-            this.router.navigate(["/"]);
+        if (this._authService.isAuthenticated()) {
+            this._router.navigate(["/"]);
         }
     }
 }

@@ -6,12 +6,12 @@ import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class ToastHttpInterceptor implements HttpInterceptor {
-    constructor(private toastr: ToastrService) { }
+    constructor(private _toastr: ToastrService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((err) => {
-                this.toastr.error("Operation failed", "Error");
+                this._toastr.error("Operation failed", "Error");
                 return throwError(err);
             })
         );

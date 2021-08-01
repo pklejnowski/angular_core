@@ -8,7 +8,7 @@ import { ApiClientService } from "./api-client.service";
     providedIn: "root"
 })
 export class ApiSampleService {
-    constructor(private apiClientService: ApiClientService) { }
+    constructor(private _apiClientService: ApiClientService) { }
 
     // Example safe API Call with Segments and Query in URI
     // this.apiClientService.get(`${appConfig.ApiUrl}/values/{id}/samples/{name}`,
@@ -16,10 +16,10 @@ export class ApiSampleService {
     // URI result: "https://localhost:5001/values/1/samples/test?q1=ABC%21&q2=z+x"
 
     getSampleData(): Observable<SampleDto[]> {
-        return this.apiClientService.get(`${appConfig.apiUrl}/values/samples`);
+        return this._apiClientService.get(`${appConfig.apiUrl}/values/samples`);
     }
 
     addSampleData(sample: SampleDto): Observable<SampleDto> {
-        return this.apiClientService.post(`${appConfig.apiUrl}/values/samples`, { data: sample });
+        return this._apiClientService.post(`${appConfig.apiUrl}/values/samples`, { data: sample });
     }
 }

@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "@app/auth";
+import { ToastrService } from "ngx-toastr";
 import { EMPTY, from, Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import * as URLParse from "url-parse";
@@ -10,26 +11,26 @@ import * as URLParse from "url-parse";
 export class HttpAuthInterceptor implements HttpInterceptor {
     allowedUrls = [appConfig.clientUrl, appConfig.apiUrl, appConfig.identityUrl];
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private _authService: AuthService, private _router: Router, private _toastrService: ToastrService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (!this.checkUrl(req.url.toLowerCase())) {
             return next.handle(req);
         }
 
-        return from(this.authService.getAuthorizationToken().then(token => {
-            if (token) {
-                req = req.clone({ setHeaders: { Authorization: token } });
-            }
-            return next.handle(req).toPromise();
+        return from(this._authService.getAuthorizationToken().then(token => {
+            const newReq = token ? req.clone({ setHeaders: { authorization: token } }) : req;
+            return next.handle(newReq).toPromise();
         })).pipe(
             catchError((err) => {
                 if (err instanceof HttpErrorResponse) {
-                    switch ((err).status) {
+                    switch (err.status) {
                         case 401:
                             return this.handle401Error(err);
                         case 404:
                             return this.handle404Error(err);
+                        default:
+                            return this.handle500Error(err);
                     }
                 }
                 return throwError(err);
@@ -38,13 +39,18 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     }
 
     // Handlers for http status codes
-    private handle401Error(error: HttpErrorResponse): Observable<any> {
-        this.router.navigateByUrl("login");
+    private handle401Error(_: HttpErrorResponse): Observable<HttpEvent<any>> {
+        this._router.navigateByUrl("login");
         return EMPTY;
     }
 
-    private handle404Error(error: HttpErrorResponse): Observable<any> {
-        this.router.navigateByUrl("not-found");
+    private handle404Error(_: HttpErrorResponse): Observable<HttpEvent<any>> {
+        this._router.navigateByUrl("not-found");
+        return EMPTY;
+    }
+
+    private handle500Error(error: HttpErrorResponse): Observable<HttpEvent<any>> {
+        this._toastrService.error(error.error?.detail || "Operation failed", "Error");
         return EMPTY;
     }
 

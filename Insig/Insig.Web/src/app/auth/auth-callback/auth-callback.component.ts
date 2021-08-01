@@ -11,14 +11,14 @@ import { AuthService } from "../auth.service";
 export class AuthCallbackComponent implements OnInit {
     error = false;
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private _authService: AuthService, private _router: Router) { }
 
     async ngOnInit(): Promise<void> {
-        if (this.router.url.indexOf("error") >= 0) {
+        if (this._router.url.indexOf("error") >= 0) {
             this.error = true;
             return;
         }
 
-        await this.authService.completeAuthentication();
+        await this._authService.completeAuthentication();
     }
 }

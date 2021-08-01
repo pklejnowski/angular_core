@@ -8,14 +8,14 @@ import { take, tap } from "rxjs/operators";
     providedIn: "root"
 })
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private authService: AuthService) { }
+    constructor(private _router: Router, private _authService: AuthService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        return this.authService.isAuthenticated$.pipe(
+        return this._authService.isAuthenticated$.pipe(
             take(1),
             tap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    this.router.navigate(["login"], { queryParams: { redirect: state.url }, replaceUrl: true });
+                    this._router.navigate(["login"], { queryParams: { redirect: state.url }, replaceUrl: true });
                 }
             })
         );

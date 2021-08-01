@@ -11,21 +11,21 @@ export class NavbarComponent implements OnInit {
     title = "Sample App";
     authStatus$!: Observable<boolean>;
 
-    constructor(private authService: AuthService) { }
+    constructor(private _authService: AuthService) { }
 
     signout(): void {
-        this.authService.signout();
+        this._authService.signout();
     }
 
     manageAccount(): void {
-        this.authService.manageAccount();
+        this._authService.manageAccount();
     }
 
     ngOnInit(): void {
-        this.authStatus$ = this.authService.authStatus$;
+        this.authStatus$ = this._authService.authStatus$;
     }
 
     getUserName(): Nullable<string> {
-        return this.authService.name;
+        return this._authService.name;
     }
 }

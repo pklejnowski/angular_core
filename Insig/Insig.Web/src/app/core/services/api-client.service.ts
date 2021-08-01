@@ -26,14 +26,14 @@ interface DeleteParameters {
     providedIn: "root"
 })
 export class ApiClientService {
-    constructor(private readonly http: HttpClient) { }
+    constructor(private readonly _http: HttpClient) { }
 
     get<T>(
         uriTemplate: string,
         queryParameters?: QueryParameters
     ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
-        return this.http.get<T>(url);
+        return this._http.get<T>(url);
     }
 
     getBlob(
@@ -41,7 +41,7 @@ export class ApiClientService {
         queryParameters?: QueryParameters
     ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
-        return this.http.get(url, { responseType: "blob" });
+        return this._http.get(url, { responseType: "blob" });
     }
 
     post<T>(
@@ -49,7 +49,7 @@ export class ApiClientService {
         commandParameters?: CommandParameters
     ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
-        return this.http.post<T>(url, commandParameters?.data);
+        return this._http.post<T>(url, commandParameters?.data);
     }
 
     postBlob(
@@ -57,7 +57,7 @@ export class ApiClientService {
         commandParameters?: CommandParameters
     ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
-        return this.http.post(url, commandParameters?.data, { responseType: "blob" });
+        return this._http.post(url, commandParameters?.data, { responseType: "blob" });
     }
 
     put<T>(
@@ -65,7 +65,7 @@ export class ApiClientService {
         commandParameters?: CommandParameters
     ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
-        return this.http.put<T>(url, commandParameters?.data);
+        return this._http.put<T>(url, commandParameters?.data);
     }
 
     patch<T>(
@@ -73,7 +73,7 @@ export class ApiClientService {
         commandParameters?: CommandParameters
     ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
-        return this.http.patch<T>(url, commandParameters?.data);
+        return this._http.patch<T>(url, commandParameters?.data);
     }
 
     delete<T>(
@@ -81,7 +81,7 @@ export class ApiClientService {
         deleteParameters?: DeleteParameters
     ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, deleteParameters?.segmentParams);
-        return this.http.delete<T>(url);
+        return this._http.delete<T>(url);
     }
 
     private buildUrl(
@@ -93,6 +93,8 @@ export class ApiClientService {
         this.parseDateValues(queryParams);
 
         if (segmentParams) {
+            // URI.expand is never null because URITemplate is imported
+            // eslint-disable-next-line
             uriTemplate = URI.expand!(uriTemplate, segmentParams);
         }
 
@@ -107,11 +109,13 @@ export class ApiClientService {
 
     private parseDateValues(params: any): void {
         if (params) {
+            /* eslint-disable*/
             for (const prop in params) {
                 if (params[prop]?.constructor === Date) {
                     params[prop] = params[prop].toISOString();
                 }
             }
+            /* eslint-disable*/
         }
     }
 }
