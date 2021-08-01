@@ -32,7 +32,7 @@
                     <mat-icon [appPasswordSwitchType]="password"
                               matSuffix>{{ password.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
                     <mat-error>
-                        <app-validation-feedback controlName="password"></app-validation-feedback>
+                        <app-password-validator-feedback controlName="password"></app-password-validator-feedback>
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="full-width-input">
@@ -41,17 +41,13 @@
                            type="password"
                            placeholder="Confirm Password"
                            formControlName="confirmPassword"
-                           pattern="{{ password.value }}"
                            required>
                     <mat-icon [appPasswordSwitchType]="confirmPassword"
                               matSuffix>{{ confirmPassword.type === 'password' ? 'visibility' : 'visibility_off'}}
                     </mat-icon>
                     <mat-error>
-                        <app-validation-feedback controlName="confirmPassword">
-                            <ng-container *ngIf="registerForm.get('confirmPassword')?.hasError('pattern')">
-                                This doesn't match the password you've provided.
-                            </ng-container>
-                        </app-validation-feedback>
+                        <app-password-validator-feedback controlName="confirmPassword">
+                        </app-password-validator-feedback>
                     </mat-error>
                 </mat-form-field>
                 <div class="margin-top-25">
