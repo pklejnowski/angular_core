@@ -8,13 +8,13 @@ import { LogoutRoutingModule } from "./logout-routing.module";
 import { LogoutComponent } from "./logout.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    LogoutRoutingModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    SharedModule
-  ],
-  declarations: [LogoutComponent]
+    imports: [
+        CommonModule,
+        LogoutRoutingModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        SharedModule
+    ],
+    declarations: [LogoutComponent]
 })
 export class LogoutModule { }

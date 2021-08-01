@@ -9,25 +9,25 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 @NgModule({
-  imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatGridListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatMenuModule
-  ],
-  exports: [
-    MatButtonModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatGridListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatMenuModule
-  ]
+    imports: [
+        MatButtonModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatGridListModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatMenuModule
+    ],
+    exports: [
+        MatButtonModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatGridListModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatMenuModule
+    ]
 })
 export class MaterialModule { }

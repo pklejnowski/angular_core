@@ -5,8 +5,8 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import * as URI from "urijs";
 
-interface DataParam { [param: string]: any; }
-interface DataBody { [param: string]: any; }
+interface DataParam { [param: string]: any }
+interface DataBody { [param: string]: any }
 
 interface QueryParameters {
     segmentParams?: DataParam;
@@ -26,61 +26,60 @@ interface DeleteParameters {
     providedIn: "root"
 })
 export class ApiClientService {
-
     constructor(private readonly http: HttpClient) { }
 
     get<T>(
         uriTemplate: string,
-        queryParameters?: QueryParameters): Observable<T> {
-
+        queryParameters?: QueryParameters
+    ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
         return this.http.get<T>(url);
     }
 
     getBlob(
         uriTemplate: string,
-        queryParameters?: QueryParameters): Observable<Blob> {
-
+        queryParameters?: QueryParameters
+    ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
         return this.http.get(url, { responseType: "blob" });
     }
 
     post<T>(
         uriTemplate: string,
-        commandParameters?: CommandParameters): Observable<T> {
-
+        commandParameters?: CommandParameters
+    ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
         return this.http.post<T>(url, commandParameters?.data);
     }
 
     postBlob(
         uriTemplate: string,
-        commandParameters?: CommandParameters): Observable<Blob> {
-
+        commandParameters?: CommandParameters
+    ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
         return this.http.post(url, commandParameters?.data, { responseType: "blob" });
     }
 
     put<T>(
         uriTemplate: string,
-        commandParameters?: CommandParameters): Observable<T> {
-
+        commandParameters?: CommandParameters
+    ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
         return this.http.put<T>(url, commandParameters?.data);
     }
 
     patch<T>(
         uriTemplate: string,
-        commandParameters?: CommandParameters): Observable<T> {
-
+        commandParameters?: CommandParameters
+    ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
         return this.http.patch<T>(url, commandParameters?.data);
     }
 
     delete<T>(
         uriTemplate: string,
-        deleteParameters?: DeleteParameters): Observable<T> {
-
+        deleteParameters?: DeleteParameters
+    ): Observable<T> {
         const url: string = this.buildUrl(uriTemplate, deleteParameters?.segmentParams);
         return this.http.delete<T>(url);
     }
@@ -88,8 +87,8 @@ export class ApiClientService {
     private buildUrl(
         uriTemplate: string,
         segmentParams?: DataParam,
-        queryParams?: DataParam): string {
-
+        queryParams?: DataParam
+    ): string {
         this.parseDateValues(segmentParams);
         this.parseDateValues(queryParams);
 
@@ -107,7 +106,7 @@ export class ApiClientService {
     }
 
     private parseDateValues(params: any): void {
-        if (!!params) {
+        if (params) {
             for (const prop in params) {
                 if (params[prop]?.constructor === Date) {
                     params[prop] = params[prop].toISOString();

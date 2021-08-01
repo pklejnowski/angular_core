@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 
 import { ApiClientService } from "./api-client.service";
 
-
 @Injectable({
     providedIn: "root"
 })

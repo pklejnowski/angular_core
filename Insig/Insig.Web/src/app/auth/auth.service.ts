@@ -16,7 +16,6 @@ interface RegisterCredentials {
 
 @Injectable()
 export class AuthService {
-
     private authorizationUrl = appConfig.identityUrl;
     private userManager = new UserManager(getClientSettings());
     private user: Nullable<User>;
@@ -55,7 +54,7 @@ export class AuthService {
     }
 
     register(credentials: RegisterCredentials): Observable<any> {
-        return this.http.post(this.authorizationUrl + "/register", credentials);
+        return this.http.post(`${this.authorizationUrl}/register`, credentials);
     }
 
     login(): Promise<any> {
@@ -63,7 +62,7 @@ export class AuthService {
     }
 
     manageAccount(): void {
-        window.location.href = this.authorizationUrl + "/Manage/Index?ReturnUrl=" + encodeURIComponent(appConfig.clientUrl);
+        window.location.href = `${this.authorizationUrl}/Manage/Index?ReturnUrl=${encodeURIComponent(appConfig.clientUrl)}`;
     }
 
     isAuthenticated(): boolean {
@@ -72,13 +71,14 @@ export class AuthService {
 
     get isAuthenticated$(): Observable<boolean> {
         return from(this.userManager.getUser()).pipe(
-            switchMap(user => !!user && !user.expired
+            switchMap(user => (!!user && !user.expired
                 ? of(true)
                 : from(this.userManager.signinSilent()).pipe(
                     map(userResult => {
                         this.user = userResult;
                         return !!userResult;
-                    }))),
+                    })
+                ))),
             catchError(() => of(false))
         );
     }

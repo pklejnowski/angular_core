@@ -8,13 +8,11 @@ import * as URLParse from "url-parse";
 
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
-
     allowedUrls = [appConfig.clientUrl, appConfig.apiUrl, appConfig.identityUrl];
 
     constructor(private authService: AuthService, private router: Router) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
         if (!this.checkUrl(req.url.toLowerCase())) {
             return next.handle(req);
         }
@@ -27,7 +25,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         })).pipe(
             catchError((err) => {
                 if (err instanceof HttpErrorResponse) {
-                    switch ((err as HttpErrorResponse).status) {
+                    switch ((err).status) {
                         case 401:
                             return this.handle401Error(err);
                         case 404:

@@ -9,21 +9,21 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MainRoutingModule,
-    MaterialModule,
-    FeaturesModule
-  ],
-  declarations: [
-    NavbarComponent,
-    HomeComponent,
-    PageNotFoundComponent
-  ],
-  exports: [
-    NavbarComponent,
-    HomeComponent,
-    PageNotFoundComponent
-  ]
+    imports: [
+        CommonModule,
+        MainRoutingModule,
+        MaterialModule,
+        FeaturesModule
+    ],
+    declarations: [
+        NavbarComponent,
+        HomeComponent,
+        PageNotFoundComponent
+    ],
+    exports: [
+        NavbarComponent,
+        HomeComponent,
+        PageNotFoundComponent
+    ]
 })
 export class MainModule { }

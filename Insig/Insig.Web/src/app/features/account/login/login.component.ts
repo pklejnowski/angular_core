@@ -7,7 +7,6 @@ import { AuthService } from "@app/auth";
     styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent {
-
     constructor(private authService: AuthService) { }
 
     login(): void {

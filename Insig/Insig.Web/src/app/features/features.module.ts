@@ -9,19 +9,19 @@ import { FeaturesRoutingModule } from "./features-routing.module";
 import { SampleComponent } from "./sample/sample.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FeaturesRoutingModule,
-    MaterialModule,
-    LoginModule,
-    RegisterModule,
-    LogoutModule
-  ],
-  declarations: [
-    SampleComponent
-  ],
-  exports: [
-    SampleComponent
-  ]
+    imports: [
+        CommonModule,
+        FeaturesRoutingModule,
+        MaterialModule,
+        LoginModule,
+        RegisterModule,
+        LogoutModule
+    ],
+    declarations: [
+        SampleComponent
+    ],
+    exports: [
+        SampleComponent
+    ]
 })
 export class FeaturesModule { }

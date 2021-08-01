@@ -6,17 +6,17 @@ import { PasswordSwitchTypeDirective } from "./password-switch-type.directive";
 import { ValidationFeedbackComponent } from "./validation-feedback/validation-feedback.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule
-  ],
-  declarations: [
-    ValidationFeedbackComponent,
-    PasswordSwitchTypeDirective
-  ],
-  exports: [
-    ValidationFeedbackComponent,
-    PasswordSwitchTypeDirective
-  ]
+    imports: [
+        CommonModule,
+        MaterialModule
+    ],
+    declarations: [
+        ValidationFeedbackComponent,
+        PasswordSwitchTypeDirective
+    ],
+    exports: [
+        ValidationFeedbackComponent,
+        PasswordSwitchTypeDirective
+    ]
 })
 export class SharedModule { }

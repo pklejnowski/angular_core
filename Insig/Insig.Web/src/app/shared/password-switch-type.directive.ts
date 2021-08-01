@@ -4,7 +4,6 @@ import { Directive, HostListener, Input } from "@angular/core";
     selector: "[appPasswordSwitchType]"
 })
 export class PasswordSwitchTypeDirective {
-
     @Input() appPasswordSwitchType: any;
 
     @HostListener("mouseup")

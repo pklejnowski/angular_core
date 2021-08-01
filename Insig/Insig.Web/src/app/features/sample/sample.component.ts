@@ -9,10 +9,9 @@ export interface SampleDto {
 
 @Component({
     selector: "app-sample",
-    templateUrl: "./sample.component.html",
+    templateUrl: "./sample.component.html"
 })
 export class SampleComponent implements OnInit {
-
     title = "Sample App";
     samples!: Observable<SampleDto[]>;
 
