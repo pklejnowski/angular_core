@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-    <PackageReference Include="Ensure.That" Version="9.2.0" />
+    <PackageReference Include="Ensure.That" Version="10.1.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
     <PackageReference Include="serilog.extensions.logging" Version="3.0.1" />
-    <PackageReference Include="serilog.sinks.file" Version="4.1.0" />
+    <PackageReference Include="serilog.sinks.file" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

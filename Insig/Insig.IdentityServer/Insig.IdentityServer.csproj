@@ -6,25 +6,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="IdentityServer4" Version="4.1.1" />
-        <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
-        <PackageReference Include="identityserver4.entityframework" Version="4.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.1" />
+        <PackageReference Include="IdentityServer4" Version="4.1.2" />
+        <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
+        <PackageReference Include="identityserver4.entityframework" Version="4.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.8" />
         <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
-        <PackageReference Include="microsoft.aspnetcore.identity.entityframeworkcore" Version="5.0.1" />
-        <PackageReference Include="microsoft.entityframeworkcore.design" Version="5.0.1">
+        <PackageReference Include="microsoft.aspnetcore.identity.entityframeworkcore" Version="5.0.8" />
+        <PackageReference Include="microsoft.entityframeworkcore.design" Version="5.0.8">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.1" />
+        <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.8" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-        <PackageReference Include="SendGrid" Version="9.22.0" />
+        <PackageReference Include="SendGrid" Version="9.24.1" />
         <PackageReference Include="serilog.extensions.logging" Version="3.0.1" />
-        <PackageReference Include="serilog.sinks.file" Version="4.1.0" />
-        <PackageReference Include="Twilio" Version="5.52.1" />
+        <PackageReference Include="serilog.sinks.file" Version="5.0.0" />
+        <PackageReference Include="Twilio" Version="5.64.1" />
     </ItemGroup>
 
     <ItemGroup>
