@@ -1,7 +1,7 @@
-using System.Text.Json;
 using Insig.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Insig.Web.Controllers
 {
@@ -19,7 +19,7 @@ namespace Insig.Web.Controllers
         [HttpGet("app-config")]
         public JavaScriptResult GetAppConfig()
         {
-            return new JavaScriptResult("window.appConfig = " + JsonSerializer.Serialize(_applicationConfig));
+            return new("window.appConfig = " + JsonConvert.SerializeObject(_applicationConfig, Formatting.Indented));
         }
     }
 }

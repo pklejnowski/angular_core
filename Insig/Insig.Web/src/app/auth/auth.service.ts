@@ -17,7 +17,7 @@ interface RegisterCredentials {
 @Injectable()
 export class AuthService {
 
-    private authorizationUrl = appConfig.AuthorizationUrl;
+    private authorizationUrl = appConfig.identityUrl;
     private userManager = new UserManager(getClientSettings());
     private user: Nullable<User>;
 
@@ -63,7 +63,7 @@ export class AuthService {
     }
 
     manageAccount(): void {
-        window.location.href = this.authorizationUrl + "/Manage/Index?ReturnUrl=" + encodeURIComponent(appConfig.ClientUrl);
+        window.location.href = this.authorizationUrl + "/Manage/Index?ReturnUrl=" + encodeURIComponent(appConfig.clientUrl);
     }
 
     isAuthenticated(): boolean {

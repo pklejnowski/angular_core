@@ -13,12 +13,12 @@ namespace Insig.Web.Infrastructure
                     .ConnectSources(x =>
                     {
                         x.Self();
-                        x.CustomSources(appConfig.AuthorizationUrl, appConfig.ApiUrl);
+                        x.CustomSources(appConfig.IdentityUrl, appConfig.ApiUrl);
                     })
                     .FrameSources(x =>
                     {
                         x.Self();
-                        x.CustomSources(appConfig.AuthorizationUrl);
+                        x.CustomSources(appConfig.IdentityUrl);
                     })
                     .FontSources(x => x.Self())
                     .ImageSources(x =>

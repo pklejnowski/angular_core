@@ -94,7 +94,6 @@ export class ApiClientService {
         this.parseDateValues(queryParams);
 
         if (segmentParams) {
-            // tslint:disable-next-line: no-non-null-assertion | URI.expand is never null because URITemplate is imported
             uriTemplate = URI.expand!(uriTemplate, segmentParams);
         }
 

@@ -25,7 +25,7 @@ export class RegisterComponent {
                 email: this.registerForm.value.email,
                 phoneNumber: "+48" + this.registerForm.value.phoneNumber,
                 password: this.registerForm.value.password,
-                redirectUrl: appConfig.ClientUrl + "/login"
+                redirectUrl: appConfig.clientUrl + "/login"
             }).subscribe(_ => {
                 this.toastr.success("A verification link has been sent to your email account", "Thank you for registering");
                 this.router.navigate(["login"]);

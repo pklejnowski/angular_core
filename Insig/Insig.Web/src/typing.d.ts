@@ -1,8 +1,9 @@
-declare var appConfig: AppConfig;
+declare let appConfig: AppConfig;
+
 interface AppConfig {
-    AuthorizationUrl: string;
-    ApiUrl: string;
-    ClientUrl: string;
+    identityUrl: string;
+    apiUrl: string;
+    clientUrl: string;
 }
 
 type Nullable<T> = T | undefined | null;

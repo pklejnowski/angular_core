@@ -9,7 +9,7 @@ import * as URLParse from "url-parse";
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
 
-    allowedUrls = [appConfig.ClientUrl, appConfig.ApiUrl, appConfig.AuthorizationUrl];
+    allowedUrls = [appConfig.clientUrl, appConfig.apiUrl, appConfig.identityUrl];
 
     constructor(private authService: AuthService, private router: Router) { }
 
