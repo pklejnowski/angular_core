@@ -1,28 +1,28 @@
-  <Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
 
-    <!--Compile TypeScript file using Angular CLI instead of VS-->
-    <TypeScriptCompilerBlocked>true</TypeScriptCompilerBlocked>
-  </PropertyGroup>
+        <!--Compile TypeScript file using Angular CLI instead of VS-->
+        <TypeScriptCompilerBlocked>true</TypeScriptCompilerBlocked>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="wwwroot\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
+    </ItemGroup>
 
 </Project>

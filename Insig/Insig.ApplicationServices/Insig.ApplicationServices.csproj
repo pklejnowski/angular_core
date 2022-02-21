@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="10.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Ensure.That" Version="10.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
-    <ProjectReference Include="..\Insig.Domain\Insig.Domain.csproj" />
-    <ProjectReference Include="..\Insig.PublishedLanguage\Insig.PublishedLanguage.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Insig.Common\Insig.Common.csproj" />
+		<ProjectReference Include="..\Insig.Domain\Insig.Domain.csproj" />
+		<ProjectReference Include="..\Insig.PublishedLanguage\Insig.PublishedLanguage.csproj" />
+	</ItemGroup>
 
 </Project>
