@@ -264,6 +264,9 @@ paket-files/
 __pycache__/
 *.pyc
 
+# Angular
+.angular/
+
 # Log reports
 authserver_log.txt
 api_log.txt

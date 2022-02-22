@@ -1,5 +1,5 @@
 # Insig Project Clean Architecture
-This is a solution template for creating a Single Page App (SPA) with Angular 11 + .NET 5.0 + IdentityServer4 (Authorization Code Flow + PKCE)
+This is a solution template for creating a Single Page App (SPA) with Angular 13 + .NET 6.0 + IdentityServer4 (Authorization Code Flow + PKCE)
 
 # Project references
 ![project_references](https://github.com/pklejnowski/angular_core/blob/master/project_references.png)
@@ -22,7 +22,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 11
 
 # Features
 **Authorization Project:**
-- .NET 5.0
+- .NET 6.0
 - IdentityServer4
 - Authorization Code Flow + PKCE
 - Database - Microsoft SQL Server
@@ -30,7 +30,7 @@ This is a solution template for creating a Single Page App (SPA) with Angular 11
 - Phone number verification (in Manage Account)
 
 **API Project:**
-- .NET 5.0
+- .NET 6.0
 - CQRS + Dispatcher
 - Custom Query Builder for Dapper
 - Prepared for Domain-driven design
@@ -38,8 +38,8 @@ This is a solution template for creating a Single Page App (SPA) with Angular 11
 - Database - Microsoft SQL Server
 
 **Angular Project:**
-- .NET 5.0
-- Angular 11
+- .NET 6.0
+- Angular 13
 - Authorization (oidc-client.js)
 - Silent refresh
 - Angular Material
