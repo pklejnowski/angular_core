@@ -1,11 +1,11 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { AuthService } from "@app/auth";
-import { ToastrService } from "ngx-toastr";
-import { EMPTY, from, Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
-import * as URLParse from "url-parse";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/auth';
+import { ToastrService } from 'ngx-toastr';
+import { EMPTY, from, lastValueFrom, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import * as URLParse from 'url-parse';
 
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
@@ -20,7 +20,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
 
         return from(this._authService.getAuthorizationToken().then(token => {
             const newReq = token ? req.clone({ setHeaders: { authorization: token } }) : req;
-            return next.handle(newReq).toPromise();
+            return lastValueFrom(next.handle(newReq));
         })).pipe(
             catchError((err) => {
                 if (err instanceof HttpErrorResponse) {
@@ -33,24 +33,24 @@ export class HttpAuthInterceptor implements HttpInterceptor {
                             return this.handle500Error(err);
                     }
                 }
-                return throwError(err);
+                return throwError(() => err as unknown);
             })
         );
     }
 
     // Handlers for http status codes
     private handle401Error(_: HttpErrorResponse): Observable<HttpEvent<any>> {
-        this._router.navigateByUrl("login");
+        this._router.navigateByUrl('login');
         return EMPTY;
     }
 
     private handle404Error(_: HttpErrorResponse): Observable<HttpEvent<any>> {
-        this._router.navigateByUrl("not-found");
+        this._router.navigateByUrl('not-found');
         return EMPTY;
     }
 
     private handle500Error(error: HttpErrorResponse): Observable<HttpEvent<any>> {
-        this._toastrService.error(error.error?.detail || "Operation failed", "Error");
+        this._toastrService.error(error.error?.detail || 'Operation failed', 'Error');
         return EMPTY;
     }
 

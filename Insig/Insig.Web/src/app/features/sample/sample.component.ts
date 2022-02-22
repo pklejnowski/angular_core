@@ -1,18 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { ApiSampleService } from "@app/core/services/api-sample.service";
-import { Observable } from "rxjs";
-import { switchMapTo } from "rxjs/operators";
+import { Component, OnInit } from '@angular/core';
+import { ApiSampleService } from '@app/core/services/api-sample.service';
+import { Observable } from 'rxjs';
+import { switchMapTo } from 'rxjs/operators';
 
 export interface SampleDto {
     name: string;
 }
 
 @Component({
-    selector: "app-sample",
-    templateUrl: "./sample.component.html"
+    selector: 'app-sample',
+    templateUrl: './sample.component.html'
 })
 export class SampleComponent implements OnInit {
-    title = "Sample App";
+    title = 'Sample App';
     samples!: Observable<SampleDto[]>;
 
     constructor(private _sampleService: ApiSampleService) { }

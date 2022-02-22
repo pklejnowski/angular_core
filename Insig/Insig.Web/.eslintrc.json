@@ -31,7 +31,7 @@
                 "no-multiple-empty-lines": "error",
                 "@typescript-eslint/quotes": [
                     "error",
-                    "double"
+                    "single"
                 ],
                 "indent": "off",
                 "@typescript-eslint/indent": [

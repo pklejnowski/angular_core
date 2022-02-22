@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, Validators } from "@angular/forms";
+import { AbstractControl, ValidationErrors, Validators } from '@angular/forms';
 
 const upperCaseCharactersValidator = (control: AbstractControl): ValidationErrors | null => {
     const upperCaseCharacters = /[A-Z]+/g;

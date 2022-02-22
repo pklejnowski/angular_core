@@ -1,21 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { ToastrService } from "ngx-toastr";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 const resultCodeDictionary: { [code: number]: string } = {
-    1: "Password has been changed successfully",
-    2: "Password change has been canceled"
+    1: 'Password has been changed successfully',
+    2: 'Password change has been canceled'
 };
 
 @Component({
-    selector: "app-home",
-    templateUrl: "./home.component.html"
+    selector: 'app-home',
+    templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
     constructor(private _route: ActivatedRoute, private _toastrService: ToastrService) { }
 
     ngOnInit(): void {
-        const resultCode = +(this._route.snapshot.queryParamMap.get("resultCode") || "");
+        const resultCode = +(this._route.snapshot.queryParamMap.get('resultCode') || '');
 
         switch (resultCode) {
             case 1:

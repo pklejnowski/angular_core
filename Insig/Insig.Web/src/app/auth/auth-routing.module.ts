@@ -1,11 +1,11 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 
 const routes: Routes = [
     {
-        path: "auth-callback",
+        path: 'auth-callback',
         component: AuthCallbackComponent
     }
 ];

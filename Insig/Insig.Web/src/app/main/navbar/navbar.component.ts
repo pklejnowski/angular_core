@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "@app/auth";
-import { Observable } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@app/auth';
+import { Observable } from 'rxjs';
 
 @Component({
-    selector: "app-navbar",
-    templateUrl: "./navbar.component.html",
-    styleUrls: ["./navbar.component.scss"]
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-    title = "Sample App";
+    title = 'Sample App';
     authStatus$!: Observable<boolean>;
 
     constructor(private _authService: AuthService) { }

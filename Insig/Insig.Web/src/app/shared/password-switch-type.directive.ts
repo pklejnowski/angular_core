@@ -1,23 +1,23 @@
-import { Directive, HostListener, Input } from "@angular/core";
+import { Directive, HostListener, Input } from '@angular/core';
 
 @Directive({
-    selector: "[appPasswordSwitchType]"
+    selector: '[appPasswordSwitchType]'
 })
 export class PasswordSwitchTypeDirective {
     @Input() appPasswordSwitchType: any;
 
-    @HostListener("mouseup")
+    @HostListener('mouseup')
     onMouseOver(): void {
-        this.appPasswordSwitchType.type = "password";
+        this.appPasswordSwitchType.type = 'password';
     }
 
-    @HostListener("mouseleave")
+    @HostListener('mouseleave')
     onMouseLeave(): void {
-        this.appPasswordSwitchType.type = "password";
+        this.appPasswordSwitchType.type = 'password';
     }
 
-    @HostListener("mousedown")
+    @HostListener('mousedown')
     onMouseDown(): void {
-        this.appPasswordSwitchType.type = "text";
+        this.appPasswordSwitchType.type = 'text';
     }
 }

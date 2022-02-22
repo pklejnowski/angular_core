@@ -1,9 +1,9 @@
-import "urijs/src/URITemplate";
+import 'urijs/src/URITemplate';
 
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import * as URI from "urijs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import * as URI from 'urijs';
 
 interface DataParam { [param: string]: any }
 interface DataBody { [param: string]: any }
@@ -23,7 +23,7 @@ interface DeleteParameters {
 }
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class ApiClientService {
     constructor(private readonly _http: HttpClient) { }
@@ -41,7 +41,7 @@ export class ApiClientService {
         queryParameters?: QueryParameters
     ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, queryParameters?.segmentParams, queryParameters?.queryParams);
-        return this._http.get(url, { responseType: "blob" });
+        return this._http.get(url, { responseType: 'blob' });
     }
 
     post<T>(
@@ -57,7 +57,7 @@ export class ApiClientService {
         commandParameters?: CommandParameters
     ): Observable<Blob> {
         const url: string = this.buildUrl(uriTemplate, commandParameters?.segmentParams);
-        return this._http.post(url, commandParameters?.data, { responseType: "blob" });
+        return this._http.post(url, commandParameters?.data, { responseType: 'blob' });
     }
 
     put<T>(

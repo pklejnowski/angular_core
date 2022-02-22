@@ -1,11 +1,11 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { User, UserManager } from "oidc-client";
-import { from, Observable, of, ReplaySubject } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { User, UserManager } from 'oidc-client';
+import { from, Observable, of, ReplaySubject } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
-import { AuthSettings } from "./auth.config";
+import { AuthSettings } from './auth.config';
 
 interface RegisterCredentials {
     email: string;
@@ -50,9 +50,27 @@ export class AuthService {
             this._userManager.removeUser().then(() => {
                 this._user = null;
                 this._authStatusSource.next(false);
-                this._router.navigate(["logout"]);
+                this._router.navigate(['logout']);
             });
         });
+    }
+
+    get isAuthenticated$(): Observable<boolean> {
+        return from(this._userManager.getUser()).pipe(
+            switchMap(user => (!!user && !user.expired
+                ? of(true)
+                : from(this._userManager.signinSilent()).pipe(
+                    map(userResult => {
+                        this._user = userResult;
+                        return !!userResult;
+                    })
+                ))),
+            catchError(() => of(false))
+        );
+    }
+
+    get name(): Nullable<string> {
+        return this._user?.profile.name;
     }
 
     register(credentials: RegisterCredentials): Observable<any> {
@@ -71,24 +89,10 @@ export class AuthService {
         return !!this._user && !this._user.expired;
     }
 
-    get isAuthenticated$(): Observable<boolean> {
-        return from(this._userManager.getUser()).pipe(
-            switchMap(user => (!!user && !user.expired
-                ? of(true)
-                : from(this._userManager.signinSilent()).pipe(
-                    map(userResult => {
-                        this._user = userResult;
-                        return !!userResult;
-                    })
-                ))),
-            catchError(() => of(false))
-        );
-    }
-
     async completeAuthentication(): Promise<void> {
         await this._userManager.signinRedirectCallback().then((user) => {
             this._user = user;
-            this._router.navigate([(new URL(user.state)).searchParams.get("redirect") || "/"]);
+            this._router.navigate([(new URL(user.state)).searchParams.get('redirect') || '/']);
             this._authStatusSource.next(this.isAuthenticated());
         });
     }
@@ -105,9 +109,5 @@ export class AuthService {
                 return null;
             }
         });
-    }
-
-    get name(): Nullable<string> {
-        return this._user?.profile.name;
     }
 }

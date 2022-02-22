@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { SampleDto } from "@app/features/sample/sample.component";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { SampleDto } from '@app/features/sample/sample.component';
+import { Observable } from 'rxjs';
 
-import { ApiClientService } from "./api-client.service";
+import { ApiClientService } from './api-client.service';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class ApiSampleService {
     constructor(private _apiClientService: ApiClientService) { }
