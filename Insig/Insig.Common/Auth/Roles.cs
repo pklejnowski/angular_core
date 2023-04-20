@@ -1,9 +1,8 @@
 ﻿
 
-namespace Insig.Common.Auth
+namespace Insig.Common.Auth;
+
+public static class Roles
 {
-    public static class Roles
-    {
-        public const string Consumer = "consumer";
-    }
+    public const string Consumer = "consumer";
 }

@@ -1,7 +1,6 @@
-﻿namespace Insig.Common.Auth
+﻿namespace Insig.Common.Auth;
+
+public class Scopes
 {
-    public class Scopes
-    {
-        public const string InsigApi = "insigapi.read";
-    }
+    public const string InsigApi = "insigapi.read";
 }

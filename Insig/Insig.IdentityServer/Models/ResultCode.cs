@@ -1,8 +1,7 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class ResultCode
 {
-    public class ResultCode
-    {
-        public static short PasswordChanged = 1;
-        public static short PasswordCanceled = 2;
-    }
+    public static short PasswordChanged = 1;
+    public static short PasswordCanceled = 2;
 }

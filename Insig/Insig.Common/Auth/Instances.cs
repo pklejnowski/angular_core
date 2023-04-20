@@ -1,7 +1,6 @@
-﻿namespace Insig.Common.Auth
+﻿namespace Insig.Common.Auth;
+
+public class Instances
 {
-    public class Instances
-    {
-        public const string InsigApi = "insigapi";
-    }
+    public const string InsigApi = "insigapi";
 }

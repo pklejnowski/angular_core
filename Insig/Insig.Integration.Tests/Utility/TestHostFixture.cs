@@ -5,27 +5,26 @@ using Insig.Infrastructure.DataModel.Context;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Insig.Integration.Tests.Utility
+namespace Insig.Integration.Tests.Utility;
+
+[Collection("Sequential")]
+public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<TestStartup, Startup>>
 {
-    [Collection("Sequential")]
-    public abstract class TestHostFixture : IClassFixture<CustomWebApplicationFactory<TestStartup, Startup>>
+    private readonly CustomWebApplicationFactory<TestStartup, Startup> _factory;
+    protected readonly HttpClient Client;
+
+    protected TestHostFixture()
     {
-        private readonly CustomWebApplicationFactory<TestStartup, Startup> _factory;
-        protected readonly HttpClient Client;
+        _factory = new CustomWebApplicationFactory<TestStartup, Startup>();
+        Client = _factory.CreateClient();
+    }
 
-        protected TestHostFixture()
+    protected void GetContext(Action<InsigContext> test)
+    {
+        using (var scope = _factory.Services.CreateScope())
         {
-            _factory = new CustomWebApplicationFactory<TestStartup, Startup>();
-            Client = _factory.CreateClient();
-        }
-
-        protected void GetContext(Action<InsigContext> test)
-        {
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<InsigContext>();
-                test(context);
-            }
+            var context = scope.ServiceProvider.GetRequiredService<InsigContext>();
+            test(context);
         }
     }
 }

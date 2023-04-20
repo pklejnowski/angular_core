@@ -1,7 +1,6 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class ResendVerificationEmailModel
 {
-    public class ResendVerificationEmailModel
-    {
-        public string Email { get; set; }
-    }
+    public string Email { get; set; }
 }

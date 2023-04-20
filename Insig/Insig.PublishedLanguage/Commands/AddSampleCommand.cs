@@ -1,9 +1,8 @@
 ﻿using Insig.Common.CQRS;
 
-namespace Insig.PublishedLanguage.Commands
+namespace Insig.PublishedLanguage.Commands;
+
+public class AddSampleCommand : ICommand
 {
-    public class AddSampleCommand : ICommand
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using Insig.PublishedLanguage.Dtos;
 using Insig.PublishedLanguage.Queries;
 
-namespace Insig.ApplicationServices.Boundaries
+namespace Insig.ApplicationServices.Boundaries;
+
+public interface ISampleQuery
 {
-    public interface ISampleQuery
-    {
-        Task<List<SampleDTO>> GetSampleData(SampleParameter query);
-    }
+    Task<List<SampleDTO>> GetSampleData(SampleParameter query);
 }

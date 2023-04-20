@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Insig.IdentityServer.Models
+namespace Insig.IdentityServer.Models;
+
+public class ForgotPasswordViewModel
 {
-    public class ForgotPasswordViewModel
-    {
-        [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress]
-        public string Email { get; set; }
-    }
+    [Required(ErrorMessage = "Email is required.")]
+    [EmailAddress]
+    public string Email { get; set; }
 }

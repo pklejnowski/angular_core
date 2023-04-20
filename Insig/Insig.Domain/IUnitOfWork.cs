@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Insig.Domain
+namespace Insig.Domain;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task Save();
-    }
+    Task Save();
 }

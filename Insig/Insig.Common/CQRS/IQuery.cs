@@ -1,6 +1,5 @@
-﻿namespace Insig.Common.CQRS
+﻿namespace Insig.Common.CQRS;
+
+public interface IQuery<out TResult>
 {
-    public interface IQuery<out TResult>
-    {
-    }
 }

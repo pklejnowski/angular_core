@@ -4,37 +4,36 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace Insig.IdentityServer.Infrastructure.Services
+namespace Insig.IdentityServer.Infrastructure.Services;
+
+public class EmailSender : IEmailSender
 {
-    public class EmailSender : IEmailSender
+    private readonly AuthMessageSenderOptions _options;
+
+    public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
     {
-        private readonly AuthMessageSenderOptions _options;
+        _options = optionsAccessor.Value;
+    }
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+    public Task SendEmailAsync(string email, string subject, string message)
+    {
+        return Execute(_options.SendGridKey, subject, message, email);
+    }
+
+    public Task Execute(string apiKey, string subject, string message, string email)
+    {
+        var client = new SendGridClient(apiKey);
+        var msg = new SendGridMessage
         {
-            _options = optionsAccessor.Value;
-        }
+            From = new EmailAddress(_options.EmailSender),
+            Subject = subject,
+            PlainTextContent = message,
+            HtmlContent = message
+        };
+        msg.AddTo(new EmailAddress(email));
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(_options.SendGridKey, subject, message, email);
-        }
+        msg.SetClickTracking(false, false);
 
-        public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage
-            {
-                From = new EmailAddress(_options.EmailSender),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            msg.AddTo(new EmailAddress(email));
-
-            msg.SetClickTracking(false, false);
-
-            return client.SendEmailAsync(msg);
-        }
+        return client.SendEmailAsync(msg);
     }
 }

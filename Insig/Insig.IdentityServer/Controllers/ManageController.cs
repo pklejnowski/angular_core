@@ -10,204 +10,203 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 
-namespace Insig.IdentityServer.Controllers
+namespace Insig.IdentityServer.Controllers;
+
+[Authorize]
+public class ManageController : Controller
 {
-    [Authorize]
-    public class ManageController : Controller
+    private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
+    private readonly IPhoneVerificationSender _phoneVerificationSender;
+    private readonly ILogger _logger;
+
+    public ManageController(
+        UserManager<AppUser> userManager,
+        SignInManager<AppUser> signInManager,
+        IPhoneVerificationSender phoneVerificationSender,
+        ILogger<ManageController> logger)
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly IPhoneVerificationSender _phoneVerificationSender;
-        private readonly ILogger _logger;
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _logger = logger;
+        _phoneVerificationSender = phoneVerificationSender;
+    }
 
-        public ManageController(
-          UserManager<AppUser> userManager,
-          SignInManager<AppUser> signInManager,
-          IPhoneVerificationSender phoneVerificationSender,
-          ILogger<ManageController> logger)
+    [HttpGet]
+    public async Task<IActionResult> Index(string returnUrl)
+    {
+        var user = await GetUser();
+
+        var model = new IndexViewModel
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _phoneVerificationSender = phoneVerificationSender;
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            ReturnUrl = returnUrl
+        };
+
+        ViewBag.ReturnUrl = returnUrl;
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Index(IndexViewModel model, string button)
+    {
+        if (button == "cancel")
+        {
+            return Redirect(string.IsNullOrWhiteSpace(model.ReturnUrl) ? "~/" : model.ReturnUrl);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string returnUrl)
-        {
-            var user = await GetUser();
-
-            var model = new IndexViewModel
-            {
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                ReturnUrl = returnUrl
-            };
-
-            ViewBag.ReturnUrl = returnUrl;
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model, string button)
-        {
-            if (button == "cancel")
-            {
-                return Redirect(string.IsNullOrWhiteSpace(model.ReturnUrl) ? "~/" : model.ReturnUrl);
-            }
-
-            if (button == "verify")
-            {
-                try
-                {
-                    var verification = await _phoneVerificationSender.SendVeryficationCode(model.PhoneNumber);
-
-                    if (verification.Status == "pending")
-                    {
-                        return RedirectToAction(nameof(ConfirmPhoneNumber));
-                    }
-
-                    ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("",
-                        "There was an error sending the verification code, please check the phone number is correct and try again");
-                }
-            }
-
-            await UpdateUserProfile(model);
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ConfirmPhoneNumber()
-        {
-            var user = await GetUser();
-            var model = new ConfirmPhoneNumberViewModel { PhoneNumber = user.PhoneNumber };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmPhoneNumber(ConfirmPhoneNumberViewModel model)
+        if (button == "verify")
         {
             try
             {
-                var verification = await _phoneVerificationSender.VerifyCode(model.PhoneNumber, model.Code);
+                var verification = await _phoneVerificationSender.SendVeryficationCode(model.PhoneNumber);
 
-                if (verification.Status == "approved")
+                if (verification.Status == "pending")
                 {
-                    var identityUser = await GetUser();
-                    identityUser.PhoneNumberConfirmed = true;
-                    var updateResult = await _userManager.UpdateAsync(identityUser);
+                    return RedirectToAction(nameof(ConfirmPhoneNumber));
+                }
 
-                    if (updateResult.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "There was an error confirming the verification code, please try again");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", $"There was an error confirming the verification code: {verification.Status}");
-                }
+                ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
             }
             catch (Exception)
             {
                 ModelState.AddModelError("",
-                    "There was an error confirming the code, please check the verification code is correct and try again");
+                    "There was an error sending the verification code, please check the phone number is correct and try again");
             }
-
-            return View(model);
         }
 
-        [HttpGet]
-        public IActionResult ChangePassword(string returnUrl)
-        {
-            var model = new ChangePasswordViewModel { ReturnUrl = returnUrl };
-            ViewBag.ReturnUrl = returnUrl;
+        await UpdateUserProfile(model);
 
-            return View(model);
-        }
+        return View(model);
+    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string button)
+    [HttpGet]
+    public async Task<IActionResult> ConfirmPhoneNumber()
+    {
+        var user = await GetUser();
+        var model = new ConfirmPhoneNumberViewModel { PhoneNumber = user.PhoneNumber };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmPhoneNumber(ConfirmPhoneNumberViewModel model)
+    {
+        try
         {
-            if (button == "cancel")
+            var verification = await _phoneVerificationSender.VerifyCode(model.PhoneNumber, model.Code);
+
+            if (verification.Status == "approved")
             {
-                return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
-                    ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordCanceled}"
-                    : "~/");
+                var identityUser = await GetUser();
+                identityUser.PhoneNumberConfirmed = true;
+                var updateResult = await _userManager.UpdateAsync(identityUser);
+
+                if (updateResult.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "There was an error confirming the verification code, please try again");
+                }
             }
             else
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-
-                var user = await GetUser();
-
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                if (!changePasswordResult.Succeeded)
-                {
-                    _logger.Log(LogLevel.Error, $"An error occurs when User with ID '{user.Id}' was trying to change password. (Error: '${string.Join(",", changePasswordResult.Errors.Select(e => e.Description))}')");
-                    model.HasError = true;
-                    return View(model);
-                }
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
-                    ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordChanged}"
-                    : "~/");
+                ModelState.AddModelError("", $"There was an error confirming the verification code: {verification.Status}");
             }
         }
-
-        private async Task<AppUser> GetUser()
+        catch (Exception)
         {
-            var user = await _userManager.GetUserAsync(User);
+            ModelState.AddModelError("",
+                "There was an error confirming the code, please check the verification code is correct and try again");
+        }
 
-            if (user == null)
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult ChangePassword(string returnUrl)
+    {
+        var model = new ChangePasswordViewModel { ReturnUrl = returnUrl };
+        ViewBag.ReturnUrl = returnUrl;
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string button)
+    {
+        if (button == "cancel")
+        {
+            return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
+                ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordCanceled}"
+                : "~/");
+        }
+        else
+        {
+            if (!ModelState.IsValid)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return View(model);
             }
 
-            return user;
-        }
-
-        private async Task UpdateUserProfile(IndexViewModel model)
-        {
             var user = await GetUser();
-            user.Email = model.Email;
 
-            if (user.PhoneNumber != model.PhoneNumber)
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
             {
-                user.PhoneNumber = model.PhoneNumber;
-                user.PhoneNumberConfirmed = false;
-                model.PhoneNumberConfirmed = false;
+                _logger.Log(LogLevel.Error, $"An error occurs when User with ID '{user.Id}' was trying to change password. (Error: '${string.Join(",", changePasswordResult.Errors.Select(e => e.Description))}')");
+                model.HasError = true;
+                return View(model);
             }
 
-            try
-            {
-                await _userManager.UpdateAsync(user);
-                ViewBag.message = "User data has been updated.";
-            }
-            catch (Exception)
-            {
-                ViewBag.message = null;
-                ModelState.AddModelError("", "There was an error with saving data, please try again");
-            }
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            return Redirect(!string.IsNullOrEmpty(model.ReturnUrl)
+                ? model.ReturnUrl + $"?resultCode={ResultCode.PasswordChanged}"
+                : "~/");
+        }
+    }
+
+    private async Task<AppUser> GetUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+        {
+            throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        }
+
+        return user;
+    }
+
+    private async Task UpdateUserProfile(IndexViewModel model)
+    {
+        var user = await GetUser();
+        user.Email = model.Email;
+
+        if (user.PhoneNumber != model.PhoneNumber)
+        {
+            user.PhoneNumber = model.PhoneNumber;
+            user.PhoneNumberConfirmed = false;
+            model.PhoneNumberConfirmed = false;
+        }
+
+        try
+        {
+            await _userManager.UpdateAsync(user);
+            ViewBag.message = "User data has been updated.";
+        }
+        catch (Exception)
+        {
+            ViewBag.message = null;
+            ModelState.AddModelError("", "There was an error with saving data, please try again");
         }
     }
 }

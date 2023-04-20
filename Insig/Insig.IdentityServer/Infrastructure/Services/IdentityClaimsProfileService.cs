@@ -9,38 +9,37 @@ using Insig.Common.Auth;
 using Insig.IdentityServer.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace Insig.IdentityServer.Infrastructure.Services
+namespace Insig.IdentityServer.Infrastructure.Services;
+
+public class IdentityClaimsProfileService : IProfileService
 {
-    public class IdentityClaimsProfileService : IProfileService
+    private readonly IUserClaimsPrincipalFactory<AppUser> _claimsFactory;
+    private readonly UserManager<AppUser> _userManager;
+
+    public IdentityClaimsProfileService(UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsFactory)
     {
-        private readonly IUserClaimsPrincipalFactory<AppUser> _claimsFactory;
-        private readonly UserManager<AppUser> _userManager;
+        _userManager = userManager;
+        _claimsFactory = claimsFactory;
+    }
 
-        public IdentityClaimsProfileService(UserManager<AppUser> userManager, IUserClaimsPrincipalFactory<AppUser> claimsFactory)
-        {
-            _userManager = userManager;
-            _claimsFactory = claimsFactory;
-        }
+    public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        var sub = context.Subject.GetSubjectId();
+        var user = await _userManager.FindByIdAsync(sub);
+        var principal = await _claimsFactory.CreateAsync(user);
 
-        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
-        {
-            var sub = context.Subject.GetSubjectId();
-            var user = await _userManager.FindByIdAsync(sub);
-            var principal = await _claimsFactory.CreateAsync(user);
+        var claims = principal.Claims.ToList();
+        claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
+        claims.Add(new Claim(IdentityServerConstants.StandardScopes.Email, user.Email));
+        claims.Add(new Claim(ClaimTypes.Role, Roles.Consumer));
 
-            var claims = principal.Claims.ToList();
-            claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
-            claims.Add(new Claim(IdentityServerConstants.StandardScopes.Email, user.Email));
-            claims.Add(new Claim(ClaimTypes.Role, Roles.Consumer));
+        context.IssuedClaims = claims;
+    }
 
-            context.IssuedClaims = claims;
-        }
-
-        public async Task IsActiveAsync(IsActiveContext context)
-        {
-            var sub = context.Subject.GetSubjectId();
-            var user = await _userManager.FindByIdAsync(sub);
-            context.IsActive = user != null;
-        }
+    public async Task IsActiveAsync(IsActiveContext context)
+    {
+        var sub = context.Subject.GetSubjectId();
+        var user = await _userManager.FindByIdAsync(sub);
+        context.IsActive = user != null;
     }
 }

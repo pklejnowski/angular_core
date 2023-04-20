@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Insig.Common.CQRS
+namespace Insig.Common.CQRS;
+
+public interface IQueryDispatcher
 {
-    public interface IQueryDispatcher
-    {
-        Task<TResult> Dispatch<TResult>(IQuery<TResult> query);
-    }
+    Task<TResult> Dispatch<TResult>(IQuery<TResult> query);
 }

@@ -1,7 +1,6 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class LoginViewModel : LoginInputModel
 {
-    public class LoginViewModel : LoginInputModel
-    {
-        public bool AllowRememberLogin { get; set; } = true;
-    }
+    public bool AllowRememberLogin { get; set; } = true;
 }

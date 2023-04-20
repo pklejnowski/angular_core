@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Insig.Common.CQRS
+namespace Insig.Common.CQRS;
+
+public interface ICommandHandler<in TCommand> where TCommand : ICommand
 {
-    public interface ICommandHandler<in TCommand> where TCommand : ICommand
-    {
-        Task Handle(TCommand command);
-    }
+    Task Handle(TCommand command);
 }
