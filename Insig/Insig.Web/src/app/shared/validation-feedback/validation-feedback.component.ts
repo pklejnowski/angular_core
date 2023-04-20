@@ -13,7 +13,7 @@ export class ValidationFeedbackComponent implements OnInit {
     @Input() control: Nullable<AbstractControl>;
     @Input() controlName: Nullable<string>;
 
-    private _validatorErrors: { [key: string]: string };
+    private _validatorErrors: { [key: string]: string } = {};
 
     constructor(@Optional() private _formGroup: FormGroupDirective) { }
 

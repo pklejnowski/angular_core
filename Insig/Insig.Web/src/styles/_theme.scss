@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 @include mat-core();
 
 $light-primary: mat-palette($mat-blue, 800, 500, 900);
@@ -7,3 +7,19 @@ $light-warn: mat-palette($mat-red);
 
 $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 @include angular-material-theme($light-theme);
+
+
+//@use '@angular/material' as mat;
+//@include mat.core();
+//...
+//$my-app-primary: mat.define-palette($md-elearningsupportportalwebapp-primary);
+//$my-app-accent:  mat.define-palette($md-elearningsupportportalwebapp-accent);
+//$my-app-warn:    mat.define-palette($mat-deep-orange);
+//$my-app-theme:   mat.define-light-theme((
+//  color: (
+//    primary: $my-app-primary,
+//    accent: $my-app-accent,
+//    warn: $my-app-warn,
+//  )
+//));
+//@include mat.all-component-themes($my-app-theme);

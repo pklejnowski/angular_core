@@ -53,7 +53,7 @@ export class PasswordValidator {
             return null;
         }
 
-        if (matchingInput?.errors && !matchingInput.errors.confirmedValidator) {
+        if (matchingInput?.errors && !matchingInput.errors['confirmedValidator']) {
             return null;
         }
 

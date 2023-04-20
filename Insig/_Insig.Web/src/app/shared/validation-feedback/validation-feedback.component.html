@@ -1,0 +1,4 @@
+<ng-container *ngIf="getValidationError() as errorMessage">
+  {{errorMessage}}
+</ng-container>
+<ng-content *ngIf="!getValidationError()"></ng-content>

@@ -4,13 +4,13 @@ import { UserManagerSettings } from 'oidc-client';
 export class AuthSettings {
     static getClientSettings(): UserManagerSettings {
         return {
-            authority: appConfig.identityUrl,
+            authority: AppConfig.IdentityUrl,
             client_id: 'insig_spa',
-            redirect_uri: `${appConfig.clientUrl}/auth-callback`,
+            redirect_uri: `${AppConfig.ClientUrl}/auth-callback`,
             response_type: 'code',
             scope: 'openid profile email insigapi.read',
             automaticSilentRenew: true,
-            silent_redirect_uri: `${appConfig.clientUrl}/assets/silent-refresh.html`
+            silent_redirect_uri: `${AppConfig.ClientUrl}/assets/silent-refresh.html`
         };
     }
 }
