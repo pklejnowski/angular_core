@@ -25,7 +25,7 @@ export class ValidationFeedbackComponent implements OnInit {
                 email: 'E-mail format is incorrect.'
             };
 
-            return this._validatorErrors[Object.keys((this.control.errors as any))[0]];
+            return this._validatorErrors[Object.keys((this.control.errors as any) || {})[0]];
         }
 
         return '';
