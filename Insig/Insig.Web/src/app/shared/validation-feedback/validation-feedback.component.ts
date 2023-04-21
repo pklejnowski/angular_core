@@ -13,7 +13,7 @@ export class ValidationFeedbackComponent implements OnInit {
     @Input() control: Nullable<AbstractControl>;
     @Input() controlName: Nullable<string>;
 
-    private _validatorErrors: { [key: string]: string };
+    private _validatorErrors: { [key: string]: string } = {};
 
     constructor(@Optional() private _formGroup: FormGroupDirective) { }
 
@@ -25,7 +25,7 @@ export class ValidationFeedbackComponent implements OnInit {
                 email: 'E-mail format is incorrect.'
             };
 
-            return this._validatorErrors[Object.keys((this.control.errors as any))[0]];
+            return this._validatorErrors[Object.keys((this.control.errors as any) || {})[0]];
         }
 
         return '';

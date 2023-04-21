@@ -9,57 +9,56 @@ using Insig.Infrastructure.DataModel.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Insig.Infrastructure.DataModel.Context
+namespace Insig.Infrastructure.DataModel.Context;
+
+public class InsigContext : DbContext
 {
-    public class InsigContext : DbContext
+    private readonly ICurrentUserService _currentUserService;
+
+    public InsigContext() { }
+
+    public InsigContext(DbContextOptions<InsigContext> options, ICurrentUserService currentUserService) : base(options)
     {
-        private readonly ICurrentUserService _currentUserService;
+        _currentUserService = currentUserService;
+    }
 
-        public InsigContext() { }
+    public DbSet<Sample> Samples { get; set; }
 
-        public InsigContext(DbContextOptions<InsigContext> options, ICurrentUserService currentUserService) : base(options)
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfiguration(new SampleConfiguration());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
         {
-            _currentUserService = currentUserService;
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Insig"));
         }
+    }
 
-        public DbSet<Sample> Samples { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
-            builder.ApplyConfiguration(new SampleConfiguration());
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
+            switch (entry.State)
             {
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Insig"));
+                case EntityState.Added:
+                    entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.CreatedOn = DateTime.Now;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedBy = _currentUserService.UserId;
+                    entry.Entity.UpdatedOn = DateTime.Now;
+                    break;
             }
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
-                        entry.Entity.CreatedOn = DateTime.Now;
-                        break;
-                    case EntityState.Modified:
-                        entry.Entity.UpdatedBy = _currentUserService.UserId;
-                        entry.Entity.UpdatedOn = DateTime.Now;
-                        break;
-                }
-            }
-
-            return base.SaveChangesAsync(cancellationToken);
-        }
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

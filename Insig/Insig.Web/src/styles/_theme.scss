@@ -1,9 +1,72 @@
-@import '~@angular/material/theming';
-@include mat-core();
+@use '@angular/material' as mat;
+@include mat.core();
 
-$light-primary: mat-palette($mat-blue, 800, 500, 900);
-$light-accent: mat-palette($mat-amber);
-$light-warn: mat-palette($mat-red);
+$md-elearningsupportportalwebapp-primary: (
+    50 : #f2e2f0,
+    100 : #dfb8d8,
+    200 : #c988bf,
+    300 : #b358a5,
+    400 : #a33591,
+    500 : #93117e,
+    600 : #8b0f76,
+    700 : #800c6b,
+    800 : #760a61,
+    900 : #64054e,
+    A100 : #ff95e3,
+    A200 : #ff62d5,
+    A400 : #ff2fc8,
+    A700 : #ff15c1,
+    contrast: (50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+$md-elearningsupportportalwebapp-accent: (
+    50 : #e0eaf3,
+    100 : #b3cbe2,
+    200 : #80a8cf,
+    300 : #4d85bb,
+    400 : #266bad,
+    500 : #00519e,
+    600 : #004a96,
+    700 : #00408c,
+    800 : #003782,
+    900 : #002770,
+    A100 : #9fb8ff,
+    A200 : #6c92ff,
+    A400 : #396cff,
+    A700 : #1f59ff,
+    contrast: (50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
 
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
-@include angular-material-theme($light-theme);
+$my-app-primary: mat.define-palette($md-elearningsupportportalwebapp-primary);
+$my-app-accent: mat.define-palette($md-elearningsupportportalwebapp-accent);
+$my-app-theme: mat.define-light-theme((color: (primary: $my-app-primary,
+                accent: $my-app-accent )));
+
+@include mat.all-component-themes($my-app-theme);

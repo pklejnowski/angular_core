@@ -10,7 +10,7 @@ interface MinLength {
     templateUrl: './password-validator-feedback.component.html'
 })
 export class PasswordValidatorFeedbackComponent implements OnInit {
-    @Input() controlName: string;
+    @Input() controlName: string = "";
     private _control: Nullable<AbstractControl>;
 
     constructor(private _formGroup: FormGroupDirective) { }

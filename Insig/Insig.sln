@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28729.10
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Api", "Insig.Api\Insig.Api.csproj", "{758BA3FD-AC4B-42A2-8CD6-A7909827A413}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Web", "Insig.Web\Insig.Web.csproj", "{4844FF0F-42F2-4A98-B349-A34BF87688AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insig.Infrastructure", "Insig.Infrastructure\Insig.Infrastructure.csproj", "{88CFD398-F345-46F9-8FD4-D1606841981E}"
 EndProject
@@ -35,10 +33,6 @@ Global
 		{758BA3FD-AC4B-42A2-8CD6-A7909827A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{758BA3FD-AC4B-42A2-8CD6-A7909827A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{758BA3FD-AC4B-42A2-8CD6-A7909827A413}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4844FF0F-42F2-4A98-B349-A34BF87688AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4844FF0F-42F2-4A98-B349-A34BF87688AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4844FF0F-42F2-4A98-B349-A34BF87688AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4844FF0F-42F2-4A98-B349-A34BF87688AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88CFD398-F345-46F9-8FD4-D1606841981E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88CFD398-F345-46F9-8FD4-D1606841981E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88CFD398-F345-46F9-8FD4-D1606841981E}.Release|Any CPU.ActiveCfg = Release|Any CPU

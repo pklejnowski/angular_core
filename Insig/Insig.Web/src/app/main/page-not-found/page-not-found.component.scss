@@ -13,6 +13,7 @@
     }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card {
     max-width: 800px;
     margin: 2em auto;

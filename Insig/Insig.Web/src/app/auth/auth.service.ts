@@ -18,7 +18,7 @@ interface RegisterCredentials {
 export class AuthService {
     authStatus$: Observable<boolean>;
 
-    private _identityUrl = appConfig.identityUrl;
+    private _identityUrl = AppConfig.IdentityUrl;
     private _userManager = new UserManager(AuthSettings.getClientSettings());
     private _user: Nullable<User>;
     private _authStatusSource = new ReplaySubject<boolean>();
@@ -82,7 +82,7 @@ export class AuthService {
     }
 
     manageAccount(): void {
-        window.location.href = `${this._identityUrl}/Manage/Index?ReturnUrl=${encodeURIComponent(appConfig.clientUrl)}`;
+        window.location.href = `${this._identityUrl}/Manage/Index?ReturnUrl=${encodeURIComponent(AppConfig.ClientUrl)}`;
     }
 
     isAuthenticated(): boolean {

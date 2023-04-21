@@ -3,74 +3,73 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Insig.Common.Auth;
 
-namespace Insig.IdentityServer
+namespace Insig.IdentityServer;
+
+public class Config
 {
-    public class Config
+    public static IEnumerable<IdentityResource> GetIdentityResources()
     {
-        public static IEnumerable<IdentityResource> GetIdentityResources()
+        return new List<IdentityResource>
         {
-            return new List<IdentityResource>
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Email(),
-                new IdentityResources.Profile(),
-            };
-        }
+            new IdentityResources.OpenId(),
+            new IdentityResources.Email(),
+            new IdentityResources.Profile(),
+        };
+    }
 
-        public static IEnumerable<ApiResource> GetApiResources()
+    public static IEnumerable<ApiResource> GetApiResources()
+    {
+        return new List<ApiResource>
         {
-            return new List<ApiResource>
+            new ApiResource(Instances.InsigApi, "Resource Insig API")
             {
-                new ApiResource(Instances.InsigApi, "Resource Insig API")
+                Scopes = new List<string>()
                 {
-                    Scopes = new List<string>()
-                    {
-                        Scopes.InsigApi
-                    }
+                    Scopes.InsigApi
                 }
-            };
-        }
+            }
+        };
+    }
 
-        public static IEnumerable<ApiScope> GetApiScopes()
+    public static IEnumerable<ApiScope> GetApiScopes()
+    {
+        return new[]
         {
-            return new[]
-            {
-                new ApiScope(Scopes.InsigApi, "Access API Backend")
-            };
-        }
+            new ApiScope(Scopes.InsigApi, "Access API Backend")
+        };
+    }
 
-        public static IEnumerable<Client> GetClients(string clientUrl)
+    public static IEnumerable<Client> GetClients(string clientUrl)
+    {
+        return new[]
         {
-            return new[]
+            new Client
             {
-                new Client
+                RequireConsent = false,
+                ClientId = "insig_spa",
+                ClientName = "Insig SPA",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+                AllowedScopes =
                 {
-                    RequireConsent = false,
-                    ClientId = "insig_spa",
-                    ClientName = "Insig SPA",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
-                    RequireClientSecret = false,
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        Scopes.InsigApi
-                    },
-                    RedirectUris =
-                    {
-                        clientUrl + "/auth-callback",
-                        clientUrl + "/assets/silent-refresh.html"
-                    },
-                    PostLogoutRedirectUris = { clientUrl + "/logout" },
-                    AllowedCorsOrigins = { clientUrl },
-                    AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 300,
-                    AccessTokenType = AccessTokenType.Jwt,
-                    AlwaysIncludeUserClaimsInIdToken = true
-                }
-            };
-        }
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    Scopes.InsigApi
+                },
+                RedirectUris =
+                {
+                    clientUrl + "/auth-callback",
+                    clientUrl + "/assets/silent-refresh.html"
+                },
+                PostLogoutRedirectUris = { clientUrl + "/logout" },
+                AllowedCorsOrigins = { clientUrl },
+                AllowAccessTokensViaBrowser = true,
+                AccessTokenLifetime = 300,
+                AccessTokenType = AccessTokenType.Jwt,
+                AlwaysIncludeUserClaimsInIdToken = true
+            }
+        };
     }
 }

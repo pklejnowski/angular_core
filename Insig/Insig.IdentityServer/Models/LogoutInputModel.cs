@@ -1,7 +1,6 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class LogoutInputModel
 {
-    public class LogoutInputModel
-    {
-        public string LogoutId { get; set; }
-    }
+    public string LogoutId { get; set; }
 }

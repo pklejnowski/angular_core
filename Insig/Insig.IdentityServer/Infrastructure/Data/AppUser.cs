@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Insig.IdentityServer.Infrastructure.Data
+namespace Insig.IdentityServer.Infrastructure.Data;
+
+public class AppUser : IdentityUser
 {
-    public class AppUser : IdentityUser
-    {
-        // Add additional profile data for application users by adding properties to this class
-    }
+    // Add additional profile data for application users by adding properties to this class
 }

@@ -1,6 +1,5 @@
-﻿namespace Insig.Common.CQRS
+﻿namespace Insig.Common.CQRS;
+
+public interface ICommand
 {
-    public interface ICommand
-    {
-    }
 }

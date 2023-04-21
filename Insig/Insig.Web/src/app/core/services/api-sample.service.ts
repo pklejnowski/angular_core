@@ -16,10 +16,10 @@ export class ApiSampleService {
     // URI result: "https://localhost:5001/values/1/samples/test?q1=ABC%21&q2=z+x"
 
     getSampleData(): Observable<SampleDto[]> {
-        return this._apiClientService.get(`${appConfig.apiUrl}/values/samples`);
+        return this._apiClientService.get(`${AppConfig.ApiUrl}/values/samples`);
     }
 
     addSampleData(sample: SampleDto): Observable<SampleDto> {
-        return this._apiClientService.post(`${appConfig.apiUrl}/values/samples`, { data: sample });
+        return this._apiClientService.post(`${AppConfig.ApiUrl}/values/samples`, { data: sample });
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class LogoutViewModel : LogoutInputModel
 {
-    public class LogoutViewModel : LogoutInputModel
-    {
-        public bool ShowLogoutPrompt { get; set; } = true;
-    }
+    public bool ShowLogoutPrompt { get; set; } = true;
 }

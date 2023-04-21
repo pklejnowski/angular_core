@@ -1,10 +1,9 @@
 ﻿using Insig.Domain.Samples;
 
-namespace Insig.ApplicationServices.Boundaries
+namespace Insig.ApplicationServices.Boundaries;
+
+public interface ISampleRepository
 {
-    public interface ISampleRepository
-    {
-        void EnsureThatSampleDoesNotExist(string name);
-        void Store(Sample sample);
-    }
+    void EnsureThatSampleDoesNotExist(string name);
+    void Store(Sample sample);
 }

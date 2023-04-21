@@ -1,7 +1,6 @@
-﻿namespace Insig.Common.Auth
+﻿namespace Insig.Common.Auth;
+
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        string UserId { get; }
-    }
+    string UserId { get; }
 }

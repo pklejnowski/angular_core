@@ -5,29 +5,28 @@ using Insig.Common.Exceptions;
 using Insig.Domain;
 using Insig.Infrastructure.DataModel.Context;
 
-namespace Insig.Infrastructure.Domain
+namespace Insig.Infrastructure.Domain;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly InsigContext _context;
+
+    public UnitOfWork(InsigContext context)
     {
-        private readonly InsigContext _context;
+        EnsureArg.IsNotNull(context, nameof(context));
 
-        public UnitOfWork(InsigContext context)
+        _context = context;
+    }
+
+    public async Task Save()
+    {
+        try
         {
-            EnsureArg.IsNotNull(context, nameof(context));
-
-            _context = context;
+            await _context.SaveChangesAsync();
         }
-
-        public async Task Save()
+        catch (Exception ex)
         {
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseException(ex.Message, ex.InnerException);
-            }
+            throw new DatabaseException(ex.Message, ex.InnerException);
         }
     }
 }

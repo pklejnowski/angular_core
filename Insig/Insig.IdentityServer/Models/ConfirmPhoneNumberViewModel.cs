@@ -1,8 +1,7 @@
-﻿namespace Insig.IdentityServer.Models
+﻿namespace Insig.IdentityServer.Models;
+
+public class ConfirmPhoneNumberViewModel
 {
-    public class ConfirmPhoneNumberViewModel
-    {
-        public string PhoneNumber { get; set; }
-        public string Code { get; set; }
-    }
+    public string PhoneNumber { get; set; }
+    public string Code { get; set; }
 }

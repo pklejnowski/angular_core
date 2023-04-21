@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Insig.Common.Exceptions
+namespace Insig.Common.Exceptions;
+
+public class DomainException : Exception
 {
-    public class DomainException : Exception
+    public DomainException(string message)
+        : base(message)
     {
-        public DomainException(string message)
-            : base(message)
-        {
-        }
     }
 }
