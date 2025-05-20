@@ -1,0 +1,37 @@
+pool:
+  name: Azure Pipelines
+  vmImage: "windows-latest"
+
+# VARIABLES (you need to add them on Azure DevOps)
+
+parameters:
+- name: pipelineMode
+  displayName: Pipeline Mode
+  type: string
+  default: plan
+  values:
+  - plan
+  - plan-and-apply
+
+steps:
+  - task: AzureCLI@2
+    displayName: "Azure CLI - Bicep deploy"
+    inputs:
+      azureSubscription: 'Azure subscription 1 (7bd1b4d8-c6a8-43e8-8903-f520a7ab5779)'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        $action = if ("${{ parameters.pipelineMode }}" -eq "plan") { "what-if" } else { "create" }
+        
+        az deployment sub $action `
+          --location $(ServicesLocation) `
+          --template-file "$(MainBicepPath)" `
+          --parameters `
+            environment="$(ServicesEnvironment)" `
+            projectName="$(ProjectName)" `
+            location="$(ServicesLocation)" `
+            addFrontDoor=$(AddFrontDoor) `
+            wafEnableLimitToPoland=$(WafEnableLimitToPoland) `
+            customDomain="$(CustomDomain)" `
+            sqlServerLogin="$(SqlServerLogin)" `
+            sqlServerPassword="$(SqlServerPassword)"
